@@ -1,4 +1,5 @@
 from bokeh.plotting import figure, output_file, show
+from bokeh.models import Range1d
 
 class Grid(object):
     def __init__(self, total_length, total_width):
@@ -15,6 +16,12 @@ class Grid(object):
             grid.append(grid_row)
             grid_row = []
         return grid
+
+    def create_water(self, width, length):
+        for row in range(length):
+            for place in range(width):
+                if self.grid[row][place] != 1:
+                    self.grid[row][place] = 1
 
 
 class Visualator(object):
@@ -38,12 +45,28 @@ class Visualator(object):
         for count, values in enumerate(y_axis):
             last_y = count + 1
 
-
+        # makes the graph and changes the aesthetics if the graph
+        graph.x_range = Range1d(last_x, first_x)
+        graph.y_range = Range1d(last_y, first_y)
         graph.multi_polygons(xs=[[[[first_x, first_x, last_x, last_x]]]],
                              ys=[[[[first_y, last_y, last_y, first_y]]]],
                              color="green")
+
+        # makes a waterbody
+        for y, value in enumerate(self.grid):
+            print(y, values)
+            for x, value in enumerate(self.grid[y]):
+                if value == 1:
+                    #print(x, value, end="/")
+                    print("", end='')
+
+
         return graph
 if __name__ == "__main__":
-    grid = Grid(160, 180).grid
+
+    grid = Grid(160, 180)
+    grid.create_water(15, 20)
+    grid = grid.grid
     x = Visualator(grid)
-    show(x.bokeh())
+    x.bokeh()
+    # show(x.bokeh())
