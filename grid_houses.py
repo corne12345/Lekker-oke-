@@ -1,4 +1,5 @@
 from bokeh.plotting import figure, output_file, show
+from bokeh.models import Range1d
 
 class Grid(object):
     def __init__(self, total_length, total_width):
@@ -15,6 +16,12 @@ class Grid(object):
             grid.append(grid_row)
             grid_row = []
         return grid
+
+    def create_water(self, width, length):
+        for row in range(length):
+            for place in range(width):
+                if self.grid[row][place] != 1:
+                    self.grid[row][place] = 1
 
 
 class Visualator(object):
@@ -38,12 +45,42 @@ class Visualator(object):
         for count, values in enumerate(y_axis):
             last_y = count + 1
 
+        # makes the graph and changes the aesthetics if the graph
+        graph.x_range = Range1d(last_x, first_x)
+        graph.y_range = Range1d(last_y, first_y)
 
-        graph.multi_polygons(xs=[[[[first_x, first_x, last_x, last_x]]]],
-                             ys=[[[[first_y, last_y, last_y, first_y]]]],
-                             color="green")
+        # makes a waterbody and datapoints
+        water_first_x = None
+        water_first_y = None
+        water_last_x = None
+        water_last_y = None
+        for y, list in enumerate(self.grid):
+            if 1 in list and water_first_x == None:
+                water_first_x = list[::1].index(1) + 1
+                water_first_y = y + 1
+            elif 1 in list:
+                water_last_x = len(list) - list[::-1].index(1)
+                water_last_y = y + 1
+        print(first_x)
+        print(water_first_x)
+        if water_first_x != None:
+            graph.multi_polygons(xs=[[[ [first_x, first_x, last_x, last_x], [water_first_x, water_first_x, water_last_x, water_last_x]  ]]],
+                                 ys=[[[ [first_y, last_y, last_y, first_y], [water_first_y, water_last_y, water_last_y, water_first_y]  ]]],
+                                 color="green")
+            graph.patch(x=[water_first_x, water_first_x, water_last_x, water_last_x],
+                        y=[water_first_y, water_last_y, water_last_y, water_first_y], color="blue" )
+        else:
+            graph.multi_polygons(xs=[[[[first_x, first_x, last_x, last_x]]]],
+                                 ys=[[[[first_y, last_y, last_y, first_y]]]],
+                                 color="green")
+
+
+
         return graph
 if __name__ == "__main__":
-    grid = Grid(160, 180).grid
+
+    grid = Grid(160, 180)
+    grid.create_water(15, 20)
+    grid = grid.grid
     x = Visualator(grid)
     show(x.bokeh())
