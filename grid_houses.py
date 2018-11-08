@@ -64,8 +64,8 @@ class Visualator(object):
 
         # checks if water exist and print the ground
         if water_first_x != None:
-            graph.multi_polygons(xs=[[[ [first_x, first_x, last_x, last_x], [water_first_x, water_first_x, water_last_x, water_last_x]  ]]],
-                                 ys=[[[ [first_y, last_y, last_y, first_y], [water_first_y, water_last_y, water_last_y, water_first_y]  ]]],
+            graph.multi_polygons(xs=[[[ [first_x, first_x, last_x, last_x], [water_first_x, water_first_x, water_last_x, water_last_x] ]]],
+                                 ys=[[[ [first_y, last_y, last_y, first_y], [water_first_y, water_last_y, water_last_y, water_first_y] ]]],
                                  color="green")
             graph.patch(x=[water_first_x, water_first_x, water_last_x, water_last_x], y=[water_first_y, water_last_y, water_last_y, water_first_y], color="blue" )
 
@@ -81,7 +81,7 @@ class Visualator(object):
 if __name__ == "__main__":
 
     grid = Grid(160, 180)
-    grid.create_water(15, 20)
+    grid.create_water(30, 40)
     grid = grid.grid
     x = Visualator(grid)
     show(x.bokeh())
