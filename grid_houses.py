@@ -81,8 +81,6 @@ class Visualator(object):
                                  ys=[[[[first_y, last_y, last_y, first_y]]]],
                                  color="green")
 
-
-
         return graph
 if __name__ == "__main__":
 
