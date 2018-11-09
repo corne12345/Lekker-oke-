@@ -38,6 +38,9 @@ class Check(object):
         print("")
 
     def check_water_surface(self, surface, percentage):
+        # ratio of the surface
+        ratio = surface.length / surface.length
+        print(ration)
         if surface >= self.surface * percentage:
             return True
         else:
@@ -96,10 +99,9 @@ class Visualator(object):
             graph.multi_polygons(xs=[[[[first_x, first_x, last_x, last_x]]]],
                                  ys=[[[[first_y, last_y, last_y, first_y]]]],
                                  color="green")
-
-
-
         return graph
+
+
 if __name__ == "__main__":
 
     grid = Grid(160, 180)
