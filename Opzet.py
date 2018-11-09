@@ -26,6 +26,12 @@ class Maison(object):
         self.number = 0.15 * nr_of_houses
         self.price = standard_price
 
+class Water(object):
+    def __init__(self, width, length):
+        self.width = width
+        self.length = length
+        self.sutface = width * length
+
 if __name__ == "__main__":
     total_homes = 20
 

@@ -1,11 +1,13 @@
 from bokeh.plotting import figure, output_file, show
 from bokeh.models import Range1d
+from Opzet import Water
 
 class Grid(object):
     def __init__(self, total_length, total_width):
         self.width = total_width
         self.length = total_length
         self.grid = self.grid_command()
+        self.water_check = None
 
     def grid_command(self):
         grid = []
@@ -17,11 +19,14 @@ class Grid(object):
             grid_row = []
         return grid
 
-    def create_water(self, width, length):
-        for row in range(length):
-            for place in range(width):
+    def create_water(self, file):
+        water = file
+        for row in range(water.length):
+            for place in range(water.width):
                 if self.grid[row][place] != 1:
                     self.grid[row][place] = 1
+        surface = water.length * water.width
+        return surface
 
 
 class Visualator(object):
@@ -64,9 +69,10 @@ class Visualator(object):
 
         # checks if water exist and print the ground
         if water_first_x != None:
+            print(graph)
             graph.multi_polygons(xs=[[[ [first_x, first_x, last_x, last_x], [water_first_x, water_first_x, water_last_x, water_last_x]  ]]],
                                  ys=[[[ [first_y, last_y, last_y, first_y], [water_first_y, water_last_y, water_last_y, water_first_y]  ]]],
-                                 color="green")
+                                color="green")
             graph.patch(x=[water_first_x, water_first_x, water_last_x, water_last_x], y=[water_first_y, water_last_y, water_last_y, water_first_y], color="blue" )
 
         # prints only the ground
@@ -81,7 +87,8 @@ class Visualator(object):
 if __name__ == "__main__":
 
     grid = Grid(160, 180)
-    grid.create_water(15, 20)
+    x = grid.create_water(Water(15, 20))
+    print(x)
     grid = grid.grid
     x = Visualator(grid)
     show(x.bokeh())
