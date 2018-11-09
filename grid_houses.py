@@ -7,18 +7,19 @@ class Grid(object):
         self.width = total_width
         self.length = total_length
         self.grid = self.grid_command()
-        self.water_check = None
 
+    # makes the grid itself
     def grid_command(self):
         grid = []
         grid_row = []
         for length in range(self.length):
-            for pixel in range(self.width):
+            for pixel in range(selb f.width):
                 grid_row.append(0)
             grid.append(grid_row)
             grid_row = []
         return grid
 
+    # creates different_water_bodies
     def create_water(self, file):
         water = file
         for row in range(water.length):
@@ -27,6 +28,21 @@ class Grid(object):
                     self.grid[row][place] = 1
         surface = water.length * water.width
         return surface
+
+class Check(object):
+    def __init__(self, surface_water, grid):
+        self.surface = grid.width * grid.length
+        self.check_water = self.check_water_surface(surface_water, 0.2)
+
+    def total_surface water(self):
+        print("")
+
+    def check_water_surface(self, surface, percentage):
+        if surface >= self.surface * percentage:
+            return True
+        else:
+            return False
+
 
 
 
@@ -70,7 +86,6 @@ class Visualator(object):
 
         # checks if water exist and print the ground
         if water_first_x != None:
-            print(graph)
             graph.multi_polygons(xs=[[[ [first_x, first_x, last_x, last_x], [water_first_x, water_first_x, water_last_x, water_last_x]  ]]],
                                  ys=[[[ [first_y, last_y, last_y, first_y], [water_first_y, water_last_y, water_last_y, water_first_y]  ]]],
                                 color="green")
@@ -82,12 +97,17 @@ class Visualator(object):
                                  ys=[[[[first_y, last_y, last_y, first_y]]]],
                                  color="green")
 
+
+
         return graph
 if __name__ == "__main__":
 
     grid = Grid(160, 180)
-    x = grid.create_water(Water(15, 20))
-    print(x)
-    grid = grid.grid
-    x = Visualator(grid)
-    show(x.bokeh())
+    x = grid.create_water(Water(6, 100))
+    check = Check(x, grid)
+    if check.check_water is True:
+        grid_end = grid.grid
+        x = Visualator(grid_end)
+        show(x.bokeh())
+    else:
+        print("ERROR JOE")
