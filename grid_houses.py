@@ -1,7 +1,7 @@
 from bokeh.plotting import figure, output_file, show
 from bokeh.models import Range1d
 from Opzet import Water
-Een test is dit
+
 class Grid(object):
     def __init__(self, total_length, total_width):
         self.width = total_width
