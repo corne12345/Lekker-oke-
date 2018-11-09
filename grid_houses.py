@@ -13,7 +13,7 @@ class Grid(object):
         grid = []
         grid_row = []
         for length in range(self.length):
-            for pixel in range(selb f.width):
+            for pixel in range(self.width):
                 grid_row.append(0)
             grid.append(grid_row)
             grid_row = []
@@ -30,18 +30,19 @@ class Grid(object):
         return surface
 
 class Check(object):
-    def __init__(self, surface_water, grid):
+    def __init__(self, water_class, grid, file):
         self.surface = grid.width * grid.length
-        self.check_water = self.check_water_surface(surface_water, 0.2)
+        self.properties = file
+        self.check_water = self.check_water_surface(water_class, 0.2)
 
-    def total_surface water(self):
+
+    def total_surface_water(self):
         print("")
 
     def check_water_surface(self, surface, percentage):
         # ratio of the surface
-        ratio = surface.length / surface.length
-        print(ration)
-        if surface >= self.surface * percentage:
+        ratio = self.properties.length / self.properties.width
+        if surface >= self.surface * percentage and ratio <= 4:
             return True
         else:
             return False
@@ -89,10 +90,18 @@ class Visualator(object):
 
         # checks if water exist and print the ground
         if water_first_x != None:
-            graph.multi_polygons(xs=[[[ [first_x, first_x, last_x, last_x], [water_first_x, water_first_x, water_last_x, water_last_x]  ]]],
-                                 ys=[[[ [first_y, last_y, last_y, first_y], [water_first_y, water_last_y, water_last_y, water_first_y]  ]]],
-                                color="green")
-            graph.patch(x=[water_first_x, water_first_x, water_last_x, water_last_x], y=[water_first_y, water_last_y, water_last_y, water_first_y], color="blue" )
+
+            # makes ground plan polygon
+            graph.multi_polygons(xs=[[[ [first_x, first_x, last_x, last_x],
+                                    [water_first_x, water_first_x, water_last_x, water_last_x]  ]]],
+                                 ys=[[[ [first_y, last_y, last_y, first_y],
+                                    [water_first_y, water_last_y, water_last_y, water_first_y]  ]]],
+                                color="grey")
+
+            # makes water polygon
+            graph.patch(x=[water_first_x, water_first_x, water_last_x, water_last_x],
+                        y=[water_first_y, water_last_y, water_last_y, water_first_y],
+                        color="blue" )
 
         # prints only the ground
         else:
@@ -105,8 +114,10 @@ class Visualator(object):
 if __name__ == "__main__":
 
     grid = Grid(160, 180)
-    x = grid.create_water(Water(6, 100))
-    check = Check(x, grid)
+    water = Water(60, 100)
+    x = grid.create_water(water)
+
+    check = Check(x, grid, water)
     if check.check_water is True:
         grid_end = grid.grid
         x = Visualator(grid_end)
