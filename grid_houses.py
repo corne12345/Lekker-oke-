@@ -2,6 +2,11 @@ from bokeh.plotting import figure, output_file, show
 from bokeh.models import Range1d
 from Opzet import Water
 
+
+# 1 = waterbody
+# 2 = single home
+# 3 = bungalow
+# 4 = maison
 class Grid(object):
     def __init__(self, total_length, total_width):
         self.width = total_width
@@ -22,12 +27,28 @@ class Grid(object):
     # creates different_water_bodies
     def create_water(self, file):
         water = file
-        for row in range(water.length):
-            for place in range(water.width):
-                if self.grid[row][place] != 1:
+        first_length_position = None
+        first_width_position = None
+        print(self.length)
+        for row in range(len(self.grid)): # length
+            for place, item in enumerate(self.grid[0]): # width
+                if self.grid[row][place] == 0 and first_width_position == None:
                     self.grid[row][place] = 1
+                    first_width_position = self.grid[row][place]
+                    print('true')
+
+                elif water.width > (first_width_position + place):
+                    print(first_width_position - place)
+                    self.grid[row][place] = 1
+
         surface = water.length * water.width
         return surface
+
+
+    def create_bungalow(self, file):
+        bungalow = file
+        print("")
+
 
 class Check(object):
     def __init__(self, water_class, grid, file):
