@@ -2,6 +2,8 @@
 class SingleHome(object):
     def __init__(self, nr_of_houses, length, width, standard_price):
         self.nr_of_houses = nr_of_houses
+        self.length = length
+        self.width = width
         self.surface = length * width
         self.number = 0.6 * nr_of_houses
         self.price = standard_price
@@ -14,6 +16,8 @@ class SingleHome(object):
 class Bungalow(object):
     def __init__(self, nr_of_houses, length, width, standard_price):
         self.nr_of_houses = nr_of_houses, standard_price
+        self.length = length
+        self.width = width
         self.surface = length * width
         self.number = 0.25 * nr_of_houses
         self.price = standard_price
@@ -22,6 +26,8 @@ class Bungalow(object):
 class Maison(object):
     def __init__(self, nr_of_houses, length, width, standard_price):
         self.nr_of_houses = nr_of_houses
+        self.length = length
+        self.width = width
         self.surface = length * width
         self.number = 0.15 * nr_of_houses
         self.price = standard_price
