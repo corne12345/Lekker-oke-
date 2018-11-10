@@ -29,17 +29,18 @@ class Grid(object):
         water = file
         first_length_position = None
         first_width_position = None
-        print(self.length)
-        for row in range(len(self.grid)): # length
-            for place, item in enumerate(self.grid[0]): # width
-                if self.grid[row][place] == 0 and first_width_position == None:
-                    self.grid[row][place] = 1
-                    first_width_position = self.grid[row][place]
-                    print('true')
 
-                elif water.width > (first_width_position + place):
-                    print(first_width_position - place)
-                    self.grid[row][place] = 1
+        for row in range(len(self.grid)): # length
+            if first_length_position == None:
+                first_length_position = row
+            elif water.length > (row - first_length_position):
+                for place, item in enumerate(self.grid[0]): # width
+                    if self.grid[row][place] == 0 and first_width_position == None:
+                        self.grid[row][place] = 1
+                        first_width_position = self.grid[row][place]
+
+                    elif water.width > (place - first_width_position):
+                        self.grid[row][place] = 1
 
         surface = water.length * water.width
         return surface
