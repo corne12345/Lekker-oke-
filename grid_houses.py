@@ -84,7 +84,7 @@ class Grid(object):
             if first_length_position == None: # nog nakijken of de huizen goed positioneerd
                 first_length_position = row
 
-            if single_home.length > (row - first_length_position) and \
+            if bungalow.length > (row - first_length_position) and \
             first_length_position != None:
                 for place in range(len(self.grid[0])):
                     if self.grid[row][place] not in range(1, 5) and first_width_position == None:
@@ -92,11 +92,11 @@ class Grid(object):
                         self.grid[row][place] = 3
 
                     elif self.grid[row][place] not in range(1, 5) and \
-                    single_home.width > (place - first_width_position):
+                    bungalow.width > (place - first_width_position):
                         self.grid[row][place] = 3
 
     def create_maison(self, file):
-        bungalow = file
+        maison = file
         first_length_position = None
         first_width_position = None
 
@@ -106,7 +106,7 @@ class Grid(object):
             if first_length_position == None: # nog nakijken of de huizen goed positioneerd
                 first_length_position = row
 
-            if single_home.length > (row - first_length_position) and \
+            if maison.length > (row - first_length_position) and \
             first_length_position != None:
                 for place in range(len(self.grid[0])):
                     if self.grid[row][place] not in range(1, 5) and first_width_position == None:
@@ -114,7 +114,7 @@ class Grid(object):
                         self.grid[row][place] = 4
 
                     elif self.grid[row][place] not in range(1, 5) and \
-                    single_home.width > (place - first_width_position):
+                    maison.width > (place - first_width_position):
                         self.grid[row][place] = 4
 
 
@@ -177,7 +177,13 @@ class Visualator(object):
         bungalow_first_x = None
         bungalow_first_y = None
         bungalow_last_x = None
-        bungalowe_last_y = None
+        bungalow_last_y = None
+
+        #  make variables for maison
+        maison_first_x = None
+        maison_first_y = None
+        maison_last_x = None
+        maison_last_y = None
 
         # makes the datapoints
         for y, list in enumerate(self.grid):
@@ -203,16 +209,16 @@ class Visualator(object):
                 bungalow_first_x = list[::1].index(3)
                 bungalow_first_y = y + 1
             elif 3 in list:
-                single_home_last_x = len(list) - list[::-1].index(3)
+                bungalow_last_x = len(list) - list[::-1].index(3)
                 bungalow_last_y = y + 1
 
             # makes postion of the maison
-            if 4 in list and bungalow_first_x == None:
-                bungalow_first_x = list[::1].index(3)
-                bungalow_first_y = y + 1
+            if 4 in list and maison_first_x == None:
+                maison_first_x = list[::1].index(4)
+                maison_first_y = y + 1
             elif 4 in list:
-                single_home_last_x = len(list) - list[::-1].index(3)
-                bungalow_last_y = y + 1
+                maison_last_x = len(list) - list[::-1].index(4)
+                maison_last_y = y + 1
 
         # checks if water exist and print the ground
         if water_first_x != None and single_home_first_x != None \
