@@ -43,8 +43,6 @@ class Grid(object):
                     if item == 0 and first_width_position == None:
                         first_width_position = place
                         self.grid[row][place] = 1
-                        print(first_width_position)
-
 
                     elif first_width_position != None and place >= first_width_position \
                     and water.width > (place - first_width_position):
@@ -74,6 +72,51 @@ class Grid(object):
                     elif self.grid[row][place] not in range(1, 5) and \
                     single_home.width > (place - first_width_position):
                         self.grid[row][place] = 2
+
+    def create_bungalow(self, file):
+        bungalow = file
+        first_length_position = None
+        first_width_position = None
+
+
+        # import the grid and put the houses in the right spaces
+        for row in range(len(self.grid)): # to do iterate over the grid to put the houses on the right places
+            if first_length_position == None: # nog nakijken of de huizen goed positioneerd
+                first_length_position = row
+
+            if single_home.length > (row - first_length_position) and \
+            first_length_position != None:
+                for place in range(len(self.grid[0])):
+                    if self.grid[row][place] not in range(1, 5) and first_width_position == None:
+                        first_width_position = place
+                        self.grid[row][place] = 3
+
+                    elif self.grid[row][place] not in range(1, 5) and \
+                    single_home.width > (place - first_width_position):
+                        self.grid[row][place] = 3
+
+    def create_maison(self, file):
+        bungalow = file
+        first_length_position = None
+        first_width_position = None
+
+
+        # import the grid and put the houses in the right spaces
+        for row in range(len(self.grid)): # to do iterate over the grid to put the houses on the right places
+            if first_length_position == None: # nog nakijken of de huizen goed positioneerd
+                first_length_position = row
+
+            if single_home.length > (row - first_length_position) and \
+            first_length_position != None:
+                for place in range(len(self.grid[0])):
+                    if self.grid[row][place] not in range(1, 5) and first_width_position == None:
+                        first_width_position = place
+                        self.grid[row][place] = 4
+
+                    elif self.grid[row][place] not in range(1, 5) and \
+                    single_home.width > (place - first_width_position):
+                        self.grid[row][place] = 4
+
 
 class Check(object):
     def __init__(self, water_class, grid, file):
@@ -124,11 +167,17 @@ class Visualator(object):
         water_last_x = None
         water_last_y = None
 
-        #  makes houses
+        #  makes single house
         single_home_first_x = None
         single_home_first_y = None
         single_home_last_x = None
         single_home_last_y = None
+
+        #  make variables for bungalow
+        bungalow_first_x = None
+        bungalow_first_y = None
+        bungalow_last_x = None
+        bungalowe_last_y = None
 
         # makes the datapoints
         for y, list in enumerate(self.grid):
@@ -138,19 +187,36 @@ class Visualator(object):
                 water_first_x = list[::1].index(1)
                 water_first_y = y + 1
             elif 1 in list:
-                water_last_x = len(list) - list[::-1].indedx(1)
+                water_last_x = len(list) - list[::-1].index(1)
                 water_last_y = y + 1
 
             # makes postion of the singlehouse
             if 2 in list and single_home_first_x == None:
-                single_home_first_x = list[::1].index(2) + 1
+                single_home_first_x = list[::1].index(2)
                 single_home_first_y = y + 1
             elif 2 in list:
                 single_home_last_x = len(list) - list[::-1].index(2)
                 single_home_last_y = y + 1
 
+            # makes position of the bungalow
+            if 3 in list and bungalow_first_x == None:
+                bungalow_first_x = list[::1].index(3)
+                bungalow_first_y = y + 1
+            elif 3 in list:
+                single_home_last_x = len(list) - list[::-1].index(3)
+                bungalow_last_y = y + 1
+
+            # makes postion of the maison
+            if 4 in list and bungalow_first_x == None:
+                bungalow_first_x = list[::1].index(3)
+                bungalow_first_y = y + 1
+            elif 4 in list:
+                single_home_last_x = len(list) - list[::-1].index(3)
+                bungalow_last_y = y + 1
+
         # checks if water exist and print the ground
-        if water_first_x != None and single_home_first_x != None:
+        if water_first_x != None and single_home_first_x != None \
+        and bungalow_first_x != None and maison_first_x != None:
 
             # makes ground plan polygon
             graph.patch(x=[first_x, first_x, last_x, last_x],
@@ -167,6 +233,16 @@ class Visualator(object):
                         y=[single_home_first_y, single_home_last_y, single_home_last_y, single_home_first_y],
                         color="red")
 
+            # makes bungalow polygon
+            graph.patch(x=[bungalow_first_x, bungalow_first_x, bungalow_last_x, bungalow_last_x],
+                        y=[bungalow_first_y, bungalow_last_y, bungalow_last_y, bungalow_first_y],
+                        color="yellow")
+
+            # makes maison polygon
+            graph.patch(x=[maison_first_x, maison_first_x, maison_last_x, maison_last_x],
+                        y=[maison_first_y, maison_last_y, maison_last_y, maison_first_y],
+                        color="green")
+
         # prints only the ground
         else:
             graph.multi_polygons(xs=[[[[first_x, first_x, last_x, last_x]]]],
@@ -180,6 +256,8 @@ if __name__ == "__main__":
     grid = Grid(160, 180)
     water = Water(60, 100)
     grid.create_single_home(SingleHome(total_houses, 8, 8, 285000))
+    grid.create_bungalow(Bungalow(total_houses, 10, 7.5, 399000))
+    grid.create_maison(Maison(total_houses, 11, 10.5, 610000))
     create_water = grid.create_water(water)
 
     check = Check(create_water, grid, water)
