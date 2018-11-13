@@ -36,7 +36,7 @@ class Water(object):
     def __init__(self, width, length):
         self.width = width
         self.length = length
-        self.sutface = width * length
+        self.surface = width * length
 
 if __name__ == "__main__":
     total_homes = 20
