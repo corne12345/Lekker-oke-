@@ -22,3 +22,8 @@ It contains calculations of the state space, lower bound and upper bound.
 - Eveline Tiekink
 - Coen Mol
 - Corné Heijnen
+
+# Acknowledgements
+- Stackoverflow
+- Minor Programmeren at University of Amsterdam
+- Angelo Groot (Tech Assistent)
