@@ -1,3 +1,8 @@
+import sys
+
+# get the path to the classes
+sys.path.append(sys.path[0].replace('\\grid', '\\classes'))
+
 from bokeh.plotting import figure, output_file, show
 from bokeh.models import Range1d
 from Opzet import *
@@ -7,6 +12,7 @@ from Opzet import *
 # 2 = single home
 # 3 = bungalow
 # 4 = maison
+# 5 = detachement
 class Grid(object):
     def __init__(self, total_length, total_width):
         self.width = total_width
@@ -143,8 +149,8 @@ class Visualator(object):
 
     def bokeh(self):
         graph = figure(title = "Amstelhaege")
+
         # get x values for the bokeh figure
-        print(self.grid)
         x_axis = self.grid[-1]
         first_x = x_axis.index(x_axis[0]) + 1
         last_x = None
@@ -263,7 +269,7 @@ if __name__ == "__main__":
     total_houses = 20
     grid = Grid(160, 180)
     water = Water(60, 100)
-    grid.create_single_home(SingleHome(total_houses, 8, 8, 285000))
+    grid.create_single_home(SingleHome(total_houses, 8, 8, 285000, 2))
     grid.create_bungalow(Bungalow(total_houses, 10, 7.5, 399000))
     grid.create_maison(Maison(total_houses, 11, 10.5, 610000))
     create_water = grid.create_water(water)
