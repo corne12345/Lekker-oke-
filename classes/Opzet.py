@@ -1,16 +1,22 @@
+# the measurements are decimeters (not in foot, filthy emperials)
+
+
+
 # Single Home defined
 class SingleHome(object):
-    def __init__(self, nr_of_houses, length, width, standard_price):
+    def __init__(self, nr_of_houses, length, width, standard_price, detachement):
+        self.detachement = detachement
         self.nr_of_houses = nr_of_houses
         self.length = length
         self.width = width
         self.surface = length * width
-        self.number = 0.6 * nr_of_houses
+        self.number = 0.6 * nr_of_houses # TODO: misschien hier nog percentage ook als variabele invullen
         self.price = standard_price
 
     def surface_house(self, length, width):
         surface = length * width
         return surface
+
 
 # Bungalow defined
 class Bungalow(object):
