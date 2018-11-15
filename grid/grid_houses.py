@@ -63,7 +63,7 @@ class Grid(object):
         return surface
 
 
-    def create_little_house(self, file):
+    def create_little_house(self, file, coordinates):
         little_house = file
         first_length_position = None
         first_width_position = None
@@ -74,9 +74,9 @@ class Grid(object):
 
         # import the grid and put the houses in the right spaces
         for row in range(len(self.grid)): # to do iterate over the grid to put the houses on the right places
-            for check in range(1, file.detachement + 1):
+            for check in range(1, little_house.detachement + 1):
                 try:
-                    if row - check < 0:
+                    if row - check < 0 and len(self.grid) < row + check:
                         h_check.append(None)
                     else:
                         h_check.append(self.grid[row - check][0])
@@ -95,7 +95,7 @@ class Grid(object):
                             if place - check < 0:
                                 l_check.append(None)
                             else:
-                                h_check.append(self.grid[place - check])
+                                h_check.append(self.grid[row][place - check])
                         except:
                             h_check.append(None)
 
