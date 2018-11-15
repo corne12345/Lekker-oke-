@@ -26,6 +26,8 @@ class Grid(object):
     def grid_command(self):
         grid = []
         grid_row = []
+        print(self.length)
+        print(self.width)
         for length in range(self.length):
             for pixel in range(self.width):
                 grid_row.append(0)
@@ -66,29 +68,32 @@ class Grid(object):
         return surface
 
 
-    def create_little_house(self, file, coordinates):
+    def create_little_house(self, file):
         little_house = file
+        coordinates = Coordinates(little_house.nr_of_houses, self.length, self.width).coordinates
+        print(coordinates)
         first_length_position = None
         first_width_position = None
-        coordinates = coordinates
+
+        # coordinates, navragen of library beter is
+        y_axis = coordinates[0]
+        x_axis = coordinates[1]
 
         # import the grid and put the houses in the right spaces
         for row in range(len(self.grid)): # to do iterate over the grid to put the houses on the right places
-            if first_length_position == None and row == coordinates[0] : # nog nakijken of de huizen goed positioneerd
+            if first_length_position == None and row == y_axis : # nog nakijken of de huizen goed positioneerd
                 first_length_position = row
 
             if first_length_position != None and \
             little_house.length > (row - first_length_position):
                 for place in range(len(self.grid[0])):
-                    if self.grid[row][place] not in range(1, 5) and first_width_position == None and place == coordinates[1]:
+                    if self.grid[row][place] not in range(1, 5) and first_width_position == None and place == x_axis:
                         first_width_position = place
                         self.grid[row][place] = 2
                     elif first_width_position != None and self.grid[row][place] not in range(1, 5) and \
                     little_house.width > (place - first_width_position):
                         self.grid[row][place] = 2
 
-                    l_check = []
-            h_check = []
 
     def create_medium_house(self, file):
         """
@@ -99,16 +104,20 @@ class Grid(object):
         first_length_position = None
         first_width_position = None
 
+        # misschien hier nog een library van maken
+        y_axis = coordinates[0]
+        x_axis = coordinates[1]
+
 
         # import the grid and put the houses in the right spaces
         for row in range(len(self.grid)): # to do iterate over the grid to put the houses on the right places
             if first_length_position == None: # nog nakijken of de huizen goed positioneerd
                 first_length_position = row
 
-            if medium_house.length > (row - first_length_position) and \
-            first_length_position != None:
+            if row == y_axis and first_length_position != None:
                 for place in range(len(self.grid[0])):
-                    if self.grid[row][place] not in range(1, 5) and first_width_position == None:
+                    if self.grid[row][place] not in range(1, 5) and first_width_position == None \
+                    and place == x_axis:
                         first_width_position = place
                         self.grid[row][place] = 3
 
@@ -116,7 +125,7 @@ class Grid(object):
                     medium_house.width > (place - first_width_position):
                         self.grid[row][place] = 3
 
-    def create_large_house(self, file):
+    def create_large_house(self, file, coordinates):
         """
         Creates large homes (maisons)
         """
@@ -284,10 +293,10 @@ class Visualator(object):
 
 if __name__ == "__main__":
     total_houses = 20
-    grid = Grid(160, 180)
+    grid = Grid(180, 160)
     water = Water(60, 100)
 
-    grid.create_little_house(SingleHome(total_houses, 8, 8, 285000, 2),  Coordinates().coordinates())
+    grid.create_little_house(SingleHome(total_houses, 8, 8, 285000, 2))
     #grid.create_medium_house(Bungalow(total_houses, 10, 7.5, 399000))
     #grid.create_large_house(Maison(total_houses, 11, 10.5, 610000))
     create_water = grid.create_water(water)
