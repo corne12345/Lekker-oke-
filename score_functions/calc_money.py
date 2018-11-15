@@ -10,11 +10,10 @@ def calc_money():
     This function takes the length of the newly created detachement around the houses
     and calculates the money each house yields.
     """
-    # def __init__(self, y, x):
-    #     self.y = y
-    #     self.x = x
+    coordinates_1 = Coordinates_large(0, 0)
 
-    print(coordinates_large)
+    x = coordinates_1.coordinates()
+    print(x)
 
 if __name__ == "__main__":
 
