@@ -40,7 +40,7 @@ class Grid(object):
         first_width_position = None
         last_width_position = None
 
-        # creates the wwater and check if there is nothing there
+        # creates the water and checks if there is nothing there
         for row in range(len(self.grid)): # length
 
             # get the first position of the length
@@ -257,7 +257,7 @@ class Visualator(object):
                         y=[water_first_y, water_last_y, water_last_y, water_first_y],
                         color="blue" )
 
-            # makes little house (single familt home) polygon
+            # makes little house (single family home) polygon
             graph.patch(x=[little_house_first_x, little_house_first_x, little_house_last_x, little_house_last_x],
                         y=[little_house_first_y, little_house_last_y, little_house_last_y, little_house_first_y],
                         color="red")
@@ -284,6 +284,7 @@ if __name__ == "__main__":
     total_houses = 20
     grid = Grid(160, 180)
     water = Water(60, 100)
+    water2 = Water(50, 50)
     grid.create_little_house(SingleHome(total_houses, 8, 8, 285000, 2))
     grid.create_medium_house(Bungalow(total_houses, 10, 7.5, 399000))
     grid.create_large_house(Maison(total_houses, 11, 10.5, 610000))
