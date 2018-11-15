@@ -67,7 +67,10 @@ class Grid(object):
         little_house = file
         first_length_position = None
         first_width_position = None
+
+        # checks if there is not interferention
         h_check = []
+        l_check = []
 
         # import the grid and put the houses in the right spaces
         for row in range(len(self.grid)): # to do iterate over the grid to put the houses on the right places
@@ -87,14 +90,27 @@ class Grid(object):
             if first_length_position != None and \
             little_house.length > (row - first_length_position):
                 for place in range(len(self.grid[0])):
-                    if self.grid[row][place] not in range(1, 5) and first_width_position == None:
+                    for check in range(1, file.detachement + 1):
+                        try:
+                            if place - check < 0:
+                                l_check.append(None)
+                            else:
+                                h_check.append(self.grid[place - check])
+                        except:
+                            h_check.append(None)
+
+                    print(l_check)
+                    if self.grid[row][place] not in range(1, 5) and first_width_position == None \
+                    and None not in l_check:
                         first_width_position = place
                         self.grid[row][place] = 2
-                    elif self.grid[row][place] not in range(1, 5) and \
+                    elif first_width_position != None and self.grid[row][place] not in range(1, 5) and \
                     little_house.width > (place - first_width_position):
                         self.grid[row][place] = 2
+
+                    l_check = []
             h_check = []
-            
+
     def create_medium_house(self, file):
         """
         Creates medium homes (bungalows)
@@ -174,14 +190,14 @@ class Visualator(object):
 
         # get x values for the bokeh figure
         x_axis = self.grid[-1]
-        first_x = x_axis.index(x_axis[0]) + 1
+        first_x = x_axis.index(x_axis[0])
         last_x = None
         for count, values in enumerate(x_axis):
             last_x = count + 1
 
         # get y values for graph
         y_axis = self.grid
-        first_y = y_axis.index(y_axis[0]) + 1
+        first_y = y_axis.index(y_axis[0])
         last_y = None
         for count, values in enumerate(y_axis):
             last_y = count + 1
@@ -221,38 +237,38 @@ class Visualator(object):
             # make water body
             if 1 in list and water_first_x == None:
                 water_first_x = list[::1].index(1)
-                water_first_y = y + 1
+                water_first_y = y
             elif 1 in list:
                 water_last_x = len(list) - list[::-1].index(1)
-                water_last_y = y + 1
+                water_last_y = y
 
             # makes postion of the little houses (single homes)
             if 2 in list and little_house_first_x == None:
                 little_house_first_x = list[::1].index(2)
-                little_house_first_y = y + 1
+                little_house_first_y = y
             elif 2 in list:
                 little_house_last_x = len(list) - list[::-1].index(2)
-                little_house_last_y = y + 1
+                little_house_last_y = y
 
             # makes position of the medium houses (bungalow)
             if 3 in list and medium_house_first_x == None:
                 medium_house_first_x = list[::1].index(3)
-                medium_house_first_y = y + 1
+                medium_house_first_y = y
             elif 3 in list:
                 medium_house_last_x = len(list) - list[::-1].index(3)
-                medium_house_last_y = y + 1
+                medium_house_last_y = y
 
             # makes postion of the large houses (maison)
             if 4 in list and large_house_first_x == None:
                 large_house_first_x = list[::1].index(4)
-                large_housen_first_y = y + 1
+                large_housen_first_y = y
             elif 4 in list:
                 large_house_last_x = len(list) - list[::-1].index(4)
-                large_house_last_y = y + 1
+                large_house_last_y = y
 
         # checks if water exist and print the ground
-        if water_first_x != None and little_house_first_x != None \
-        and medium_house_first_x != None and large_house_first_x != None:
+        if water_first_x != None or little_house_first_x != None \
+        and medium_house_first_x != None or large_house_first_x != None:
 
             # makes ground plan polygon
             graph.patch(x=[first_x, first_x, last_x, last_x],
