@@ -48,6 +48,6 @@ if __name__ == "__main__":
     total_homes = 20
 
     # defines the houses
-    single_home = SingleHome(total_homes, 8, 8, 285000)
-    bungalow = Bungalow(total_homes, 10, 7.5, 399000)
-    maison = Maison(total_homes, 11, 10.5, 610000)
+    single_home = SingleHome(total_homes, 8, 8, 285000, 2)
+    bungalow = Bungalow(total_homes, 10, 7.5, 399000, 4)
+    maison = Maison(total_homes, 11, 10.5, 610000, 6)
