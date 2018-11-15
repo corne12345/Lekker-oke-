@@ -2,10 +2,13 @@ import sys
 
 # get the path to the classes
 sys.path.append(sys.path[0].replace('\\grid', '\\classes'))
+sys.path.append(sys.path[0].replace('\\grid', '\\coordinates'))
+
 
 from bokeh.plotting import figure, output_file, show
 from bokeh.models import Range1d
 from Opzet import *
+from generator import *
 
 
 # 1 = waterbody
@@ -67,41 +70,17 @@ class Grid(object):
         little_house = file
         first_length_position = None
         first_width_position = None
-
-        # checks if there is not interferention
-        h_check = []
-        l_check = []
+        coordinates = coordinates
 
         # import the grid and put the houses in the right spaces
         for row in range(len(self.grid)): # to do iterate over the grid to put the houses on the right places
-            for check in range(1, little_house.detachement + 1):
-                try:
-                    if row - check < 0 and len(self.grid) < row + check:
-                        h_check.append(None)
-                    else:
-                        h_check.append(self.grid[row - check][0])
-                except:
-                    h_check.append(None)
-
-            if None not in h_check:
-                if first_length_position == None: # nog nakijken of de huizen goed positioneerd
-                    first_length_position = row
+            if first_length_position == None and row == coordinates[0] : # nog nakijken of de huizen goed positioneerd
+                first_length_position = row
 
             if first_length_position != None and \
             little_house.length > (row - first_length_position):
                 for place in range(len(self.grid[0])):
-                    for check in range(1, file.detachement + 1):
-                        try:
-                            if place - check < 0:
-                                l_check.append(None)
-                            else:
-                                h_check.append(self.grid[row][place - check])
-                        except:
-                            h_check.append(None)
-
-                    print(l_check)
-                    if self.grid[row][place] not in range(1, 5) and first_width_position == None \
-                    and None not in l_check:
+                    if self.grid[row][place] not in range(1, 5) and first_width_position == None and place == coordinates[1]:
                         first_width_position = place
                         self.grid[row][place] = 2
                     elif first_width_position != None and self.grid[row][place] not in range(1, 5) and \
@@ -307,10 +286,10 @@ if __name__ == "__main__":
     total_houses = 20
     grid = Grid(160, 180)
     water = Water(60, 100)
-    water2 = Water(50, 50)
-    grid.create_little_house(SingleHome(total_houses, 8, 8, 285000, 2))
-    grid.create_medium_house(Bungalow(total_houses, 10, 7.5, 399000))
-    grid.create_large_house(Maison(total_houses, 11, 10.5, 610000))
+
+    grid.create_little_house(SingleHome(total_houses, 8, 8, 285000, 2),  Coordinates().coordinates())
+    #grid.create_medium_house(Bungalow(total_houses, 10, 7.5, 399000))
+    #grid.create_large_house(Maison(total_houses, 11, 10.5, 610000))
     create_water = grid.create_water(water)
 
     check = Check(create_water, grid, water)
