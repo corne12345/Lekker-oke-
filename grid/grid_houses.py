@@ -94,24 +94,7 @@ class Grid(object):
                     little_house.width > (place - first_width_position):
                         self.grid[row][place] = 2
             h_check = []
-
-
-        # import the grid and put the houses in the right spaces
-        for row in range(len(self.grid)): # to do iterate over the grid to put the houses on the right places
-            if first_length_position == None: # nog nakijken of de huizen goed positioneerd
-                first_length_position = row
-
-            if little_house.length > (row - first_length_position) and \
-            first_length_position != None:
-                for place in range(len(self.grid[0])):
-                    if self.grid[row][place] not in range(1, 5) and first_width_position == None:
-                        first_width_position = place
-                        self.grid[row][place] = 2
-
-                    elif self.grid[row][place] not in range(1, 5) and \
-                    little_house.width > (place - first_width_position):
-                        self.grid[row][place] = 2
-
+            
     def create_medium_house(self, file):
         """
         Creates medium homes (bungalows)
