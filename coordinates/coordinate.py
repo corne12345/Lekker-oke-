@@ -11,8 +11,8 @@ class Coordinates_little(object):
         coordinates_little = []
         little_coordinates_y = [self.y, self.y, self.y + 8, self.y + 8]
         little_coordinates_x = [self.x, self.x + 8, self.x, self.x + 8]
-        coordinates.append(little_coordinates_y)
-        coordinates.append(little_coordinates_x)
+        coordinates_little.append(little_coordinates_y)
+        coordinates_little.append(little_coordinates_x)
 
         return coordinates_little
 
@@ -29,8 +29,8 @@ class Coordinates_medium(object):
         coordinates_medium = []
         medium_coordinates_y = [self.y, self.y, self.y + 7.5, self.y + 7.5]
         medium_coordinates_x = [self.x, self.x + 10, self.x, self.x + 10]
-        coordinates.append(medium_coordinates_y)
-        coordinates.append(medium_coordinates_x)
+        coordinates_medium.append(medium_coordinates_y)
+        coordinates_medium.append(medium_coordinates_x)
 
         return coordinates_medium
 
