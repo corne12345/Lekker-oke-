@@ -109,7 +109,7 @@ class Grid(object):
         medium_house = file
         self.medium_coordinates = Coordinates(int(medium_house.number), self.length, self.width).coordinates
         coordinates = self.medium_coordinates
-
+        print(coordinates)
         for coordinate in coordinates:
             # coordinates, navragen of library beter is
             y_axis = coordinate["y"]
@@ -217,48 +217,31 @@ class Visualator(object):
         water_last_x = None
         water_last_y = None
 
-        #  get the coordinates for little houses (single family homes)
-        little_coordinates = grid.little_coordinates
-
-        #  get the coordinates for medium houses (bungalows)
-        medium_coordinates = grid.medium_coordinates
-
-        # get the coordinates for large houses (maisons)
-        large_coordinates = grid.large_coordinates
-
-
-        # makes postion of the little houses (single homes)
+        # makes the datapoints
         for y, list in enumerate(self.grid):
 
             # misschien dubble loepen
             # make water body
             if 1 in list and water_first_x == None:
                 water_first_x = list[::1].index(1)
-                water_first_y = y
+                water_first_y = y + 1
             elif 1 in list:
                 water_last_x = len(list) - list[::-1].index(1)
-                water_last_y = y
+                water_last_y = y + 1
 
-            # makes position of the medium houses (bungalow)
-            if 3 in list and medium_house_first_x == None:
-                medium_house_first_x = list[::1].index(3)
-                medium_house_first_y = y
-            elif 3 in list:
-                medium_house_last_x = len(list) - list[::-1].index(3)
-                medium_house_last_y = y
+        #  get the coordinates for little houses (single family homes)
+        little_coordinates = grid.little_coordinates
 
-            # makes postion of the large houses (maison)
-            if 4 in list and large_house_first_x == None:
-                large_house_first_x = list[::1].index(4)
-                large_housen_first_y = y
-            elif 4 in list:
-                large_house_last_x = len(list) - list[::-1].index(4)
-                large_house_last_y = y
+        #  get the coordinates for medium houses (bungalows)
+        medium_coordinates = grid.medium_coordinates
+        print(medium_coordinates)
+
+        # get the coordinates for large houses (maisons)
+        large_coordinates = grid.large_coordinates
 
         # checks if water exist and print the ground
-        if water_first_x != None or little_house_first_x != None \
-        and medium_house_first_x != None or large_house_first_x != None:
-
+        if water_first_x != None:
+            print("true")
             # makes ground plan polygon
             graph.patch(x=[first_x, first_x, last_x, last_x],
                         y=[first_y, last_y, last_y, first_y],
@@ -277,6 +260,7 @@ class Visualator(object):
 
             # makes medium house (bungalow) polygon
             for house in medium_coordinates:
+                print(house)
                 graph.patch(x=[house["x"], house["x"], (house["x"] + self.medium_house.width), (house["x"] + self.medium_house.width)],
                             y=[house["y"], (house["y"] + self.medium_house.length), (house["y"] + self.medium_house.length), house["y"]],
                             color="yellow")
@@ -285,7 +269,7 @@ class Visualator(object):
             for house in medium_coordinates:
                 graph.patch(x=[house["x"], house["x"], (house["x"] + self.medium_house.width), (house["x"] + self.medium_house.width)],
                             y=[house["y"], (house["y"] + self.medium_house.length), (house["y"] + self.medium_house.length), house["y"]],
-                            color="yellow")
+                            color="green")
 
         # prints only the ground
         else:
