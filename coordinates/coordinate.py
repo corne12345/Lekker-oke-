@@ -34,7 +34,7 @@ class Coordinates_medium(object):
 
         return coordinates_medium
 
-class Coordinates_large(object):
+class Coordinates_large(list):
     """
     Creates coordinates for large houses (mansion)
     """
