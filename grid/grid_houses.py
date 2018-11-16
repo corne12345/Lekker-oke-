@@ -184,11 +184,11 @@ class Check(object):
 
 # Visualizes the graph
 class Visualator(object):
-    def __init__(self, grid, little_house, medium_house, big_house):
+    def __init__(self, grid, little_house, medium_house, large_house):
         self.grid = grid
         self.little_house = little_house
         self.medium_house = medium_house
-        self.big_house = big_house
+        self.large_house = large_house
 
     def bokeh(self):
         graph = figure(title = "Amstelhaege")
@@ -234,7 +234,6 @@ class Visualator(object):
 
         #  get the coordinates for medium houses (bungalows)
         medium_coordinates = grid.medium_coordinates
-        print(medium_coordinates)
 
         # get the coordinates for large houses (maisons)
         large_coordinates = grid.large_coordinates
@@ -260,15 +259,14 @@ class Visualator(object):
 
             # makes medium house (bungalow) polygon
             for house in medium_coordinates:
-                print(house)
                 graph.patch(x=[house["x"], house["x"], (house["x"] + self.medium_house.width), (house["x"] + self.medium_house.width)],
                             y=[house["y"], (house["y"] + self.medium_house.length), (house["y"] + self.medium_house.length), house["y"]],
                             color="yellow")
 
             # makes large house (maison) polygon
-            for house in medium_coordinates:
-                graph.patch(x=[house["x"], house["x"], (house["x"] + self.medium_house.width), (house["x"] + self.medium_house.width)],
-                            y=[house["y"], (house["y"] + self.medium_house.length), (house["y"] + self.medium_house.length), house["y"]],
+            for house in large_coordinates:
+                graph.patch(x=[house["x"], house["x"], (house["x"] + self.large_house.width), (house["x"] + self.large_house.width)],
+                            y=[house["y"], (house["y"] + self.large_house.length), (house["y"] + self.large_house.length), house["y"]],
                             color="green")
 
         # prints only the ground
@@ -285,14 +283,14 @@ if __name__ == "__main__":
     water = Water(60, 100)
 
     grid.create_little_house(LittleHouse(total_houses, 8, 8, 285000, 2))
-    grid.create_medium_house(MediumHouse(total_houses, 10, 7.5, 399000, 4))
-    grid.create_large_house(LargeHouse(total_houses, 11, 10.5, 610000, 6))
+    grid.create_medium_house(MediumHouse(total_houses, 10, 7.5, 399000))
+    grid.create_large_house(LargeHouse(total_houses, 11, 10.5, 610000))
     create_water = grid.create_water(water)
 
     check = Check(create_water, grid, water)
     if check.check_water is True:
         grid_end = grid.grid
-        x = Visualator(grid_end, LittleHouse(total_houses, 8, 8, 285000, 2), MediumHouse(total_houses, 10, 7.5, 399000, 4), LargeHouse(total_houses, 11, 10.5, 610000, 6))
+        x = Visualator(grid_end, LittleHouse(total_houses, 8, 8, 285000, 2), MediumHouse(total_houses, 10, 7.5, 399000), LargeHouse(total_houses, 11, 10.5, 610000))
         show(x.bokeh())
     else:
         print("ERROR JOE haha!!!")
