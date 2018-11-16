@@ -14,8 +14,6 @@ class Coordinates(object):
             y_x_coordinates = []
         print(list_coordinates)
 
-
-
         return list_coordinates
 
 if __name__ == "__main__":
