@@ -21,6 +21,7 @@ class Grid(object):
         self.width = total_width
         self.length = total_length
         self.grid = self.grid_command()
+        self.little_coordinates = Coordinates(2, self.length, self.width).coordinates
 
     # makes the grid itself
     def grid_command(self):
@@ -70,7 +71,7 @@ class Grid(object):
 
     def create_little_house(self, file):
         little_house = file
-        coordinates = Coordinates(2, self.length, self.width).coordinates
+        coordinates = self.little_coordinates
 
         for coordinate in coordinates:
             # coordinates, navragen of library beter is
@@ -170,8 +171,11 @@ class Check(object):
 
 # Visualizes the graph
 class Visualator(object):
-    def __init__(self, grid):
+    def __init__(self, grid, little_house, medium_house, big_house):
         self.grid = grid
+        self.little_house = little_house
+        self.medium_house = medium_house
+        self.big_house = big_house
 
     def bokeh(self):
         graph = figure(title = "Amstelhaege")
@@ -205,6 +209,16 @@ class Visualator(object):
         little_house_first_y = None
         little_house_last_x = None
         little_house_last_y = None
+        little_coordinates = []
+        little_points = []
+
+        for coordinate in grid.little_coordinates:
+            little_points.append(coordinate[0])
+            little_points.append(coordinate[1])
+            little_coordinates.append(little_points)
+            little_points = []
+
+
 
         #  make variables for medium houses (bungalows)
         medium_house_first_x = None
@@ -219,6 +233,8 @@ class Visualator(object):
         large_house_last_y = None
 
         # makes the datapoints
+
+        # makes postion of the little houses (single homes)
         for y, list in enumerate(self.grid):
 
             # misschien dubble loepen
@@ -229,14 +245,6 @@ class Visualator(object):
             elif 1 in list:
                 water_last_x = len(list) - list[::-1].index(1)
                 water_last_y = y
-
-            # makes postion of the little houses (single homes)
-            if 2 in list and little_house_first_x == None:
-                little_house_first_x = list[::1].index(2)
-                little_house_first_y = y
-            elif 2 in list:
-                little_house_last_x = len(list) - list[::-1].index(2)
-                little_house_last_y = y
 
             # makes position of the medium houses (bungalow)
             if 3 in list and medium_house_first_x == None:
@@ -269,9 +277,12 @@ class Visualator(object):
                         color="blue" )
 
             # makes little house (single family home) polygon
-            graph.patch(x=[little_house_first_x, little_house_first_x, little_house_last_x, little_house_last_x],
-                        y=[little_house_first_y, little_house_last_y, little_house_last_y, little_house_first_y],
-                        color="red")
+            for house in little_coordinates:
+                print(house)
+                print("joe")
+                graph.patch(x=[house[1], house[1], (house[1] + self.little_house.width), (house[1] + self.little_house.width)],
+                            y=[house[0], (house[0] + self.little_house.length), (house[0] + self.little_house.length), house[0]],
+                            color="red")
 
             # makes medium house (bungalow) polygon
             graph.patch(x=[medium_house_first_x, medium_house_first_x, medium_house_last_x, medium_house_last_x],
@@ -304,7 +315,7 @@ if __name__ == "__main__":
     check = Check(create_water, grid, water)
     if check.check_water is True:
         grid_end = grid.grid
-        x = Visualator(grid_end)
+        x = Visualator(grid_end, SingleHome(total_houses, 8, 8, 285000, 2), Bungalow(total_houses, 10, 7.5, 399000), Maison(total_houses, 11, 10.5, 610000))
         show(x.bokeh())
     else:
         print("ERROR JOE")
