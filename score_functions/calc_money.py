@@ -12,24 +12,31 @@ def calc_money():
     and calculates the money each house yields.
     """
 
-    # Create sample coordinates
-    coordinates = Coordinates(20, 180, 160).create_coordinates(20, 180, 160)
+    # Create sample coordinates by using random
+    coordinates = Coordinates(20, 180, 160).coordinates
     print(coordinates)
+    comparisons = []
 
-    coordinates_1 = Coordinates_large(47, 87)
-    coordinates_2 = Coordinates_large(38,75)
-    coordinates_3 = Coordinates_large(20,20)
-    # coordinates_4 =
+    # Create 4-point coordinates for each house by making 3 large, 5 medium
+    # and 12 small houses
+    for i in range(20):
+        y = coordinates[i]['y']
+        x = coordinates[i]['x']
+        if i < 3:
+            temp = Coordinates_large(x, y)
+        elif i < 8:
+            temp = Coordinates_medium(x,y)
+        else:
+            temp = Coordinates_little(x,y)
+        temp = temp.coordinates()
+        comparisons.append(temp)
 
-    # Extends to full set of coordinates
-    one = coordinates_1.coordinates()
-    two = coordinates_2.coordinates()
-    three = coordinates_3.coordinates()
-    comparisons = [two, three]
-
+    print(comparisons)
     # Create local variable that can't be a result value
     minimum_distance = 9999.999
 
+    one = comparisons[0]
+    print(one)
     # loop over all coordinates of selected house
     for i in range(4):
         # Loop over the list of houses to  select one
