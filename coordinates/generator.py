@@ -17,3 +17,7 @@ class Coordinates(object):
 
 
         return list_coordinates
+
+if __name__ == "__main__":
+    test = Coordinates(20, 160, 180)
+    print(test)
