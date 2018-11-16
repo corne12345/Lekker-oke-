@@ -80,8 +80,8 @@ class Grid(object):
 
         for coordinate in coordinates:
             # coordinates, navragen of library beter is
-            y_axis = coordinate[0]
-            x_axis = coordinate[1]
+            y_axis = coordinate["y"]
+            x_axis = coordinate["x"]
             first_length_position = None
             first_width_position = None
 
@@ -112,8 +112,8 @@ class Grid(object):
 
         for coordinate in coordinates:
             # coordinates, navragen of library beter is
-            y_axis = coordinate[0]
-            x_axis = coordinate[1]
+            y_axis = coordinate["y"]
+            x_axis = coordinate["x"]
             first_length_position = None
             first_width_position = None
 
@@ -132,30 +132,6 @@ class Grid(object):
                         first_width_position + medium_house.width > place and place - first_width_position >= 0:
                             self.grid[row][place] = 3
 
-        # medium_house = file
-        # first_length_position = None
-        # first_width_position = None
-        #
-        # # misschien hier nog een library van maken
-        # y_axis = coordinates[0]
-        # x_axis = coordinates[1]
-        #
-        #
-        # # import the grid and put the houses in the right spaces
-        # for row in range(len(self.grid)): # to do iterate over the grid to put the houses on the right places
-        #     if first_length_position == None: # nog nakijken of de huizen goed positioneerd
-        #         first_length_position = row
-        #
-        #     if row == y_axis and first_length_position != None:
-        #         for place in range(len(self.grid[0])):
-        #             if self.grid[row][place] not in range(1, 5) and first_width_position == None \
-        #             and place == x_axis:
-        #                 first_width_position = place
-        #                 self.grid[row][place] = 3
-        #
-        #             elif self.grid[row][place] not in range(1, 5) and \
-        #             medium_house.width > (place - first_width_position):
-        #                 self.grid[row][place] = 3
 
     def create_large_house(self, file):
         """
@@ -168,8 +144,8 @@ class Grid(object):
 
         for coordinate in coordinates:
             # coordinates, navragen of library beter is
-            y_axis = coordinate[0]
-            x_axis = coordinate[1]
+            y_axis = coordinate["y"]
+            x_axis = coordinate["x"]
             first_length_position = None
             first_width_position = None
 
@@ -188,27 +164,6 @@ class Grid(object):
                         first_width_position + large_house.width > place and place - first_width_position >= 0:
                             self.grid[row][place] = 4
 
-        #
-        # large_house = file
-        # first_length_position = None
-        # first_width_position = None
-        #
-        #
-        # # import the grid and put the houses in the right spaces
-        # for row in range(len(self.grid)): # to do iterate over the grid to put the houses on the right places
-        #     if first_length_position == None: # nog nakijken of de huizen goed positioneerd
-        #         first_length_position = row
-        #
-        #     if large_house.length > (row - first_length_position) and \
-        #     first_length_position != None:
-        #         for place in range(len(self.grid[0])):
-        #             if self.grid[row][place] not in range(1, 5) and first_width_position == None:
-        #                 first_width_position = place
-        #                 self.grid[row][place] = 4
-        #
-        #             elif self.grid[row][place] not in range(1, 5) and \
-        #             large_house.width > (place - first_width_position):
-        #                 self.grid[row][place] = 4
 
 # Checks if the conditions are fine
 class Check(object):
@@ -262,33 +217,15 @@ class Visualator(object):
         water_last_x = None
         water_last_y = None
 
-        #  makes variables for little houses (single family homes)
-        little_house_first_x = None
-        little_house_first_y = None
-        little_house_last_x = None
-        little_house_last_y = None
-        little_coordinates = []
-        little_points = []
+        #  get the coordinates for little houses (single family homes)
+        little_coordinates = grid.little_coordinates
 
-        for coordinate in grid.little_coordinates:
-            little_points.append(coordinate[0])
-            little_points.append(coordinate[1])
-            little_coordinates.append(little_points)
-            little_points = []
+        #  get the coordinates for medium houses (bungalows)
+        medium_coordinates = grid.medium_coordinates
 
-        #  make variables for medium houses (bungalows)
-        medium_house_first_x = None
-        medium_house_first_y = None
-        medium_house_last_x = None
-        medium_house_last_y = None
+        # get the coordinates for large houses (maisons)
+        large_coordinates = grid.large_coordinates
 
-        #  make variables for large houses (maisons)
-        large_house_first_x = None
-        large_house_first_y = None
-        large_house_last_x = None
-        large_house_last_y = None
-
-        # makes the datapoints
 
         # makes postion of the little houses (single homes)
         for y, list in enumerate(self.grid):
@@ -334,19 +271,21 @@ class Visualator(object):
 
             # makes little house (single family home) polygon
             for house in little_coordinates:
-                graph.patch(x=[house[1], house[1], (house[1] + self.little_house.width), (house[1] + self.little_house.width)],
-                            y=[house[0], (house[0] + self.little_house.length), (house[0] + self.little_house.length), house[0]],
+                graph.patch(x=[house["x"], house["x"], (house["x"] + self.little_house.width), (house["x"] + self.little_house.width)],
+                            y=[house["y"], (house["y"] + self.little_house.length), (house["y"] + self.little_house.length), house["y"]],
                             color="red")
 
             # makes medium house (bungalow) polygon
-            graph.patch(x=[medium_house_first_x, medium_house_first_x, medium_house_last_x, medium_house_last_x],
-                        y=[medium_house_first_y, medium_house_last_y, medium_house_last_y, medium_house_first_y],
-                        color="yellow")
+            for house in medium_coordinates:
+                graph.patch(x=[house["x"], house["x"], (house["x"] + self.medium_house.width), (house["x"] + self.medium_house.width)],
+                            y=[house["y"], (house["y"] + self.medium_house.length), (house["y"] + self.medium_house.length), house["y"]],
+                            color="yellow")
 
             # makes large house (maison) polygon
-            graph.patch(x=[large_house_first_x, large_house_first_x, large_house_last_x, large_house_last_x],
-                        y=[large_house_first_y, large_house_last_y, large_house_last_y, large_house_first_y],
-                        color="green")
+            for house in medium_coordinates:
+                graph.patch(x=[house["x"], house["x"], (house["x"] + self.medium_house.width), (house["x"] + self.medium_house.width)],
+                            y=[house["y"], (house["y"] + self.medium_house.length), (house["y"] + self.medium_house.length), house["y"]],
+                            color="yellow")
 
         # prints only the ground
         else:
