@@ -13,7 +13,12 @@ class Coordinates(object):
             y_x_coordinates.update({"y" : random.randint(0, length),
                                     "x" : random.randint(0, width)})
             list_coordinates.append(y_x_coordinates)
+<<<<<<< HEAD
+            y_x_coordinates = []
+        print(list_coordinates)
+=======
             y_x_coordinates = {}
+>>>>>>> b78a838564ec0e0d878a34797b07fcafdd92c623
 
         return list_coordinates
 
