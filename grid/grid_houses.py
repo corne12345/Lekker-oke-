@@ -284,15 +284,15 @@ if __name__ == "__main__":
     grid = Grid(180, 160)
     water = Water(60, 100)
 
-    grid.create_little_house(SingleHome(total_houses, 8, 8, 285000, 2))
-    grid.create_medium_house(Bungalow(total_houses, 10, 7.5, 399000))
-    grid.create_large_house(Maison(total_houses, 11, 10.5, 610000))
+    grid.create_little_house(LittleHouse(total_houses, 8, 8, 285000, 2))
+    grid.create_medium_house(MediumHouse(total_houses, 10, 7.5, 399000, 4))
+    grid.create_large_house(LargeHouse(total_houses, 11, 10.5, 610000, 6))
     create_water = grid.create_water(water)
 
     check = Check(create_water, grid, water)
     if check.check_water is True:
         grid_end = grid.grid
-        x = Visualator(grid_end, SingleHome(total_houses, 8, 8, 285000, 2), Bungalow(total_houses, 10, 7.5, 399000), Maison(total_houses, 11, 10.5, 610000))
+        x = Visualator(grid_end, LittleHouse(total_houses, 8, 8, 285000, 2), MediumHouse(total_houses, 10, 7.5, 399000, 4), LargeHouse(total_houses, 11, 10.5, 610000, 6))
         show(x.bokeh())
     else:
         print("ERROR JOE haha!!!")
