@@ -21,7 +21,7 @@ class Grid(object):
         self.width = total_width
         self.length = total_length
         self.grid = self.grid_command()
-        self.little_coordinates = Coordinates(2, self.length, self.width).coordinates
+        self.little_coordinates = None
 
     # makes the grid itself
     def grid_command(self):
@@ -71,6 +71,7 @@ class Grid(object):
 
     def create_little_house(self, file):
         little_house = file
+        self.little_coordinates = Coordinates(int(little_house.number), self.length, self.width).coordinates
         coordinates = self.little_coordinates
 
         for coordinate in coordinates:
@@ -278,8 +279,6 @@ class Visualator(object):
 
             # makes little house (single family home) polygon
             for house in little_coordinates:
-                print(house)
-                print("joe")
                 graph.patch(x=[house[1], house[1], (house[1] + self.little_house.width), (house[1] + self.little_house.width)],
                             y=[house[0], (house[0] + self.little_house.length), (house[0] + self.little_house.length), house[0]],
                             color="red")
