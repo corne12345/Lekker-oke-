@@ -108,7 +108,7 @@ if __name__ == "__main__":
     max_distances = []
     max_coordinates = []
 
-    while(instances < 1000):
+    while(instances < 5000):
         money = []
         check = False
         while(check == False):
@@ -116,7 +116,7 @@ if __name__ == "__main__":
             coordinates = outcome[0]
             distances = outcome[1]
             check = calc_validity(distances)
-            print(check)
+            print(instances)
 
         instances += 1
         worth = calc_score(distances)
