@@ -47,8 +47,8 @@ class Coordinates_large(object):
         coordinates_large = []
         large_coordinates_y = [self.y, self.y, self.y + 10.5, self.y + 10.5]
         large_coordinates_x = [self.x, self.x + 11, self.x, self.x + 11]
-        coordinates.append(large_coordinates_y)
-        coordinates.append(large_coordinates_x)
+        coordinates_large.append(large_coordinates_y)
+        coordinates_large.append(large_coordinates_x)
 
         return coordinates_large
 
