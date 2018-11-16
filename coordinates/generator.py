@@ -9,7 +9,7 @@ class Coordinates(object):
         list_coordinates = []
         y_x_coordinates = {}
         for _ in range(number):
-            
+
             # creates a library with the y and x coordinates
             y_x_coordinates.update({"y" : random.randint(0, length),
                                     "x" : random.randint(0, width)})
@@ -18,5 +18,5 @@ class Coordinates(object):
         return list_coordinates
 
 if __name__ == "__main__":
-    test = Coordinates(20, 160, 180).coordinates
+    test = Coordinates(20,180,160).coordinates
     print(test)
