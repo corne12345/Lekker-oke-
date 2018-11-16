@@ -218,8 +218,6 @@ class Visualator(object):
             little_coordinates.append(little_points)
             little_points = []
 
-
-
         #  make variables for medium houses (bungalows)
         medium_house_first_x = None
         medium_house_first_y = None
@@ -308,8 +306,8 @@ if __name__ == "__main__":
     water = Water(60, 100)
 
     grid.create_little_house(SingleHome(total_houses, 8, 8, 285000, 2))
-    #grid.create_medium_house(Bungalow(total_houses, 10, 7.5, 399000))
-    #grid.create_large_house(Maison(total_houses, 11, 10.5, 610000))
+    # grid.create_medium_house(Bungalow(total_houses, 10, 7.5, 399000))
+    # grid.create_large_house(Maison(total_houses, 11, 10.5, 610000))
     create_water = grid.create_water(water)
 
     check = Check(create_water, grid, water)
@@ -318,4 +316,4 @@ if __name__ == "__main__":
         x = Visualator(grid_end, SingleHome(total_houses, 8, 8, 285000, 2), Bungalow(total_houses, 10, 7.5, 399000), Maison(total_houses, 11, 10.5, 610000))
         show(x.bokeh())
     else:
-        print("ERROR JOE")
+        print("ERROR JOE haha!!!")
