@@ -70,29 +70,29 @@ class Grid(object):
 
     def create_little_house(self, file):
         little_house = file
-        coordinates = Coordinates(little_house.nr_of_houses, self.length, self.width).coordinates
-        print(coordinates)
-        first_length_position = None
-        first_width_position = None
+        coordinates = Coordinates(2, self.length, self.width).coordinates
 
-        # coordinates, navragen of library beter is
-        y_axis = coordinates[0]
-        x_axis = coordinates[1]
+        for coordinate in coordinates:
+            # coordinates, navragen of library beter is
+            y_axis = coordinate[0]
+            x_axis = coordinate[1]
+            first_length_position = None
+            first_width_position = None
 
-        # import the grid and put the houses in the right spaces
-        for row in range(len(self.grid)): # to do iterate over the grid to put the houses on the right places
-            if first_length_position == None and row == y_axis : # nog nakijken of de huizen goed positioneerd
-                first_length_position = row
+            # import the grid and put the houses in the right spaces
+            for row in range(len(self.grid)): # to do iterate over the grid to put the houses on the right places
+                if first_length_position == None and row == y_axis : # nog nakijken of de huizen goed positioneerd
+                    first_length_position = row
 
-            if first_length_position != None and \
-            little_house.length > (row - first_length_position):
-                for place in range(len(self.grid[0])):
-                    if self.grid[row][place] not in range(1, 5) and first_width_position == None and place == x_axis:
-                        first_width_position = place
-                        self.grid[row][place] = 2
-                    elif first_width_position != None and self.grid[row][place] not in range(1, 5) and \
-                    little_house.width > (place - first_width_position):
-                        self.grid[row][place] = 2
+                if first_length_position != None and \
+                first_length_position + little_house.length > row :
+                    for place in range(len(self.grid[0])):
+                        if self.grid[row][place] not in range(1, 5) and first_width_position == None and place == x_axis:
+                            first_width_position = place
+                            self.grid[row][place] = 2
+                        elif first_width_position != None and self.grid[row][place] not in range(1, 5) and \
+                        first_width_position + little_house.width > place and place - first_width_position >= 0:
+                            self.grid[row][place] = 2
 
 
     def create_medium_house(self, file):

@@ -11,10 +11,15 @@ def calc_money():
     and calculates the money each house yields.
     """
     coordinates_1 = Coordinates_large(0, 0)
+    coordinates_2 = Coordinates_large(20,0)
 
-    x = coordinates_1.coordinates()
-    print(x)
+    one = coordinates_1.coordinates()
+    two = coordinates_2.coordinates()
+    # print(one, two, sep='\n')
+
+    for i in range(4):
+        print(coordinates_1[0[i]] - coordinates_2[0[i]])
+
 
 if __name__ == "__main__":
-
     money = calc_money()

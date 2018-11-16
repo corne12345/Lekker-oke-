@@ -29,7 +29,11 @@ class Coordinates_medium(object):
         coordinates_medium = []
         medium_coordinates_y = [self.y, self.y, self.y + 7.5, self.y + 7.5]
         medium_coordinates_x = [self.x, self.x + 10, self.x, self.x + 10]
+<<<<<<< HEAD
         coordinates_medium.append(medium_coordinates_y)
+=======
+        Coordinates_medium.append(medium_coordinates_y)
+>>>>>>> 87c1142790a1960d66cf08a1337f8f50b1d68abe
         coordinates_medium.append(medium_coordinates_x)
 
         return coordinates_medium
