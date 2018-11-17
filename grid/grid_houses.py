@@ -9,6 +9,7 @@ from bokeh.plotting import figure, output_file, show
 from bokeh.models import Range1d
 from Opzet import *
 from generator import *
+from check import *
 
 
 # 1 = waterbody
@@ -27,8 +28,6 @@ class Grid(object):
     def grid_command(self):
         grid = []
         grid_row = []
-        print(self.length)
-        print(self.width)
         for length in range(self.length):
             for pixel in range(self.width):
                 grid_row.append(0)
@@ -75,16 +74,25 @@ class Grid(object):
         """
 
         little_house = file
-        self.little_coordinates = Coordinates(int(little_house.number), self.length, self.width).coordinates
-        coordinates = self.little_coordinates
+        self.little_coordinates = Coordinates(int(little_house.number), self.length, self.width)
+        coordinates = self.little_coordinates.coordinates
+        check_house = CheckHouse(self.grid)
 
-        for coordinate in coordinates:
+        for number in range(len(coordinates)):
+            check, place = check_house.check_coordinates(coordinates)
+
+            # checks if the coordinates are true
+            while check is not True:
+                check, place = check_house.check_coordinates(coordinates)
+                if place is not None:
+                    coordinates[place] = self.little_coordinates.single_coordinate()
+
+            coordinate = coordinates[number]
             # coordinates, navragen of library beter is
             y_axis = coordinate["y"]
             x_axis = coordinate["x"]
             first_length_position = None
             first_width_position = None
-
             # import the grid and put the houses in the right spaces
             for row in range(len(self.grid)): # to do iterate over the grid to put the houses on the right places
                 if first_length_position == None and row == y_axis : # nog nakijken of de huizen goed positioneerd
@@ -96,6 +104,7 @@ class Grid(object):
                         if self.grid[row][place] not in range(1, 5) and first_width_position == None and place == x_axis:
                             first_width_position = place
                             self.grid[row][place] = 2
+
                         elif first_width_position != None and self.grid[row][place] not in range(1, 5) and \
                         first_width_position + little_house.width > place and place - first_width_position >= 0:
                             self.grid[row][place] = 2
@@ -107,11 +116,21 @@ class Grid(object):
         """
 
         medium_house = file
-        self.medium_coordinates = Coordinates(int(medium_house.number), self.length, self.width).coordinates
-        coordinates = self.medium_coordinates
-        print(coordinates)
-        for coordinate in coordinates:
+        self.medium_coordinates = Coordinates(int(medium_house.number), self.length, self.width)
+        coordinates = self.medium_coordinates.coordinates
+        check_house = CheckHouse(self.grid)
+
+        for number in range(len(coordinates)):
+            check, place = check_house.check_coordinates(coordinates)
+
+            # checks if the coordinates are true
+            while check is not True:
+                check, place = check_house.check_coordinates(coordinates)
+                if place is not None:
+                    coordinates[place] = self.medium_coordinates.single_coordinate()
+
             # coordinates, navragen of library beter is
+            coordinate = coordinates[number]
             y_axis = coordinate["y"]
             x_axis = coordinate["x"]
             first_length_position = None
@@ -139,11 +158,21 @@ class Grid(object):
         """
 
         large_house = file
-        self.large_coordinates = Coordinates(int(large_house.number), self.length, self.width).coordinates
-        coordinates = self.large_coordinates
+        self.large_coordinates = Coordinates(int(large_house.number), self.length, self.width)
+        coordinates = self.large_coordinates.coordinates
+        check_house = CheckHouse(self.grid)
 
-        for coordinate in coordinates:
+        for number in range(len(coordinates)):
+            check, place = check_house.check_coordinates(coordinates)
+
+            # checks if the coordinates are true
+            while check is not True:
+                check, place = check_house.check_coordinates(coordinates)
+                if place is not None:
+                    coordinates[place] = self.large_coordinates.single_coordinate()
+
             # coordinates, navragen of library beter is
+            coordinate = coordinates[number]
             y_axis = coordinate["y"]
             x_axis = coordinate["x"]
             first_length_position = None
@@ -164,23 +193,6 @@ class Grid(object):
                         first_width_position + large_house.width > place and place - first_width_position >= 0:
                             self.grid[row][place] = 4
 
-
-# Checks if the conditions are fine
-class Check(object):
-    def __init__(self, water_class, grid, file):
-        self.surface = grid.width * grid.length
-        self.properties = file
-        self.check_water = self.check_water_surface(water_class, 0.2)
-
-    # checks if the ratio is right and there is enough surface
-    def check_water_surface(self, surface, percentage):
-
-        # ratio of the surface
-        ratio = self.properties.length / self.properties.width
-        if surface >= self.surface * percentage and ratio <= 4:
-            return True
-        else:
-            return False
 
 # Visualizes the graph
 class Visualator(object):
@@ -230,17 +242,17 @@ class Visualator(object):
                 water_last_y = y + 1
 
         #  get the coordinates for little houses (single family homes)
-        little_coordinates = grid.little_coordinates
+        little_coordinates = grid.little_coordinates.coordinates
 
         #  get the coordinates for medium houses (bungalows)
-        medium_coordinates = grid.medium_coordinates
+        medium_coordinates = grid.medium_coordinates.coordinates
 
         # get the coordinates for large houses (maisons)
-        large_coordinates = grid.large_coordinates
+        large_coordinates = grid.large_coordinates.coordinates
 
         # checks if water exist and print the ground
         if water_first_x != None:
-            print("true")
+
             # makes ground plan polygon
             graph.patch(x=[first_x, first_x, last_x, last_x],
                         y=[first_y, last_y, last_y, first_y],
@@ -281,16 +293,12 @@ if __name__ == "__main__":
     total_houses = 20
     grid = Grid(180, 160)
     water = Water(60, 100)
-
+    create_water = grid.create_water(water)
     grid.create_little_house(LittleHouse(total_houses, 8, 8, 285000, 2))
     grid.create_medium_house(MediumHouse(total_houses, 10, 7.5, 399000))
     grid.create_large_house(LargeHouse(total_houses, 11, 10.5, 610000))
-    create_water = grid.create_water(water)
 
-    check = Check(create_water, grid, water)
-    if check.check_water is True:
-        grid_end = grid.grid
-        x = Visualator(grid_end, LittleHouse(total_houses, 8, 8, 285000, 2), MediumHouse(total_houses, 10, 7.5, 399000), LargeHouse(total_houses, 11, 10.5, 610000))
-        show(x.bokeh())
-    else:
-        print("ERROR JOE haha!!!")
+
+    x = Visualator(grid.grid, LittleHouse(total_houses, 8, 8, 285000, 2), MediumHouse(total_houses, 10, 7.5, 399000), LargeHouse(total_houses, 11, 10.5, 610000))
+    show(x.bokeh())
+    #        print("ERROR JOE haha!!!")
