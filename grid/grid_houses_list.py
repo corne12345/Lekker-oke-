@@ -68,17 +68,20 @@ class Grid(object):
         return surface
 
 
-    def create_little_house(self, file, comparisons):
+    def create_little_house(self, file, coordinates):
         """
         Creates little homes (single family homes)
         """
 
         little_house = file
-        for number in range(len(comparisons)):
+        check_house = CheckHouse(self.grid)
+
+        for number in range(len(coordinates)):
 
             # coordinates, navragen of library beter is
-            x_axis = comparisons[0][0]
-            y_axis = comparisons[1][0]
+            print(coordinates)
+            y_axis = coordinates["y"]
+            x_axis = coordinates["x"]
             first_length_position = None
             first_width_position = None
 
@@ -97,7 +100,6 @@ class Grid(object):
                         elif first_width_position != None and self.grid[row][place] not in range(1, 5) and \
                         first_width_position + little_house.width > place and place - first_width_position >= 0:
                             self.grid[row][place] = 2
-
 
 
     def create_medium_house(self, file):
@@ -106,11 +108,24 @@ class Grid(object):
         """
 
         medium_house = file
-        for number in range(len(comparisons)):
+        self.medium_coordinates = Coordinates(int(medium_house.number), self.length, self.width)
+        coordinates = self.medium_coordinates.coordinates
+        check_house = CheckHouse(self.grid)
+        print("medium")
 
+        for number in range(len(coordinates)):
+            check, place = check_house.check_coordinates(coordinates, medium_house)
+
+            # checks if the coordinates are true
+            while check is not True:
+                if place is not None:
+                    coordinates[place] = self.medium_coordinates.single_coordinate()
+                    check, place = check_house.check_coordinates(coordinates, medium_house)
+            print("true")
             # coordinates, navragen of library beter is
-            x_axis = comparisons[0][0]
-            y_axis = comparisons[1][0]
+            coordinate = coordinates[number]
+            y_axis = coordinate["y"]
+            x_axis = coordinate["x"]
             first_length_position = None
             first_width_position = None
 
@@ -120,15 +135,15 @@ class Grid(object):
                     first_length_position = row
 
                 if first_length_position != None and \
-                first_length_position + little_house.length > row :
+                first_length_position + medium_house.length > row :
                     for place in range(len(self.grid[0])):
                         if self.grid[row][place] not in range(1, 5) and first_width_position == None and place == x_axis:
                             first_width_position = place
-                            self.grid[row][place] = 2
-
+                            self.grid[row][place] = 3
                         elif first_width_position != None and self.grid[row][place] not in range(1, 5) and \
-                        first_width_position + little_house.width > place and place - first_width_position >= 0:
-                            self.grid[row][place] = 2
+                        first_width_position + medium_house.width > place and place - first_width_position >= 0:
+                            self.grid[row][place] = 3
+
 
     def create_large_house(self, file):
         """
@@ -136,11 +151,24 @@ class Grid(object):
         """
 
         large_house = file
-        for number in range(len(comparisons)):
+        self.large_coordinates = Coordinates(int(large_house.number), self.length, self.width)
+        coordinates = self.large_coordinates.coordinates
+        check_house = CheckHouse(self.grid)
+
+        for number in range(len(coordinates)):
+            check, place = check_house.check_coordinates(coordinates, large_house)
+
+            # checks if the coordinates are true
+            while check is not True:
+                if place is not None:
+                    coordinates[place] = self.large_coordinates.single_coordinate()
+                    check, place = check_house.check_coordinates(coordinates, large_house)
+
 
             # coordinates, navragen of library beter is
-            x_axis = comparisons[0][0]
-            y_axis = comparisons[1][0]
+            coordinate = coordinates[number]
+            y_axis = coordinate["y"]
+            x_axis = coordinate["x"]
             first_length_position = None
             first_width_position = None
 
@@ -150,15 +178,15 @@ class Grid(object):
                     first_length_position = row
 
                 if first_length_position != None and \
-                first_length_position + little_house.length > row :
+                first_length_position + large_house.length > row :
                     for place in range(len(self.grid[0])):
                         if self.grid[row][place] not in range(1, 5) and first_width_position == None and place == x_axis:
                             first_width_position = place
-                            self.grid[row][place] = 2
-
+                            self.grid[row][place] = 4
                         elif first_width_position != None and self.grid[row][place] not in range(1, 5) and \
-                        first_width_position + little_house.width > place and place - first_width_position >= 0:
-                            self.grid[row][place] = 2
+                        first_width_position + large_house.width > place and place - first_width_position >= 0:
+                            self.grid[row][place] = 4
+
 
 # Visualizes the graph
 class Visualator(object):
@@ -277,7 +305,7 @@ if __name__ == "__main__":
     grid = Grid(180, 160)
     water = Water(60, 100)
     create_water = grid.create_water(water)
-    grid.create_little_house(LittleHouse(total_houses, 8, 8, 285000, 2))
+    # grid.create_little_house(LittleHouse(total_houses, 8, 8, 285000, 2))
     grid.create_medium_house(MediumHouse(total_houses, 10, 7.5, 399000))
     grid.create_large_house(LargeHouse(total_houses, 11, 10.5, 610000))
 

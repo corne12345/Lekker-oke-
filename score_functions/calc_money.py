@@ -9,15 +9,7 @@ sys.path.append(sys.path[0].replace('\\score_functions', '\\classes'))
 from Opzet import *
 
 sys.path.append(sys.path[0].replace('\\score_functions', '\\grid'))
-<<<<<<< HEAD
-from grid_houses_list import *
-=======
 from grid_houses import *
-
-# sys.path.append(sys.path[0].replace('\\clases', '\\coordinates'))
-
-
->>>>>>> b4e6cb1db255ac4a32c14377d9a10b447db811ad
 
 def calc_money():
     """
@@ -46,19 +38,16 @@ def calc_money():
         comparisons.append(temp)
 
     # print(comparisons)
-    # Create local variable that cannot be a result value and loop over the list of coordinates
+    # Create local variable that can't be a result value and loop over the list of coordinates
     for s in range(len(comparisons)):
         selected = comparisons[s]
-
         # loop over all coordinates of selected house
         for i in range(4):
             minimum_distance = 9999.999
-
             # Loop over the list of houses to select one
             for house in range(len(comparisons)):
                 if comparisons[house] == selected:
                     break
-
                 # Loop over all coordinates of the other houses
                 for j in range(4):
                     temp = ((selected[0][i] - comparisons[house][0][j])**2 + (selected[1][i] - comparisons[house][1][j])**2)**0.5
@@ -83,7 +72,6 @@ def calc_validity(distances):
     This function checks if the distances provided as a list as argument fulfill
     the constraints in terms of free space. It returns a boolean
     """
-
     if (len(distances) != 20):
         return False
     else:
@@ -140,7 +128,7 @@ if __name__ == "__main__":
     max_coordinates = []
     comparisons = []
 
-    while(instances < 10):
+    while(instances < 20):
         money = []
         check = False
         while(check == False):
@@ -164,13 +152,3 @@ if __name__ == "__main__":
     print(max_worth)
     print(max_coordinates)
     print(max_distances)
-<<<<<<< HEAD
-    print(comparisons)
-=======
-
-    # Create visualiation
-    grid = Grid(180, 160)
-    total_houses = 20
-    x = Visualator(grid.grid, LittleHouse(total_houses, 8, 8, 285000, 2), MediumHouse(total_houses, 10, 7.5, 399000), LargeHouse(total_houses, 11, 10.5, 610000))
-    show(x.bokeh())
->>>>>>> b4e6cb1db255ac4a32c14377d9a10b447db811ad
