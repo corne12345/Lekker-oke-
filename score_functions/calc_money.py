@@ -2,9 +2,15 @@ import sys
 
 # get the path to the coordinates
 sys.path.append(sys.path[0].replace('\\score_functions', '\\coordinates'))
-
 from coordinate import *
 from generator import *
+
+sys.path.append(sys.path[0].replace('\\score_functions', '\\classes'))
+from Opzet import *
+
+sys.path.append(sys.path[0].replace('\\clases', '\\coordinates'))
+
+
 
 def calc_money():
     """
@@ -114,7 +120,7 @@ def place_water(comparisons):
     This function looks for the four biggest water bodies to be placed on the grid
     and returns its coordinates and dimensions
     """
-    
+
 
 if __name__ == "__main__":
 
@@ -151,3 +157,8 @@ if __name__ == "__main__":
     print(max_worth)
     print(max_coordinates)
     print(max_distances)
+
+    # Create visualiation
+    grid = Grid(180, 160)
+    x = Visualator(grid.grid, LittleHouse(total_houses, 8, 8, 285000, 2), MediumHouse(total_houses, 10, 7.5, 399000), LargeHouse(total_houses, 11, 10.5, 610000))
+    show(x.bokeh())
