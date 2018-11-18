@@ -62,7 +62,7 @@ def calc_money():
         distances.append(minimum_distance)
 
     # print(distances)
-    return(coordinates, distances)
+    return(coordinates, distances, comparisons)
 
 def calc_validity(distances):
     """
@@ -109,6 +109,13 @@ def calc_score(distances):
 
     return worth
 
+def place_water(comparisons):
+    """
+    This function looks for the four biggest water bodies to be placed on the grid
+    and returns its coordinates and dimensions
+    """
+    
+
 if __name__ == "__main__":
 
     tries = 0
@@ -117,7 +124,7 @@ if __name__ == "__main__":
     max_distances = []
     max_coordinates = []
 
-    while(instances < 100):
+    while(instances < 1):
         money = []
         check = False
         while(check == False):
@@ -125,6 +132,7 @@ if __name__ == "__main__":
             outcome = calc_money()
             coordinates = outcome[0]
             distances = outcome[1]
+            comparions = outcome[2]
             check = calc_validity(distances)
             # print(instances)
 
