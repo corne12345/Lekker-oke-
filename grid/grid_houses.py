@@ -83,9 +83,9 @@ class Grid(object):
 
             # checks if the coordinates are true
             while check is not True:
-                check, place = check_house.check_coordinates(coordinates, little_house)
                 if place is not None:
                     coordinates[place] = self.little_coordinates.single_coordinate()
+                    check, place = check_house.check_coordinates(coordinates, little_house)
 
 
             # coordinates, navragen of library beter is
@@ -94,6 +94,7 @@ class Grid(object):
             x_axis = coordinate["x"]
             first_length_position = None
             first_width_position = None
+
             # import the grid and put the houses in the right spaces
             for row in range(len(self.grid)): # to do iterate over the grid to put the houses on the right places
                 if first_length_position == None and row == y_axis : # nog nakijken of de huizen goed positioneerd
@@ -120,16 +121,17 @@ class Grid(object):
         self.medium_coordinates = Coordinates(int(medium_house.number), self.length, self.width)
         coordinates = self.medium_coordinates.coordinates
         check_house = CheckHouse(self.grid)
+        print("medium")
 
         for number in range(len(coordinates)):
-            check, place = check_house.check_coordinates(coordinates)
+            check, place = check_house.check_coordinates(coordinates, medium_house)
 
             # checks if the coordinates are true
             while check is not True:
-                check, place = check_house.check_coordinates(coordinates)
                 if place is not None:
                     coordinates[place] = self.medium_coordinates.single_coordinate()
-
+                    check, place = check_house.check_coordinates(coordinates, medium_house)
+            print("true")
             # coordinates, navragen of library beter is
             coordinate = coordinates[number]
             y_axis = coordinate["y"]
@@ -164,13 +166,14 @@ class Grid(object):
         check_house = CheckHouse(self.grid)
 
         for number in range(len(coordinates)):
-            check, place = check_house.check_coordinates(coordinates)
+            check, place = check_house.check_coordinates(coordinates, large_house)
 
             # checks if the coordinates are true
             while check is not True:
-                check, place = check_house.check_coordinates(coordinates)
                 if place is not None:
                     coordinates[place] = self.large_coordinates.single_coordinate()
+                    check, place = check_house.check_coordinates(coordinates, large_house)
+
 
             # coordinates, navragen of library beter is
             coordinate = coordinates[number]
@@ -271,14 +274,14 @@ class Visualator(object):
             # makes water polygon
             graph.patch(x=[water_first_x, water_first_x, water_last_x, water_last_x],
                         y=[water_first_y, water_last_y, water_last_y, water_first_y],
-                        color="blue" )
+                        color="blue", line_color="black")
 
             # makes little house (single family home) polygon
             try:
                 for house in little_coordinates:
                     graph.patch(x=[house["x"], house["x"], (house["x"] + self.little_house.width), (house["x"] + self.little_house.width)],
                                 y=[house["y"], (house["y"] + self.little_house.length), (house["y"] + self.little_house.length), house["y"]],
-                                color="red")
+                                color="red", line_color="black")
             except:
                 pass
             # makes medium house (bungalow) polygon
@@ -286,7 +289,7 @@ class Visualator(object):
                 for house in medium_coordinates:
                     graph.patch(x=[house["x"], house["x"], (house["x"] + self.medium_house.width), (house["x"] + self.medium_house.width)],
                                 y=[house["y"], (house["y"] + self.medium_house.length), (house["y"] + self.medium_house.length), house["y"]],
-                                color="yellow")
+                                color="yellow", line_color="black")
             except:
                 pass
 
@@ -295,7 +298,7 @@ class Visualator(object):
                 for house in large_coordinates:
                     graph.patch(x=[house["x"], house["x"], (house["x"] + self.large_house.width), (house["x"] + self.large_house.width)],
                                 y=[house["y"], (house["y"] + self.large_house.length), (house["y"] + self.large_house.length), house["y"]],
-                                color="green")
+                                color="green", line_color="black")
             except:
                 pass
 
@@ -313,8 +316,8 @@ if __name__ == "__main__":
     water = Water(60, 100)
     create_water = grid.create_water(water)
     grid.create_little_house(LittleHouse(total_houses, 8, 8, 285000, 2))
-    #grid.create_medium_house(MediumHouse(total_houses, 10, 7.5, 399000))
-    #grid.create_large_house(LargeHouse(total_houses, 11, 10.5, 610000))
+    grid.create_medium_house(MediumHouse(total_houses, 10, 7.5, 399000))
+    grid.create_large_house(LargeHouse(total_houses, 11, 10.5, 610000))
 
 
     x = Visualator(grid.grid, LittleHouse(total_houses, 8, 8, 285000, 2), MediumHouse(total_houses, 10, 7.5, 399000), LargeHouse(total_houses, 11, 10.5, 610000))
