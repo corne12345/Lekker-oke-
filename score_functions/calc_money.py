@@ -47,7 +47,7 @@ def calc_money():
             # Loop over the list of houses to select one
             for house in range(len(comparisons)):
                 if comparisons[house] == selected:
-                    break
+                    continue
                 # Loop over all coordinates of the other houses
                 for j in range(4):
                     temp = ((selected[0][i] - comparisons[house][0][j])**2 + (selected[1][i] - comparisons[house][1][j])**2)**0.5
@@ -128,7 +128,7 @@ if __name__ == "__main__":
     max_coordinates = []
     comparisons = []
 
-    while(instances < 20):
+    while(instances < 5):
         money = []
         check = False
         while(check == False):
