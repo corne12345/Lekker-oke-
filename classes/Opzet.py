@@ -3,7 +3,7 @@
 
 
 # Single Home defined
-class SingleHome(object):
+class LittleHouse(object):
     def __init__(self, nr_of_houses, length, width, standard_price, detachement):
         self.detachement = detachement
         self.nr_of_houses = nr_of_houses
@@ -19,7 +19,7 @@ class SingleHome(object):
 
 
 # Bungalow defined
-class Bungalow(object):
+class MediumHouse(object):
     def __init__(self, nr_of_houses, length, width, standard_price):
         self.nr_of_houses = nr_of_houses, standard_price
         self.length = length
@@ -29,7 +29,7 @@ class Bungalow(object):
         self.price = standard_price
 
 # Maison defined
-class Maison(object):
+class LargeHouse(object):
     def __init__(self, nr_of_houses, length, width, standard_price):
         self.nr_of_houses = nr_of_houses
         self.length = length
@@ -45,9 +45,9 @@ class Water(object):
         self.surface = width * length
 
 if __name__ == "__main__":
-    total_homes = 20
+    total_houses = 20
 
     # defines the houses
-    single_home = SingleHome(total_homes, 8, 8, 285000, 2)
-    bungalow = Bungalow(total_homes, 10, 7.5, 399000, 4)
-    maison = Maison(total_homes, 11, 10.5, 610000, 6)
+    single_home = LittleHouse(total_houses, 8, 8, 285000, 2)
+    bungalow = MediumHouse(total_houses, 10, 7.5, 399000, 4)
+    maison = LargeHouse(total_houses, 11, 10.5, 610000, 6)
