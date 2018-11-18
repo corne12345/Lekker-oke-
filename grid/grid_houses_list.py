@@ -68,30 +68,17 @@ class Grid(object):
         return surface
 
 
-    def create_little_house(self, file):
+    def create_little_house(self, file, comparisons):
         """
         Creates little homes (single family homes)
         """
 
         little_house = file
-        self.little_coordinates = Coordinates(int(little_house.number), self.length, self.width)
-        coordinates = self.little_coordinates.coordinates
-        check_house = CheckHouse(self.grid)
-
-        for number in range(len(coordinates)):
-            check, place = check_house.check_coordinates(coordinates, little_house)
-
-            # checks if the coordinates are true
-            while check is not True:
-                if place is not None:
-                    coordinates[place] = self.little_coordinates.single_coordinate()
-                    check, place = check_house.check_coordinates(coordinates, little_house)
-
+        for number in range(len(comparisons)):
 
             # coordinates, navragen of library beter is
-            coordinate = coordinates[number]
-            y_axis = coordinate["y"]
-            x_axis = coordinate["x"]
+            x_axis = comparisons[0][0]
+            y_axis = comparisons[1][0]
             first_length_position = None
             first_width_position = None
 
@@ -112,30 +99,18 @@ class Grid(object):
                             self.grid[row][place] = 2
 
 
+
     def create_medium_house(self, file):
         """
         Creates medium homes (bungalows)
         """
 
         medium_house = file
-        self.medium_coordinates = Coordinates(int(medium_house.number), self.length, self.width)
-        coordinates = self.medium_coordinates.coordinates
-        check_house = CheckHouse(self.grid)
-        print("medium")
+        for number in range(len(comparisons)):
 
-        for number in range(len(coordinates)):
-            check, place = check_house.check_coordinates(coordinates, medium_house)
-
-            # checks if the coordinates are true
-            while check is not True:
-                if place is not None:
-                    coordinates[place] = self.medium_coordinates.single_coordinate()
-                    check, place = check_house.check_coordinates(coordinates, medium_house)
-            print("true")
             # coordinates, navragen of library beter is
-            coordinate = coordinates[number]
-            y_axis = coordinate["y"]
-            x_axis = coordinate["x"]
+            x_axis = comparisons[0][0]
+            y_axis = comparisons[1][0]
             first_length_position = None
             first_width_position = None
 
@@ -145,15 +120,15 @@ class Grid(object):
                     first_length_position = row
 
                 if first_length_position != None and \
-                first_length_position + medium_house.length > row :
+                first_length_position + little_house.length > row :
                     for place in range(len(self.grid[0])):
                         if self.grid[row][place] not in range(1, 5) and first_width_position == None and place == x_axis:
                             first_width_position = place
-                            self.grid[row][place] = 3
-                        elif first_width_position != None and self.grid[row][place] not in range(1, 5) and \
-                        first_width_position + medium_house.width > place and place - first_width_position >= 0:
-                            self.grid[row][place] = 3
+                            self.grid[row][place] = 2
 
+                        elif first_width_position != None and self.grid[row][place] not in range(1, 5) and \
+                        first_width_position + little_house.width > place and place - first_width_position >= 0:
+                            self.grid[row][place] = 2
 
     def create_large_house(self, file):
         """
@@ -161,24 +136,11 @@ class Grid(object):
         """
 
         large_house = file
-        self.large_coordinates = Coordinates(int(large_house.number), self.length, self.width)
-        coordinates = self.large_coordinates.coordinates
-        check_house = CheckHouse(self.grid)
-
-        for number in range(len(coordinates)):
-            check, place = check_house.check_coordinates(coordinates, large_house)
-
-            # checks if the coordinates are true
-            while check is not True:
-                if place is not None:
-                    coordinates[place] = self.large_coordinates.single_coordinate()
-                    check, place = check_house.check_coordinates(coordinates, large_house)
-
+        for number in range(len(comparisons)):
 
             # coordinates, navragen of library beter is
-            coordinate = coordinates[number]
-            y_axis = coordinate["y"]
-            x_axis = coordinate["x"]
+            x_axis = comparisons[0][0]
+            y_axis = comparisons[1][0]
             first_length_position = None
             first_width_position = None
 
@@ -188,15 +150,15 @@ class Grid(object):
                     first_length_position = row
 
                 if first_length_position != None and \
-                first_length_position + large_house.length > row :
+                first_length_position + little_house.length > row :
                     for place in range(len(self.grid[0])):
                         if self.grid[row][place] not in range(1, 5) and first_width_position == None and place == x_axis:
                             first_width_position = place
-                            self.grid[row][place] = 4
-                        elif first_width_position != None and self.grid[row][place] not in range(1, 5) and \
-                        first_width_position + large_house.width > place and place - first_width_position >= 0:
-                            self.grid[row][place] = 4
+                            self.grid[row][place] = 2
 
+                        elif first_width_position != None and self.grid[row][place] not in range(1, 5) and \
+                        first_width_position + little_house.width > place and place - first_width_position >= 0:
+                            self.grid[row][place] = 2
 
 # Visualizes the graph
 class Visualator(object):
