@@ -33,13 +33,13 @@ def calc_money():
         comparisons.append(temp)
 
     # print(comparisons)
-    # Create local variable that can't be a result value
+    # Create local variable that can't be a result value and loop over the list of coordinates
     for s in range(len(comparisons)):
         selected = comparisons[s]
         # loop over all coordinates of selected house
         for i in range(4):
             minimum_distance = 9999.999
-            # Loop over the list of houses to  select one
+            # Loop over the list of houses to select one
             for house in range(len(comparisons)):
                 if comparisons[house] == selected:
                     break
@@ -47,6 +47,11 @@ def calc_money():
                 for j in range(4):
                     temp = ((selected[0][i] - comparisons[house][0][j])**2 + (selected[1][i] - comparisons[house][1][j])**2)**0.5
                     # print(temp)
+
+                    # Check for house in house and append lisst of distances if so
+                    if comparisons[house][0][0] < selected[0][i] < comparisons[house][0][2] and comparisons[house][1][0] < selected[1][i] < comparisons[house][1][1]:
+                        # print(comparisons[house][0][0], comparisons[house][0][2], comparisons[house][1][0], comparisons[house][1][1], selected[0][i], selected[1][i])
+                        distances.append("House in house")
                     if temp < minimum_distance:
                         minimum_distance = temp
                         # print(house, minimum_distance, sep='\t')
@@ -64,19 +69,22 @@ def calc_validity(distances):
     This function checks if the distances provided as a list as argument fulfill
     the constraints in terms of free space. It returns a boolean
     """
-    for i in range(len(distances)):
-        if i < 3:
-            if distances[i] < 6:
-                return False
-                break
-        elif i < 8:
-            if distances[i] < 3:
-                return False
-                break
-        else:
-            if distances[i] < 2:
-                return False
-                break
+    if (len(distances) != 20):
+        return False
+    else:
+        for i in range(len(distances)):
+            if i < 3:
+                if distances[i] < 6:
+                    return False
+                    break
+            elif i < 8:
+                if distances[i] < 3:
+                    return False
+                    break
+            else:
+                if distances[i] < 2:
+                    return False
+                    break
     return True
 
 def calc_score(distances):
@@ -103,20 +111,22 @@ def calc_score(distances):
 
 if __name__ == "__main__":
 
+    tries = 0
     instances = 0
     max_worth = 0
     max_distances = []
     max_coordinates = []
 
-    while(instances < 5000):
+    while(instances < 100):
         money = []
         check = False
         while(check == False):
+            tries += 1
             outcome = calc_money()
             coordinates = outcome[0]
             distances = outcome[1]
             check = calc_validity(distances)
-            print(instances)
+            # print(instances)
 
         instances += 1
         worth = calc_score(distances)
@@ -129,6 +139,7 @@ if __name__ == "__main__":
     # print(distances)
     # print(worth)
 
+    print(instances/tries * 100)
     print(max_worth)
     print(max_coordinates)
     print(max_distances)
