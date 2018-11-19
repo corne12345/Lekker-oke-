@@ -11,10 +11,6 @@ from Opzet import *
 sys.path.append(sys.path[0].replace('\\score_functions', '\\grid'))
 from grid_houses import *
 
-# sys.path.append(sys.path[0].replace('\\clases', '\\coordinates'))
-
-
-
 def calc_money():
     """
     This function takes the length of the newly created detachement around the houses
@@ -42,36 +38,31 @@ def calc_money():
         comparisons.append(temp)
 
     # print(comparisons)
-    # Create local variable that cannot be a result value and loop over the list of coordinates
+    # Create local variable that can't be a result value and loop over the list of coordinates
     for s in range(len(comparisons)):
         selected = comparisons[s]
-
         # loop over all coordinates of selected house
         for i in range(4):
             minimum_distance = 9999.999
-
             # Loop over the list of houses to select one
             for house in range(len(comparisons)):
                 if comparisons[house] == selected:
-                    break
-
+                    continue
                 # Loop over all coordinates of the other houses
                 for j in range(4):
                     temp = ((selected[0][i] - comparisons[house][0][j])**2 + (selected[1][i] - comparisons[house][1][j])**2)**0.5
-                    # print(temp)
 
                     # Check for house in house and append lisst of distances if so
                     if comparisons[house][0][0] < selected[0][i] < comparisons[house][0][2] and comparisons[house][1][0] < selected[1][i] < comparisons[house][1][1]:
-                        # print(comparisons[house][0][0], comparisons[house][0][2], comparisons[house][1][0], comparisons[house][1][1], selected[0][i], selected[1][i])
                         distances.append("House in house")
                     if temp < minimum_distance:
                         minimum_distance = temp
-                        # print(house, minimum_distance, sep='\t')
-            temp = min(selected[0][i] - 0, 160 - selected[0][i], selected[1][i] - 0, 180 - selected[1][i])
-            if temp < minimum_distance:
-                minimum_distance = temp
-                # print("BOUNDS", minimum_distance, sep='\t')
+        temp = min(selected[0][0] - 0, 160 - selected[0][2], selected[1][0] - 0, 180 - selected[1][1])
+        if temp < minimum_distance:
+            minimum_distance = temp
+            # print("BOUNDS", minimum_distance, sep='\t')
         distances.append(minimum_distance)
+
 
     # print(distances)
     return(coordinates, distances, comparisons)
@@ -81,7 +72,6 @@ def calc_validity(distances):
     This function checks if the distances provided as a list as argument fulfill
     the constraints in terms of free space. It returns a boolean
     """
-
     if (len(distances) != 20):
         return False
     else:
@@ -136,8 +126,9 @@ if __name__ == "__main__":
     max_worth = 0
     max_distances = []
     max_coordinates = []
+    comparisons = []
 
-    while(instances < 1):
+    while(instances < 5):
         money = []
         check = False
         while(check == False):
@@ -145,28 +136,19 @@ if __name__ == "__main__":
             outcome = calc_money()
             coordinates = outcome[0]
             distances = outcome[1]
-            comparions = outcome[2]
+            comparisons = outcome[2]
             check = calc_validity(distances)
-            # print(instances)
 
         instances += 1
+        print(instances , "fixed")
         worth = calc_score(distances)
         if worth > max_worth:
             max_worth = worth
             max_coordinates = coordinates
             max_distances = distances
 
-    # print(coordinates)
-    # print(distances)
-    # print(worth)
-
+    # Print characteristics of the best score
     print(instances/tries * 100)
     print(max_worth)
     print(max_coordinates)
     print(max_distances)
-
-    # Create visualiation
-    grid = Grid(180, 160)
-    total_houses = 20
-    x = Visualator(grid.grid, LittleHouse(total_houses, 8, 8, 285000, 2), MediumHouse(total_houses, 10, 7.5, 399000), LargeHouse(total_houses, 11, 10.5, 610000))
-    show(x.bokeh())

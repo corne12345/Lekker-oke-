@@ -68,30 +68,20 @@ class Grid(object):
         return surface
 
 
-    def create_little_house(self, file):
+    def create_little_house(self, file, coordinates):
         """
         Creates little homes (single family homes)
         """
 
         little_house = file
-        self.little_coordinates = Coordinates(int(little_house.number), self.length, self.width)
-        coordinates = self.little_coordinates.coordinates
         check_house = CheckHouse(self.grid)
 
         for number in range(len(coordinates)):
-            check, place = check_house.check_coordinates(coordinates, little_house)
-
-            # checks if the coordinates are true
-            while check is not True:
-                if place is not None:
-                    coordinates[place] = self.little_coordinates.single_coordinate()
-                    check, place = check_house.check_coordinates(coordinates, little_house)
-
 
             # coordinates, navragen of library beter is
-            coordinate = coordinates[number]
-            y_axis = coordinate["y"]
-            x_axis = coordinate["x"]
+            print(coordinates)
+            y_axis = coordinates["y"]
+            x_axis = coordinates["x"]
             first_length_position = None
             first_width_position = None
 
@@ -315,7 +305,7 @@ if __name__ == "__main__":
     grid = Grid(180, 160)
     water = Water(60, 100)
     create_water = grid.create_water(water)
-    grid.create_little_house(LittleHouse(total_houses, 8, 8, 285000, 2))
+    # grid.create_little_house(LittleHouse(total_houses, 8, 8, 285000, 2))
     grid.create_medium_house(MediumHouse(total_houses, 10, 7.5, 399000))
     grid.create_large_house(LargeHouse(total_houses, 11, 10.5, 610000))
 
