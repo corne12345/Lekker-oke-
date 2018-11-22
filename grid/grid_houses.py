@@ -27,10 +27,18 @@ class Grid(object):
         self.coordinates = Check().check()
 
     def make_csv(self):
-        with open("coordinates.txt", "w") as csv_file:
+        with open("coordinates.csv", "w") as csv_file:
             csv_reader = csv.writer(csv_file, delimiter=" ")
             for row in self.coordinates.items():
                 csv_reader.writerow(row)
+
+    def load_csv(self):
+        list = []
+
+        with open("data-for-check.txt", "r") as infile, open("data-for-check.csv", "w"):
+            for text in infile:
+                list.append(text)
+        print(list)
 
 
     # makes the grid itself
@@ -224,24 +232,6 @@ class Visualator(object):
                 water_last_x = len(list) - list[::-1].index(1)
                 water_last_y = y + 1
 
-        #  get the coordinates for little houses (single family homes)
-        try:
-            little_coordinates = grid.coordinates["little"]
-        except:
-            print("No little houses given")
-
-        #  get the coordinates for medium houses (bungalows)
-        try:
-            medium_coordinates = grid.coordinates["medium"]
-        except:
-            print("No medium coordinates given")
-
-        # get the coordinates for large houses (maisons)
-        try:
-            large_coordinates = grid.coordinates["large"]
-        except:
-            print("No large_coordinates given")
-
         # checks if water exist and print the ground
         if water_first_x != None:
 
@@ -255,43 +245,30 @@ class Visualator(object):
                         y=[water_first_y, water_last_y, water_last_y, water_first_y],
                         color="blue", line_color="black")
 
-            # makes little house (single family home) polygon
-            try:
-                for house in little_coordinates:
+        for sort in grid.coordinates.keys():
+            colour = None
+
+            for house in grid.coordinates[sort]:
+                try:
+                    if sort in "little":
+                        colour = "red"
+                    elif sort in "medium":
+                        colour = "yellow"
+                    else:
+                        colour = "green"
                     graph.patch(x=[house["x"], house["x"], (house["x"] + self.little_house.width), (house["x"] + self.little_house.width)],
                                 y=[house["y"], (house["y"] + self.little_house.length), (house["y"] + self.little_house.length), house["y"]],
-                                color="red", line_color="black")
-            except:
-                pass
-            # makes medium house (bungalow) polygon
-            try:
-                for house in medium_coordinates:
-                    graph.patch(x=[house["x"], house["x"], (house["x"] + self.medium_house.width), (house["x"] + self.medium_house.width)],
-                                y=[house["y"], (house["y"] + self.medium_house.length), (house["y"] + self.medium_house.length), house["y"]],
-                                color="yellow", line_color="black")
-            except:
-                pass
+                                color=colour, line_color="black")
+                except:
+                    print("No valid coordinates")
 
-            # makes large house (maison) polygon
-            try:
-                for house in large_coordinates:
-                    graph.patch(x=[house["x"], house["x"], (house["x"] + self.large_house.width), (house["x"] + self.large_house.width)],
-                                y=[house["y"], (house["y"] + self.large_house.length), (house["y"] + self.large_house.length), house["y"]],
-                                color="green", line_color="black")
-            except:
-                pass
-
-        # prints only the ground
-        else:
-            graph.multi_polygons(xs=[[[[first_x, first_x, last_x, last_x]]]],
-                                 ys=[[[[first_y, last_y, last_y, first_y]]]],
-                                 color="grey")
         return graph
 
 
 if __name__ == "__main__":
     total_houses = 20
     grid = Grid(180, 160)
+    # grid.load_csv()
     water = Water(60, 100)
     create_water = grid.create_water(water)
     grid.make_csv()
@@ -302,4 +279,3 @@ if __name__ == "__main__":
 
     x = Visualator(grid.grid, LittleHouse(total_houses, 8, 8, 285000, 2), MediumHouse(total_houses, 10, 7.5, 399000), LargeHouse(total_houses, 11, 10.5, 610000))
     show(x.bokeh())
-    #        print("ERROR JOE haha!!!")
