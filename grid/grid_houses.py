@@ -105,7 +105,7 @@ class Grid(object):
             first_width_position = None
 
             # import the grid and put the houses in the right spaces
-            for row in range(len(self.grid)): # to do iterate over the grid to put the houses on the right places
+            for row in range(len(self.grid)): # to do iterate  over the grid to put the houses on the right places
                 if first_length_position == None and row == y_axis : # nog nakijken of de huizen goed positioneerd
                     first_length_position = row
 
@@ -217,6 +217,10 @@ class Visualator(object):
         graph.x_range = Range1d(last_x, first_x)
         graph.y_range = Range1d(last_y, first_y)
 
+        # makes ground plan polygon
+        graph.patch(x=[first_x, first_x, last_x, last_x],
+                    y=[first_y, last_y, last_y, first_y],
+                    color="grey")
         # makes a waterbody and datapoints
         water_first_x = None
         water_first_y = None
@@ -224,30 +228,28 @@ class Visualator(object):
         water_last_y = None
 
         # makes the datapoints
-        for y, list in enumerate(self.grid):
+        #
+        # for y, list in enumerate(self.grid
+        #     # misschien dubble loepen
+        #     # make water body
+        #     if 1 in list and water_first_x == None:
+        #         water_first_x = list[::1].index(1)
+        #         water_first_y = y + 1
+        #     elif 1 in list:
+        #         water_last_x = len(list) - list[::-1].index(1)
+        #         water_last_y = y + 1
+        #
+        # # checks if water exist and print the ground
+        # if water_first_x != None:
+        #
+        #
+        #
+        #     # makes water polygon
+        #     graph.patch(x=[water_first_x, water_first_x, water_last_x, water_last_x],
+        #                 y=[water_first_y, water_last_y, water_last_y, water_first_y],
+        #                 color="blue", line_color="black")
 
-            # misschien dubble loepen
-            # make water body
-            if 1 in list and water_first_x == None:
-                water_first_x = list[::1].index(1)
-                water_first_y = y + 1
-            elif 1 in list:
-                water_last_x = len(list) - list[::-1].index(1)
-                water_last_y = y + 1
-
-        # checks if water exist and print the ground
-        if water_first_x != None:
-
-            # makes ground plan polygon
-            graph.patch(x=[first_x, first_x, last_x, last_x],
-                        y=[first_y, last_y, last_y, first_y],
-                        color="grey")
-
-            # makes water polygon
-            graph.patch(x=[water_first_x, water_first_x, water_last_x, water_last_x],
-                        y=[water_first_y, water_last_y, water_last_y, water_first_y],
-                        color="blue", line_color="black")
-
+        # makes the houses into the graph
         for sort in self.coordinates.keys():
             colour = None
 
