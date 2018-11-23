@@ -15,7 +15,7 @@ To preserve the rural design of the neigborhood, 20% of the neigborhood has to c
 ## Background
 The first step in providing a succesfull solution to this problem is to understand its real complexity and to define the problem
 theoretically. It is necessar therefore to define the state space, upper and lower bounds, a visualisation of the problem, a means to
-compare the result and define the best (by means of a score function) an possibly a division of the problem in subproblems or a flow.
+compare the result and define the best (by means of a score function) and possibly a division of the problem in subproblems or a flow.
 
 ### State space
 For this problem, there is a grid of 180 * 160. This means there are 28800 places to plant the first house. For the 20-houses solution, 
@@ -24,8 +24,36 @@ the boundaries of the grid. Correcting for these constraints still leaves **2.57
 This state space doesn't take the correctness in terms of interdependent free space and water, since the calculations of these
 constriants is dependent on the actual locations of earlier houses. 
 
-### Upper and lower bounds
+### Problem type and score function
+As a base case, the objecctive of this problem is to place the required houses in a grid of 180 * 160 meters and to place a maximum
+of four square or oblong bodies of water strechting out 20% of the total surface. This means there are definitely constraints associated
+with this problem. However, all solutions of this problem can be ranked based on the total worth of all the houses. This mean this is 
+a constraint optimisation problem. 
+The score function of this problem is based on the base price of the houses and an enlargement factor based on the amount of free space
+for this house. This can be summarised like this:
+Type of house, base price, minimum free space, bonus enlargement% for extra free space
+S, 285000, 2, 3
+M, 399000, 3, 4
+L, 610000, 6, 6
 
+The scores per house would be:
+scoreL = 610000 * 1,06 ^ (fs - 6)
+scoreM = 399000 * 1,04 ^ (fs - 4)
+scoreS = 285000 * 1,03 ^ (fs - 2)
+
+The total score is the sum of the scores for all the houses. The goal is to maximize this score.
+
+### Upper and lower bounds
+The above mentioned score function can take on a wide range of values. To understand the problem better, and know the relative quality
+of an individual solution. The lower bound is a situation in which the houses are placed to each other as close as possible, leaving 
+the extra free space of all the houses at 0. This will result in a score of **7215000**. 
+
+The upper bound is a situation in which the free space is totally taken up by the maisons, since an increase in its free space will 
+result in the maximal relative and absolute increase in total worth. This (unrealistic) situation will return an relatively loose
+upper bound that surely will not be met. This upperbound is at **16029000**. 
+
+### Visualisation of the state
+This problem will be displayed as a map of all the houses at their coordinates.
 
 ## Structure
 The powerpoint presentations for the weekly meetings are present in the folder /powerpoints.
