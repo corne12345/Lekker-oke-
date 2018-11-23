@@ -1,9 +1,11 @@
 import sys
+import pathlib
 
 # # get the path to the classes
-sys.path.append(("../classes"))
-sys.path.append(sys.path[0].replace('\\grid', '\\coordinates'))
-sys.path.append(sys.path[0].replace('\\grid', '\\score_functions'))
+path = pathlib.Path.cwd()
+path = pathlib.Path(path).iterdir()
+for submap in path:
+    sys.path.append(str(submap))
 
 import csv
 from bokeh.plotting import figure, output_file, show
@@ -188,7 +190,8 @@ class Grid(object):
 # Visualizes the graph
 class Visualator(object):
     def __init__(self, grid, little_house, medium_house, large_house):
-        self.grid = grid
+        self.grid = grid.grid
+        self.coordinates = grid.coordinates
         self.little_house = little_house
         self.medium_house = medium_house
         self.large_house = large_house
@@ -245,37 +248,24 @@ class Visualator(object):
                         y=[water_first_y, water_last_y, water_last_y, water_first_y],
                         color="blue", line_color="black")
 
-        for sort in grid.coordinates.keys():
+        for sort in self.coordinates.keys():
             colour = None
 
-            for house in grid.coordinates[sort]:
+            for house in self.coordinates[sort]:
                 try:
                     if sort in "little":
                         colour = "red"
+                        measurement = self.little_house
                     elif sort in "medium":
                         colour = "yellow"
+                        measurement = self.medium_house
                     else:
                         colour = "green"
-                    graph.patch(x=[house["x"], house["x"], (house["x"] + self.little_house.width), (house["x"] + self.little_house.width)],
-                                y=[house["y"], (house["y"] + self.little_house.length), (house["y"] + self.little_house.length), house["y"]],
+                        measurement = self.large_house
+                    graph.patch(x=[house["x"], house["x"], (house["x"] + measurement.width), (house["x"] + measurement.width)],
+                                y=[house["y"], (house["y"] + measurement.length), (house["y"] + measurement.length), house["y"]],
                                 color=colour, line_color="black")
                 except:
                     print("No valid coordinates")
 
         return graph
-
-
-if __name__ == "__main__":
-    total_houses = 20
-    grid = Grid(180, 160)
-    # grid.load_csv()
-    water = Water(60, 100)
-    create_water = grid.create_water(water)
-    # grid.make_csv()
-    grid.create_little_house(LittleHouse(total_houses, 8, 8, 285000, 2))
-    grid.create_medium_house(MediumHouse(total_houses, 10, 7.5, 399000))
-    grid.create_large_house(LargeHouse(total_houses, 11, 10.5, 610000))
-
-
-    x = Visualator(grid.grid, LittleHouse(total_houses, 8, 8, 285000, 2), MediumHouse(total_houses, 10, 7.5, 399000), LargeHouse(total_houses, 11, 10.5, 610000))
-    show(x.bokeh())
