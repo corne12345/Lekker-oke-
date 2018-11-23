@@ -10,8 +10,8 @@ class LittleHouse(object):
         self.length = length
         self.width = width
         self.surface = length * width
-        self.number = 0.6 * nr_of_houses
         self.price = standard_price
+        self.number = 0.6 * nr_of_houses
 
     def surface_house(self, length, width):
         surface = length * width

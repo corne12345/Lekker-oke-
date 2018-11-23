@@ -67,7 +67,26 @@ class Calculations(object):
 
         # print(distances)
         return(coordinates, distances, comparisons)
+    def distances(self, coordinates):
+        coordinates = coordinates
+        for s in range(len(comparisons)):
+            selected = comparisons[s]
+            # loop over all coordinates of selected house
+            for i in range(4):
+                minimum_distance = 9999.999
+                # Loop over the list of houses to select one
+                for house in range(len(comparisons)):
+                    if comparisons[house] == selected:
+                        continue
+                    # Loop over all coordinates of the other houses
+                    for j in range(4):
+                        temp = ((selected[0][i] - comparisons[house][0][j])**2 + (selected[1][i] - comparisons[house][1][j])**2)**0.5
 
+                        # Check for house in house and append lisst of distances if so
+                        if comparisons[house][0][0] < selected[0][i] < comparisons[house][0][2] and comparisons[house][1][0] < selected[1][i] < comparisons[house][1][1]:
+                            distances.append("House in house")
+                        if temp < minimum_distance:
+                            minimum_distance = temp
     def calc_validity(self, distances):
         """
         This function checks if the distances provided as a list as argument fulfill
@@ -155,12 +174,6 @@ class Check (object):
                 houses["little"].append(max_coordinates[count])
 
 
-
-        # Print characteristics of the best score
-        print(instances/tries * 100)
-        print(max_worth)
-        print(max_coordinates)
-        print(max_distances)
         return houses
 
 
@@ -175,3 +188,10 @@ if __name__ == "__main__":
 
     calculations = Check()
     instances, tries, max_coordinates, max_distances, max_worth = calculations.check()
+
+
+    # Print characteristics of the best score
+    print(instances/tries * 100)
+    print(max_worth)
+    print(max_coordinates)
+    print(max_distances)
