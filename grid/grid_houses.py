@@ -271,7 +271,7 @@ if __name__ == "__main__":
     # grid.load_csv()
     water = Water(60, 100)
     create_water = grid.create_water(water)
-    grid.make_csv()
+    # grid.make_csv()
     grid.create_little_house(LittleHouse(total_houses, 8, 8, 285000, 2))
     grid.create_medium_house(MediumHouse(total_houses, 10, 7.5, 399000))
     grid.create_large_house(LargeHouse(total_houses, 11, 10.5, 610000))

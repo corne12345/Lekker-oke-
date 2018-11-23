@@ -154,8 +154,14 @@ class Check (object):
             else:
                 houses["little"].append(max_coordinates[count])
 
+        # Print characteristics of the best score
+        print(instances/tries * 100)
+        print(max_worth)
+        print(max_coordinates)
+        print(max_distances)
 
         return houses
+
 
 
 def place_water(comparisons):
