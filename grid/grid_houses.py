@@ -1,7 +1,7 @@
 import sys
 
-# get the path to the classes
-sys.path.append(sys.path[0].replace('\\grid', '\\classes'))
+# # get the path to the classes
+sys.path.append(("../classes"))
 sys.path.append(sys.path[0].replace('\\grid', '\\coordinates'))
 sys.path.append(sys.path[0].replace('\\grid', '\\score_functions'))
 
