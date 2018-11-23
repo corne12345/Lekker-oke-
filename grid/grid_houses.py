@@ -1,4 +1,5 @@
 import sys
+import pathlib
 
 # # get the path to the classes
 path = pathlib.Path.cwd()
@@ -254,12 +255,15 @@ class Visualator(object):
                 try:
                     if sort in "little":
                         colour = "red"
+                        measurement = self.little_house
                     elif sort in "medium":
                         colour = "yellow"
+                        measurement = self.medium_house
                     else:
                         colour = "green"
-                    graph.patch(x=[house["x"], house["x"], (house["x"] + self.little_house.width), (house["x"] + self.little_house.width)],
-                                y=[house["y"], (house["y"] + self.little_house.length), (house["y"] + self.little_house.length), house["y"]],
+                        measurement = self.large_house
+                    graph.patch(x=[house["x"], house["x"], (house["x"] + measurement.width), (house["x"] + measurement.width)],
+                                y=[house["y"], (house["y"] + measurement.length), (house["y"] + measurement.length), house["y"]],
                                 color=colour, line_color="black")
                 except:
                     print("No valid coordinates")
