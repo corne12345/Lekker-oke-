@@ -110,16 +110,30 @@ class Grid(object):
                     if first_length_position == None and row == round(coordinate["y"]): # nog nakijken of de huizen goed positioneerd
                         first_length_position = row
 
+                    # get first x position
                     if first_length_position != None and \
                     first_length_position + houses[house].length > row :
                         for place in range(len(self.grid[0])):
+
+                            # fill the first the x position
                             if self.grid[row][place] not in range(1, 5) and first_width_position == None and place == round(coordinate["x"]):
                                 first_width_position = place
-                                self.grid[row][place] = 2
+                                if house == "little":
+                                    self.grid[row][place] = 2
+                                elif house == "medium":
+                                    self.grid[row][place] = 3
+                                else:
+                                    self.grid[row][place] = 4
 
+                            # fill the grid in
                             elif first_width_position != None and self.grid[row][place] not in range(1, 5) and \
                             first_width_position + houses[house].width > place and place - first_width_position >= 0:
-                                self.grid[row][place] = 2
+                                if house == "little":
+                                    self.grid[row][place] = 2
+                                elif house == "medium":
+                                    self.grid[row][place] = 3
+                                else:
+                                    self.grid[row][place] = 4
 
 
 # Visualizes the graph
