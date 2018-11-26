@@ -51,7 +51,12 @@ class Calculations(object):
                         continue
                     # Loop over all coordinates of the other houses
                     for j in range(4):
-                        temp = ((selected[0][i] - comparisons[house][0][j])**2 + (selected[1][i] - comparisons[house][1][j])**2)**0.5
+                        if comparisons[house][0][1] > selected[0][i] > comparisons[house][0][2]:
+                            temp = abs(comparisons[house][1][i] -  selected[1][i])
+                        elif comparisons[house][1][0] > selected[1][i] > comparisons[house][1][1]:
+                            temp = abs(comparisons[house][0][i] - selected[0][i])
+                        else:
+                            temp = ((selected[0][i] - comparisons[house][0][j])**2 + (selected[1][i] - comparisons[house][1][j])**2)**0.5
 
                         # Check for house in house and append lisst of distances if so
                         if comparisons[house][0][0] < selected[0][i] < comparisons[house][0][2] and comparisons[house][1][0] < selected[1][i] < comparisons[house][1][1]:
@@ -61,7 +66,7 @@ class Calculations(object):
             temp = min(selected[0][0] - 0, 160 - selected[0][2], selected[1][0] - 0, 180 - selected[1][1])
             if temp < minimum_distance:
                 minimum_distance = temp
-                # print("BOUNDS", minimum_distance, sep='\t')
+            print(minimum_distance)
             distances.append(minimum_distance)
 
 
@@ -162,6 +167,7 @@ class Check (object):
         print(max_coordinates)
         print(max_distances)
         return houses
+        # return instances, tries, max_coordinates, max_distances, max_worth
 
 
 def place_water(comparisons):
