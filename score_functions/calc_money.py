@@ -12,6 +12,9 @@ sys.path.append(sys.path[0].replace('\\score_functions', '\\grid'))
 from grid_houses import *
 
 class Calculations(object):
+    def __init__(self, grid):
+        self.grid = grid
+
     def calc_money(self):
         """
         This function takes the length of the newly created detachement around the houses
@@ -19,7 +22,7 @@ class Calculations(object):
         """
 
         # Create sample coordinates by using random
-        coordinates = Coordinates(20, 180, 160).coordinates
+        coordinates = Coordinates(20, 180, 160, self.grid).coordinates
         # print(coordinates)
         comparisons = []
         distances = []
@@ -116,9 +119,8 @@ class Calculations(object):
         return worth
 
 class Check (object):
-    def __init__(self):
-
-        self.calculations = Calculations()
+    def __init__(self, grid):
+        self.calculations = Calculations(grid)
 
     def check(self):
         instances = 0

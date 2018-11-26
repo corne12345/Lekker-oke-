@@ -14,7 +14,7 @@ def Main():
         total_houses = 20
         grid = Grid(180, 160)
         grid.create_water(Water(60, 100))
-        grid.make_csv()
+        # grid.make_csv()
         grid.create_house(LittleHouse(total_houses, 8, 8, 285000, 2),
                           MediumHouse(total_houses, 10, 7.5, 399000),
                           LargeHouse(total_houses, 11, 10.5, 610000),
