@@ -26,7 +26,7 @@ class Grid(object):
         self.length = total_length
         self.grid = self.grid_command()
         self.little_coordinates = None
-        self.coordinates = Check().check()
+        self.coordinates = None
         self.waterbody = None
 
     def make_csv(self):
@@ -92,7 +92,7 @@ class Grid(object):
         """
         Creates little homes (single family homes)
         """
-
+        self.coordinates = Check(self.grid).check()
         houses ={"little": little, "medium": middle, "large": large}
         coordinates = self.coordinates
         first_length_position = None

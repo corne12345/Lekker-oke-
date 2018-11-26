@@ -3,9 +3,10 @@ class Coordinates_little(object):
     Creates coordinates for little houses (one family homes)
     """
 
-    def __init__(self, y, x):
+    def __init__(self, y, x,):
         self.y = y
         self.x = x
+
 
     def coordinates(self):
         coordinates_little = []
