@@ -43,11 +43,3 @@ class Water(object):
         self.width = width
         self.length = length
         self.surface = width * length
-
-if __name__ == "__main__":
-    total_houses = 20
-
-    # defines the houses
-    single_home = LittleHouse(total_houses, 8, 8, 285000, 2)
-    bungalow = MediumHouse(total_houses, 10, 7.5, 399000, 4)
-    maison = LargeHouse(total_houses, 11, 10.5, 610000, 6)

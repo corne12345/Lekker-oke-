@@ -27,6 +27,7 @@ class Grid(object):
         self.grid = self.grid_command()
         self.little_coordinates = None
         self.coordinates = Check().check()
+        self.waterbody = None
 
     def make_csv(self):
         with open("coordinates.csv", "w") as csv_file:
@@ -84,10 +85,10 @@ class Grid(object):
 
         # calculates the surface
         surface = water.length * water.width
-        return surface
+        self.waterbody = {"y": first_width_position, "x": first_width_position}
 
 
-    def create_little_house(self, little, middle, large):
+    def create_house(self, little, middle, large, water):
         """
         Creates little homes (single family homes)
         """
@@ -138,10 +139,11 @@ class Grid(object):
 
 # Visualizes the graph
 class Visualator(object):
-    def __init__(self, grid, little_house, medium_house, large_house):
+    def __init__(self, grid, little_house, medium_house, large_house, water):
         self.grid = grid.grid
         self.coordinates = grid.coordinates
         self.houses = {"little": little_house, "medium": medium_house, "large": large_house}
+        self.water, self.waterbody = water, grid.waterbody
 
     def bokeh(self):
         graph = figure(title = "Amstelhaege")
@@ -168,6 +170,16 @@ class Visualator(object):
         graph.patch(x=[first_x, first_x, last_x, last_x],
                     y=[first_y, last_y, last_y, first_y],
                     color="grey")
+
+        # make waterbody
+        graph.patch(x=[self.waterbody["x"], self.waterbody["x"],
+                       self.waterbody["x"] + self.water.width,
+                       self.waterbody["x"] + self.water.width],
+                    y=[self.waterbody["y"],
+                       self.waterbody["y"] + self.water.length,
+                       self.waterbody["y"] + self.water.length,
+                       self.waterbody["y"]],
+                    color="blue", line_color="black")
 
         # makes the houses into the graph
         for sort in self.coordinates.keys():
