@@ -1,4 +1,4 @@
-##Huidige problemen
+## Huidige problemen
 # Check doet het niet
 Problemen met de afstanden meten tussen de verschillende punten. Hoe het beste op te lossen.
 Hiermee komen bepaalde punten over elkaar in bepaalde situatie.
@@ -9,7 +9,7 @@ Vragen aan Angelo hoe dit het beste is op te lossen
 Door verschillende coderingsstijlen, wordt het controleren van de huidge dataset zeer lastig.
 Moeten bekijken hoe we dit het best kunnen oplossen en de code op elkaar aansluiten.
 
-##Toekomstige Problemen
+## Toekomstige Problemen
 # Creeren van water
 Bekijken hoe dit het best is te implementeren. Echter de coordinaten voor vierkant te vinden wordt een probleem.
 Het plaatsen van water wordt geen probleem.
