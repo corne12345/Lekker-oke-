@@ -37,8 +37,11 @@ M, 399000, 3, 4
 L, 610000, 6, 6
 
 The scores per house would be:
+
 scoreL = 610000 * 1,06 ^ (fs - 6)
+
 scoreM = 399000 * 1,04 ^ (fs - 4)
+
 scoreS = 285000 * 1,03 ^ (fs - 2)
 
 The total score is the sum of the scores for all the houses. The goal is to maximize this score.
@@ -50,6 +53,17 @@ the extra free space of all the houses at 0.
 A general formula for this would be:
 Score = priceLarge * nLarge + priceMedium * nMedium+ priceSmall * nSmall
 In the case of a 20-house setup, this will result in a score of **7215000**. 
+
+The first calculated upper bound would be a situation in which all the houses have the maximum free space, as is achieved by placing
+all the houses in the middle of the grid. This would, in general, lead to the following formula:
+
+score = houseWorth * (1 + relativeIncrease) ^ min((gridHeight - houseHeight)/2,  (gridWidth - houseWidth)/2) - freeSpaceReq
+
+In the above mentioned situation, this would lead to a upper bound of:
+scoreL = 610000 * 1,06 ^ min ((160 - 10,5)/2, (180-11)/2) - 6 = **33504880**
+scoreM = 399000 * 1,04 ^ min ((160 - 7,5)/2, (180-10)/2) - 3 = **7057729**
+scoreS = 285000 * 1,03 ^ min ((160 - 8)/2, (180-8)/2) - 3 = **2465825**
+The total upper bound is **165393185**. With all the constraints as they are, this situation is far from reality
 
 The upper bound is a situation in which the free space is totally taken up by the maisons, since an increase in its free space will 
 result in the maximal relative and absolute increase in total worth. This (unrealistic) situation will return an relatively loose
