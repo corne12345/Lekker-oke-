@@ -31,7 +31,7 @@ with this problem. However, all solutions of this problem can be ranked based on
 a constraint optimisation problem. 
 The score function of this problem is based on the base price of the houses and an enlargement factor based on the amount of free space
 for this house. This can be summarised like this:
-Type of house, base price, minimum free space, bonus enlargement% for extra free space
+Type of house, base price, minimum free space, bonus enlargement for extra free space
 S, 285000, 2, 3
 M, 399000, 3, 4
 L, 610000, 6, 6
@@ -46,7 +46,10 @@ The total score is the sum of the scores for all the houses. The goal is to maxi
 ### Upper and lower bounds
 The above mentioned score function can take on a wide range of values. To understand the problem better, and know the relative quality
 of an individual solution. The lower bound is a situation in which the houses are placed to each other as close as possible, leaving 
-the extra free space of all the houses at 0. This will result in a score of **7215000**. 
+the extra free space of all the houses at 0.
+A general formula for this would be:
+Score = priceLarge * nLarge + priceMedium * nMedium+ priceSmall * nSmall
+In the case of a 20-house setup, this will result in a score of **7215000**. 
 
 The upper bound is a situation in which the free space is totally taken up by the maisons, since an increase in its free space will 
 result in the maximal relative and absolute increase in total worth. This (unrealistic) situation will return an relatively loose
