@@ -3,6 +3,7 @@ import sys
 from bokeh.plotting import show
 import random
 import copy
+import csv
 
 # # get the path to the classes
 path = pathlib.Path.cwd()
@@ -24,6 +25,11 @@ def hillclimber(reps, steps, randoms):
     score, distances, coordinates = best_of_random(randoms)
     counter = 0
     new_coordinates = copy.deepcopy(coordinates)
+    max_score, max_distances, max_coordinates = 0, 0, 0
+
+    # Write to csv
+    f = open("result.csv", "w", newline='')
+    writer = csv.writer(f)
 
     while counter < reps:
         for i in range(len(coordinates)):
@@ -33,16 +39,16 @@ def hillclimber(reps, steps, randoms):
             new_coordinates[i]["x2"] = new_coordinates[i]["x2"] + mover_x
             new_coordinates[i]["y1"] = new_coordinates[i]["y1"] + mover_y
             new_coordinates[i]["y2"] = new_coordinates[i]["y2"] + mover_y
-            max_score, max_distances, max_coordinates = 0, 0, 0
             new_distances = []
             for j in range(len(coordinates)):
                 new_distance = calc_distance(new_coordinates[j], new_coordinates, j)
                 new_distances.append(new_distance)
-                new_score = calc_score(new_distances)
-            if new_score > score:
-                max_score = new_score
+            new_score = calc_score(new_distances)
+            if new_score > max_score:
+                max_score = round(new_score)
                 max_distances = new_distances
                 max_coordinates = new_coordinates
+                writer.writerow([counter, max_score])
             else:
                 new_coordinates[i]["x1"] = new_coordinates[i]["x1"] - mover_x
                 new_coordinates[i]["x2"] = new_coordinates[i]["x2"] - mover_x
@@ -61,4 +67,4 @@ if __name__ == "__main__":
     # c = input("how many randoms to do first?")
     # hillclimber(a, b, c)
 
-    hillclimber(2000, 2, 1000)
+    hillclimber(5000, 2, 10)
