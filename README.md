@@ -38,7 +38,9 @@ L, 610000, 6, 6
 
 The scores per house would be:
 scoreL = 610000 * 1,06 ^ (fs - 6)
+
 scoreM = 399000 * 1,04 ^ (fs - 4)
+
 scoreS = 285000 * 1,03 ^ (fs - 2)
 
 The total score is the sum of the scores for all the houses. The goal is to maximize this score.
