@@ -66,6 +66,7 @@ scoreL = 610000 * 1,06 ^ min ((160 - 10,5)/2, (180-11)/2) - 6 = **33504880**
 scoreM = 399000 * 1,04 ^ min ((160 - 7,5)/2, (180-10)/2) - 3 = **7057729**
 
 scoreS = 285000 * 1,03 ^ min ((160 - 8)/2, (180-8)/2) - 3 = **2465825**
+
 The total upper bound is **165393185**. With all the constraints as they are, this situation is far from reality
 
 The upper bound is a situation in which the free space is totally taken up by the maisons, since an increase in its free space will 
