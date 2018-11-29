@@ -50,8 +50,10 @@ The total score is the sum of the scores for all the houses. The goal is to maxi
 The above mentioned score function can take on a wide range of values. To understand the problem better, and know the relative quality
 of an individual solution. The lower bound is a situation in which the houses are placed to each other as close as possible, leaving 
 the extra free space of all the houses at 0.
+
 A general formula for this would be:
 Score = priceLarge * nLarge + priceMedium * nMedium+ priceSmall * nSmall
+
 In the case of a 20-house setup, this will result in a score of **7215000**. 
 
 The first calculated upper bound would be a situation in which all the houses have the maximum free space, as is achieved by placing
