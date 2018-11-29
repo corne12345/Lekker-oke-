@@ -53,7 +53,6 @@ the extra free space of all the houses at 0.
 
 A general formula for this would be:
 Score = priceLarge * nLarge + priceMedium * nMedium+ priceSmall * nSmall
-
 In the case of a 20-house setup, this will result in a score of **7215000**. 
 
 The first calculated upper bound would be a situation in which all the houses have the maximum free space, as is achieved by placing
