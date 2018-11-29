@@ -65,7 +65,7 @@ score = houseWorth * (1 + relativeIncrease) ^ min((gridHeight - houseHeight)/2, 
 
 In the above mentioned situation, this would lead to a upper bound of:
 
-scoreL = 610000 * 1,06 ^ min ((160 - 10,5)/2, (180-11)/2) - 6 = **€33.504.880**
+scoreL = 610000 * 1,06 <sup>min ((160 - 10,5)/2, (180-11)/2) - 6</sup> = **€33.504.880**
 
 scoreM = 399000 * 1,04 ^ min ((160 - 7,5)/2, (180-10)/2) - 3 = **€7.057.729**
 
