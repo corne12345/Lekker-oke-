@@ -54,9 +54,9 @@ the extra free space of all the houses at 0.
 A general formula for this would be:
 Score = priceLarge * nLarge + priceMedium * nMedium+ priceSmall * nSmall
 
-In the case of a 20-house setup, this will result in a score of **7.215.000**.
-In the case of a 40-house setup, this will result in a score of **14.430.000**. 
-In the case of a 60-house setup, this will result in a score of **21.615.000**. 
+In the case of a 20-house setup, this will result in a score of **€7.215.000**.
+In the case of a 40-house setup, this will result in a score of **€14.430.000**. 
+In the case of a 60-house setup, this will result in a score of **€21.615.000**. 
 
 The first calculated upper bound would be a situation in which all the houses have the maximum free space, as is achieved by placing
 all the houses in the middle of the grid. This would, in general, lead to the following formula:
@@ -65,17 +65,17 @@ score = houseWorth * (1 + relativeIncrease) ^ min((gridHeight - houseHeight)/2, 
 
 In the above mentioned situation, this would lead to a upper bound of:
 
-scoreL = 610000 * 1,06 ^ min ((160 - 10,5)/2, (180-11)/2) - 6 = **33.504.880**
+scoreL = 610000 * 1,06 ^ min ((160 - 10,5)/2, (180-11)/2) - 6 = **€33.504.880**
 
-scoreM = 399000 * 1,04 ^ min ((160 - 7,5)/2, (180-10)/2) - 3 = **7.057.729**
+scoreM = 399000 * 1,04 ^ min ((160 - 7,5)/2, (180-10)/2) - 3 = **€7.057.729**
 
-scoreS = 285000 * 1,03 ^ min ((160 - 8)/2, (180-8)/2) - 3 = **2.465.825**
+scoreS = 285000 * 1,03 ^ min ((160 - 8)/2, (180-8)/2) - 3 = **€2.465.825**
 
 The total upper bound is **165.393.185**. With all the constraints as they are, this situation is far from reality
 
 The upper bound is a situation in which the free space is totally taken up by the maisons, since an increase in its free space will 
 result in the maximal relative and absolute increase in total worth. This (unrealistic) situation will return an relatively loose
-upper bound that surely will not be met. This upperbound is at **16.029.000** for the 20-house setup. 
+upper bound that surely will not be met. This upperbound is at **€16.029.000** for the 20-house setup. 
 
 ### Visualisation of the state
 This problem will be displayed as a map of all the houses at their coordinates, as shown in the picture below.
