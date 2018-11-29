@@ -75,6 +75,7 @@ upper bound that surely will not be met. This upperbound is at **16029000**.
 
 ### Visualisation of the state
 This problem will be displayed as a map of all the houses at their coordinates.
+![afbeelding](https://user-images.githubusercontent.com/43990565/49214992-11a78480-f3c8-11e8-96d9-ba736c19cf88.png)
 
 ## Structure
 The powerpoint presentations for the weekly meetings are present in the folder /powerpoints.
