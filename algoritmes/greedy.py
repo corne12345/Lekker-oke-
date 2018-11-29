@@ -81,9 +81,5 @@ class Greed(object):
                 break
 
 
-
-
-
-
 if __name__ == "__main__":
     Greed().calculate_point()
