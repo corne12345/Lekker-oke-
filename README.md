@@ -33,7 +33,9 @@ The score function of this problem is based on the base price of the houses and 
 for this house. This can be summarised like this:
 Type of house, base price, minimum free space, bonus enlargement for extra free space
 S, 285000, 2, 3
+
 M, 399000, 3, 4
+
 L, 610000, 6, 6
 
 The scores per house would be:
