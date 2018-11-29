@@ -54,7 +54,9 @@ the extra free space of all the houses at 0.
 A general formula for this would be:
 Score = priceLarge * nLarge + priceMedium * nMedium+ priceSmall * nSmall
 
-In the case of a 20-house setup, this will result in a score of **7215000**. 
+In the case of a 20-house setup, this will result in a score of **7215000**.
+In the case of a 40-house setup, this will result in a score of **14430000**. 
+In the case of a 60-house setup, this will result in a score of **21615000**. 
 
 The first calculated upper bound would be a situation in which all the houses have the maximum free space, as is achieved by placing
 all the houses in the middle of the grid. This would, in general, lead to the following formula:
@@ -76,7 +78,7 @@ result in the maximal relative and absolute increase in total worth. This (unrea
 upper bound that surely will not be met. This upperbound is at **16029000**. 
 
 ### Visualisation of the state
-This problem will be displayed as a map of all the houses at their coordinates.
+This problem will be displayed as a map of all the houses at their coordinates, as shown in the picture below.
 ![afbeelding](https://user-images.githubusercontent.com/43990565/49215236-a5795080-f3c8-11e8-9583-29a6e7dbe636.png)
 
 ## Structure
