@@ -19,8 +19,8 @@ compare the result and define the best (by means of a score function) and possib
 
 ### State space
 For this problem, there is a grid of 180 * 160. This means there are 28800 places to plant the first house. For the 20-houses solution, 
-this results in 28800 ^ 20 =  1,54 * 10 ^ 89 solutions. However, this allows houses to be placed on top of each other and next to or on
-the boundaries of the grid. Correcting for these constraints still leaves **2.57 * 10 ^ 87** options. 
+this results in 28800<sup>20</sup>=  1.54 * 10<sup>89</sup> solutions. However, this allows houses to be placed on top of each other and next to or on
+the boundaries of the grid. Correcting for these constraints still leaves **2.57 * 10<sup>87</sup>** options. 
 This state space doesn't take the correctness in terms of interdependent free space and water, since the calculations of these
 constriants is dependent on the actual locations of earlier houses. 
 
@@ -31,18 +31,15 @@ with this problem. However, all solutions of this problem can be ranked based on
 a constraint optimisation problem. 
 The score function of this problem is based on the base price of the houses and an enlargement factor based on the amount of free space
 for this house. This can be summarised like this:
-Type of house, base price, minimum free space, bonus enlargement for extra free space
-S, 285000, 2, 3
-M, 399000, 3, 4
-L, 610000, 6, 6
+Type of house, base price, minimum free space, bonus enlargement for extra free space: S, 285000, 2, 3 -- M, 399000, 3, 4 -- L, 610000, 6, 6
 
 The scores per house would be:
 
-scoreL = 610000 * 1,06 ^ (fs - 6)
+scoreL = 610000 * 1.06<sup>(fs - 6)</sup>
 
-scoreM = 399000 * 1,04 ^ (fs - 4)
+scoreM = 399000 * 1.04<sup>(fs - 4)</sup>
 
-scoreS = 285000 * 1,03 ^ (fs - 2)
+scoreS = 285000 * 1.03<sup>(fs - 62</sup>
 
 The total score is the sum of the scores for all the houses. The goal is to maximize this score.
 
@@ -50,31 +47,36 @@ The total score is the sum of the scores for all the houses. The goal is to maxi
 The above mentioned score function can take on a wide range of values. To understand the problem better, and know the relative quality
 of an individual solution. The lower bound is a situation in which the houses are placed to each other as close as possible, leaving 
 the extra free space of all the houses at 0.
+
 A general formula for this would be:
 Score = priceLarge * nLarge + priceMedium * nMedium+ priceSmall * nSmall
-In the case of a 20-house setup, this will result in a score of **7215000**. 
+
+In the case of a 20-house setup, this will result in a score of **€7.215.000**.
+In the case of a 40-house setup, this will result in a score of **€14.430.000**. 
+In the case of a 60-house setup, this will result in a score of **€21.615.000**. 
 
 The first calculated upper bound would be a situation in which all the houses have the maximum free space, as is achieved by placing
 all the houses in the middle of the grid. This would, in general, lead to the following formula:
 
-score = houseWorth * (1 + relativeIncrease) ^ min((gridHeight - houseHeight)/2,  (gridWidth - houseWidth)/2) - freeSpaceReq
+score = houseWorth * (1 + relativeIncrease) <sup>min((gridHeight - houseHeight)/2,  (gridWidth - houseWidth)/2) - freeSpaceReq</sup>
 
 In the above mentioned situation, this would lead to a upper bound of:
 
-scoreL = 610000 * 1,06 ^ min ((160 - 10,5)/2, (180-11)/2) - 6 = **33504880**
+scoreL = 610000 * 1.06 <sup>min ((160 - 10,5)/2, (180-11)/2) - 6</sup> = **€33.504.880**
 
-scoreM = 399000 * 1,04 ^ min ((160 - 7,5)/2, (180-10)/2) - 3 = **7057729**
+scoreM = 399000 * 1.04 <sup>min ((160 - 7,5)/2, (180-10)/2) - 3</sup> = **€7.057.729**
 
-scoreS = 285000 * 1,03 ^ min ((160 - 8)/2, (180-8)/2) - 3 = **2465825**
+scoreS = 285000 * 1.03 <sup>min ((160 - 8)/2, (180-8)/2) - 3</sup> = **€2.465.825**
 
-The total upper bound is **165393185**. With all the constraints as they are, this situation is far from reality
+The total upper bound is **€165.393.185**. With all the constraints as they are, this situation is far from reality
 
 The upper bound is a situation in which the free space is totally taken up by the maisons, since an increase in its free space will 
 result in the maximal relative and absolute increase in total worth. This (unrealistic) situation will return an relatively loose
-upper bound that surely will not be met. This upperbound is at **16029000**. 
+upper bound that surely will not be met. This upperbound is at **€16.029.000** for the 20-house setup. 
 
 ### Visualisation of the state
-This problem will be displayed as a map of all the houses at their coordinates.
+This problem will be displayed as a map of all the houses at their coordinates, as shown in the picture below.
+![afbeelding](https://user-images.githubusercontent.com/43990565/49215236-a5795080-f3c8-11e8-9583-29a6e7dbe636.png)
 
 ## Structure
 The powerpoint presentations for the weekly meetings are present in the folder /powerpoints.
