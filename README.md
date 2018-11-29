@@ -71,7 +71,7 @@ scoreM = 399000 * 1,04 ^ min ((160 - 7,5)/2, (180-10)/2) - 3 = **€7.057.729**
 
 scoreS = 285000 * 1,03 ^ min ((160 - 8)/2, (180-8)/2) - 3 = **€2.465.825**
 
-The total upper bound is **165.393.185**. With all the constraints as they are, this situation is far from reality
+The total upper bound is **€165.393.185**. With all the constraints as they are, this situation is far from reality
 
 The upper bound is a situation in which the free space is totally taken up by the maisons, since an increase in its free space will 
 result in the maximal relative and absolute increase in total worth. This (unrealistic) situation will return an relatively loose
