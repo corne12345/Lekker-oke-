@@ -20,7 +20,7 @@ compare the result and define the best (by means of a score function) and possib
 ### State space
 For this problem, there is a grid of 180 * 160. This means there are 28800 places to plant the first house. For the 20-houses solution, 
 this results in 28800 ^ 20 =  1,54 * 10 ^ 89 solutions. However, this allows houses to be placed on top of each other and next to or on
-the boundaries of the grid. Correcting for these constraints still leaves **2.57 * 10 ^ 87** options. 
+the boundaries of the grid. Correcting for these constraints still leaves **2.57 * 10<sup>87</sup>** options. 
 This state space doesn't take the correctness in terms of interdependent free space and water, since the calculations of these
 constriants is dependent on the actual locations of earlier houses. 
 
