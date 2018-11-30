@@ -28,7 +28,6 @@ class CheckHouse(object):
             point['x'] = point['x'] - int(house_width)
             corner_points.append(deepcopy(point))
 
-            print(corner_points)
             # checks the points in the grid if there is already
             for xy_coordinate in corner_points:
                 if xy_coordinate["y"] >= 180 or xy_coordinate["y"] < 0 or \

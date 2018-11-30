@@ -69,7 +69,7 @@ class Calculations(object):
             temp = min(selected[0][0] - 0, 160 - selected[0][2], selected[1][0] - 0, 180 - selected[1][1])
             if temp < minimum_distance:
                 minimum_distance = temp
-            print(minimum_distance)
+            # print(minimum_distance)
             distances.append(minimum_distance)
 
 
@@ -132,6 +132,7 @@ class Check (object):
         distances = None
         houses = {"large": [], "medium": [], "little": []}
 
+
         # total check
         while(instances < 1):
             money = []
@@ -164,10 +165,10 @@ class Check (object):
 
 
         # Print characteristics of the best score
-        print(instances/tries * 100)
-        print(max_worth)
-        print(max_coordinates)
-        print(max_distances)
+        # print(instances/tries * 100)
+        # print(max_worth)
+        # print(max_coordinates)
+        # print(max_distances)
         return houses
         # return instances, tries, max_coordinates, max_distances, max_worth
 

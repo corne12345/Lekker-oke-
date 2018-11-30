@@ -6,10 +6,10 @@ MEDIUM = [10, 7.5, 3]
 LARGE = [11, 10.5, 6]
 NUM_HOUSES = 20
 
-def create_valid_coordinates (house_type, valid_coordinates, DIMENSIONS, no_houses):
+def create_valid_coordinates (house_type, valid_coordinates, DIMENSIONS, num_houses):
     counter = 0
     mistakes = 0
-    while counter < no_houses:
+    while counter < num_houses:
         valid_set = {}
         x_coordinate = random.randint(0, DIMENSIONS[0])
         y_coordinate = random.randint(0, DIMENSIONS[1])
@@ -160,6 +160,23 @@ def best_of_random(reps):
     # print("great succes")
     return max_score, max_distances, max_coordinates
 
+def random_to_vis(intermediate):
+    little, medium, large = [], [], []
+    coordinates = intermediate[2]
+    for i in range(len(coordinates)):
+        coordinates_1 = coordinates[i]
+        coordinate = {"x": coordinates_1["x1"], "y": coordinates_1["y1"]}
+        if i < len(coordinates) * 0.15:
+            large.append(coordinate)
+        elif i < len(coordinates) * 0.4:
+            medium.append(coordinate)
+        else:
+            little.append(coordinate)
+
+    coordinates_ordered = {"little": little, "medium": medium, "large": large}
+    return coordinates_ordered, intermediate[0], intermediate[1]
+
+
 
 if __name__ == "__main__":
-    best_of_random(10)
+    intermediate = best_of_random(10)
