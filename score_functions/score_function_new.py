@@ -160,6 +160,23 @@ def best_of_random(reps):
     # print("great succes")
     return max_score, max_distances, max_coordinates
 
+def random_to_vis(intermediate):
+    little, medium, large = [], [], []
+    coordinates = intermediate[2]
+    for i in range(len(coordinates)):
+        coordinates_1 = coordinates[i]
+        coordinate = {"x": coordinates_1["x1"], "y": coordinates_1["y1"]}
+        if i < len(coordinates) * 0.15:
+            large.append(coordinate)
+        elif i < len(coordinates) * 0.4:
+            medium.append(coordinate)
+        else:
+            little.append(coordinate)
+
+    coordinates_ordered = {"little": little, "medium": medium, "large": large}
+    return coordinates_ordered, intermediate[0], intermediate[1]
+
+
 
 if __name__ == "__main__":
-    best_of_random(10)
+    intermediate = best_of_random(10)

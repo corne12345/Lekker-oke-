@@ -23,7 +23,7 @@ class Calculations(object):
 
         # Create sample coordinates by using random
         coordinates = Coordinates(20, 180, 160, self.grid).coordinates
-        print(coordinates)
+        # print(coordinates)
         comparisons = []
         distances = []
 

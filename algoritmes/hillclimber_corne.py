@@ -59,7 +59,7 @@ def hillclimber(reps, steps, randoms):
     print(score, max_score)
     print(distances, max_distances, sep='\n')
     print(coordinates, max_coordinates, sep='\n')
-    return max_coordinates, max_distances, max_score
+    return  max_score, max_distances, max_coordinates
 
 if __name__ == "__main__":
     # a = input("how many reps would you like")
@@ -67,4 +67,4 @@ if __name__ == "__main__":
     # c = input("how many randoms to do first?")
     # hillclimber(a, b, c)
 
-    hillclimber(1, 1, 1)
+    hillclimber(10, 1, 10)

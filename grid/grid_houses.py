@@ -13,7 +13,8 @@ from bokeh.models import Range1d
 from Opzet import *
 from generator import *
 from calc_money import *
-from score_function_new import * 
+from score_function_new import *
+from hillclimber_corne import *
 
 
 # 1 = waterbody
@@ -91,12 +92,19 @@ class Grid(object):
 
     def create_house(self, little, middle, large, water):
         """
-        Creates little homes (single family homes)
+        Creates homes
         """
-        print(little)
-        self.coordinates = Check(self.grid).check()
+        # self.coordinates = Check(self.grid).check()
+        # coordinates = self.coordinates
+
+
+        # Code necessary to visualise reandom function
         houses ={"little": little, "medium": middle, "large": large}
-        coordinates = self.coordinates
+        output = random_to_vis(hillclimber(1, 3, 1))
+        coordinates, max_score, max_distances  = output[0], output[1], output[2]
+        self.coordinates = coordinates
+        print(coordinates, max_score, max_distances, sep='\n')
+
         first_length_position = None
         first_width_position = None
 
