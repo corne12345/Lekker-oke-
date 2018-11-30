@@ -6,10 +6,10 @@ MEDIUM = [10, 7.5, 3]
 LARGE = [11, 10.5, 6]
 NUM_HOUSES = 20
 
-def create_valid_coordinates (house_type, valid_coordinates, DIMENSIONS, no_houses):
+def create_valid_coordinates (house_type, valid_coordinates, DIMENSIONS, num_houses):
     counter = 0
     mistakes = 0
-    while counter < no_houses:
+    while counter < num_houses:
         valid_set = {}
         x_coordinate = random.randint(0, DIMENSIONS[0])
         y_coordinate = random.randint(0, DIMENSIONS[1])

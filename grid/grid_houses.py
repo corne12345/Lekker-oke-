@@ -13,6 +13,7 @@ from bokeh.models import Range1d
 from Opzet import *
 from generator import *
 from calc_money import *
+from score_function_new import * 
 
 
 # 1 = waterbody
@@ -92,19 +93,18 @@ class Grid(object):
         """
         Creates little homes (single family homes)
         """
+        print(little)
         self.coordinates = Check(self.grid).check()
         houses ={"little": little, "medium": middle, "large": large}
         coordinates = self.coordinates
         first_length_position = None
         first_width_position = None
 
-
         for house in coordinates.keys():
             for number in range(len(coordinates[house])):
 
                 # coordinates, navragen of library beter is
                 coordinate = coordinates[house][number]
-
 
                 # import the grid and put the houses in the right spaces
                 for row in range(len(self.grid)): # to do iterate  over the grid to put the houses on the right places

@@ -67,4 +67,4 @@ if __name__ == "__main__":
     # c = input("how many randoms to do first?")
     # hillclimber(a, b, c)
 
-    hillclimber(5000, 2, 10)
+    hillclimber(1, 1, 1)
