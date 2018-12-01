@@ -94,13 +94,13 @@ class Depthfirst(object):
                 print(coordinates)
         # print(end_coordinates)
 
-        for i in range(len(coordinates)):
-            for j in range(len(coordinates)):
-                for k, coord in enumerate(y_x_coordinates):
-                        coordinates[i] = coord
-                        end_coordinates.append(coordinates)
-                        print(coordinates)
-        # print(end_coordinates)
+        # for i in range(len(coordinates)):
+        #     for j in range(len(coordinates)):
+        #         for k, coord in enumerate(y_x_coordinates):
+        #                 coordinates[i] = coord
+        #                 end_coordinates.append(coordinates)
+        #                 print(coordinates)
+        # # print(end_coordinates)
 
 
 
