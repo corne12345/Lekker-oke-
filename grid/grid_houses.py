@@ -96,14 +96,13 @@ class Grid(object):
         """
         # self.coordinates = Check(self.grid).check()
         # coordinates = self.coordinates
-
-
-        # Code necessary to visualise reandom function
         houses ={"little": little, "medium": middle, "large": large}
+
+        # Code necessary to visualise random function
         output = random_to_vis(hillclimber(1, 3, 1))
         coordinates, max_score, max_distances  = output[0], output[1], output[2]
         self.coordinates = coordinates
-        print(coordinates, max_score, max_distances, sep='\n')
+        # print(coordinates, max_score, max_distances, sep='\n')
 
         first_length_position = None
         first_width_position = None
