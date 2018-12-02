@@ -2,6 +2,11 @@ import math
 from random import sample
 
 class Greed(object):
+    """
+    Takes the grid, calculates the distance between houses and creates houses
+    with their coordinates.
+    """
+
     def __init__(self, grid, little, middle, large):
         self.grid = grid
         self.houses = {"little": little, "middle": middle, "large": large}
@@ -12,6 +17,7 @@ class Greed(object):
         self.count_large = 0
         self.coordinates = self.create_coordinates()
 
+    # calculates the degrees between houses for the amount of detachment
     def calculate_degree(self):
         pi = math.pi
         degrees_horizontal = []
@@ -26,6 +32,7 @@ class Greed(object):
 
         return degrees_vertical, degrees_horizontal
 
+    # creates a list with all the houses
     def create_list_house(self):
         list_houses = []
         for key in self.houses.keys():
@@ -33,33 +40,31 @@ class Greed(object):
 
         return list_houses
 
-
+    # creates coordinates for the houses
     def create_coordinates(self):
         random_list = self.create_list_house()
         house = sample(set(random_list), 1)[0]
 
+        # (Vraagje: het number_point is toch nooit negatief, dus dan komt hij toch nooit in de if statement?)
         while self.number_point < len(random_list):
             self.number_point += 1
             if self.number_point < 1:
 
-                # goes throught the grid
+                # goes through the grid and looks if the detachment is large enough for the y axis
                 for y_axe in range(len(self.grid)):
                     if y_axe < self.detachment[house] or \
                     y_axe > self.grid.length - self.detachment:
                         pass
                     else:
+
+                        # looks if the detachment is large enough for the x axis
                         for x_axe in range(len(y_axe)):
                             if x_axe < self.detachment[house] or \
                             y_axe > self.grid.length - self.detachement:
+                                # volgensmij kan het or statement met y_axe > weg, want die zeg je in het if statement erboven al!
                                 pass
                             elif self.grid[y_axe][x_axe] in range(1, 5):
                                 pass
-
-
-
-
-
-
 
     def calc_money(self):
         """
@@ -69,13 +74,13 @@ class Greed(object):
 
         print(self.houses)
 
-        # Create sample coordinates by using random
+        # create sample coordinates by using random function
         coordinates = Coordinates(20, 180, 160, self.grid).coordinates
         comparisons = []
         distances = []
         name = list(self.houses.keys())
 
-        # Create 4-point coordinates for each house by making 3 large, 5 medium
+        # create 4-point coordinates for each house by making 3 large, 5 medium
         # and 12 small houses
 
         house_number = 0
@@ -93,18 +98,22 @@ class Greed(object):
 
 
         print(comparisons)
-        # Create local variable that can't be a result value and loop over the list of coordinates
+
+        # create local variable that cannot be a result value and loop over the list of coordinates
         for s in range(len(comparisons)):
             selected = comparisons[s]
             print(selected)
+
             # loop over all coordinates of selected house
             for i in range(4):
                 minimum_distance = 9999.999
-                # Loop over the list of houses to select one
+
+                # loop over the list of houses to select one
                 for house in range(len(comparisons)):
                     if comparisons[house] == selected:
                         continue
-                    # Loop over all coordinates of the other houses
+
+                    # loop over all coordinates of the other houses to put the temp on a value
                     for j in range(4):
                         if comparisons[house][0][1] > selected[0][i] > comparisons[house][0][2]:
                             temp = abs(comparisons[house][1][i] -  selected[1][i])
@@ -115,13 +124,13 @@ class Greed(object):
                         else:
                             temp = ((selected[0][i] - comparisons[house][0][j])**2 + (selected[1][i] - comparisons[house][1][j])**2)**0.5
 
-
-
-                        # Check for house in house and append lisst of distances if so
+                        # check for house in house and append list of distances if so
                         if comparisons[house][0][0] < selected[0][i] < comparisons[house][0][2] and comparisons[house][1][0] < selected[1][i] < comparisons[house][1][1]:
-                            distances.append("House in house")
+                            distances.append("House in house!")
                         if temp < minimum_distance:
                             minimum_distance = temp
+
+            # puts the distance on a specific value
             temp = min(selected[0][0] - 0, 160 - selected[0][2], selected[1][0] - 0, 180 - selected[1][1])
             if temp < minimum_distance:
                 minimum_distance = temp
