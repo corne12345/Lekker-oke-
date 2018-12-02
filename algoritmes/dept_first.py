@@ -6,6 +6,7 @@ import random
 import copy
 import csv
 
+# Imports different paths, has to be changed and to be put in main
 path = pathlib.Path.cwd()
 path = path.absolute()
 path = path.parent
@@ -19,6 +20,11 @@ from grid_houses import Grid
 from Opzet import LittleHouse, MediumHouse, LargeHouse, Water
 
 class Depthfirst(object):
+    """
+    This function calculates all the possible coordinates for the houses
+    in steps of ten.
+    """
+
     def __init__(self, number, length, width, grid):
         self.number = number
         self.grid = grid
@@ -32,13 +38,16 @@ class Depthfirst(object):
     #     self.length = 180
     #     self.width = 160
 
+    # creates the coordinates
     def create_coordinates(self):
         list_coordinates = []
         # y_x_coordinates = {}
 
+        # makes lists for all the x and y coordinates
         x_list = []
         y_list = []
 
+        # appends all the x and y coordinates
         for i in range(20, self.width, 20):
             x_list.append(i)
 
@@ -51,71 +60,69 @@ class Depthfirst(object):
         number = 8
         y_x_coordinates = []
 
-        # check if water is on the place
+        # To do: check if water is on the place!!!!!
+        # appends all the possible coordinates to a list
         for y_value in y_list:
             for x_value in x_list:
                 y_x_coordinates.append({"y" : y_value,
                                         "x" : x_value})
 
 
-        # print(y_x_coordinates)
-
-        # y_x_coordinate = ({"y" : random.choice(y_list),
-        #                     "x" : random.choice(x_list)})
-        #
-        # print(y_x_coordinate)
+        print(y_x_coordinates)
+        print(len(y_x_coordinates))
 
         end_coordinates = []
         coordinates = []
 
+        # adds the first coordinates to a list with all coordinates
         for i, coord in enumerate(y_x_coordinates):
             if i < number:
                 coordinates.append(coord)
 
         end_coordinates.append(coordinates)
-        #
+
         print(end_coordinates)
 
-        # # for i, coord in enumerate(all_coordinates):
-        # for i, coord in enumerate(y_x_coordinates):
-        #     # for i, coord in enumerate(y_x_coordinates):
-        #     coordinates.remove(coordinates[-1])
-        #     coordinates.append(coord)
-        #     end_coordinates.append(coordinates)
-        #     print(coordinates)
-        #
-        # print(end_coordinates)
-
-
-        for i in range(len(coordinates)):
-            for j, coord in enumerate(y_x_coordinates):
-                coordinates[i] = coord
-                end_coordinates.append(coordinates)
-                print(coordinates)
-        # print(end_coordinates)
-
+        # # hier geeft die alleen deel van de coorinaten
         # for i in range(len(coordinates)):
-        #     for j in range(len(coordinates)):
-        #         for k, coord in enumerate(y_x_coordinates):
-        #                 coordinates[i] = coord
-        #                 end_coordinates.append(coordinates)
-        #                 print(coordinates)
+        #     for j, coord in enumerate(y_x_coordinates):
+        #         coordinates[i] = coord
+        #         end_coordinates.append(coordinates)
+        # #         print(coordinates)
         # # print(end_coordinates)
 
+        # changes all the coordinates, until you have all combinations and adds
+        # them to the list with all final coordinates
+        for i in range(len(coordinates)):
+            for j in range(len(coordinates)):
+                for k, coord in enumerate(y_x_coordinates):
+                    for l, coord_2 in enumerate(y_x_coordinates):
+                        coordinates[i] = coord
+                        coordinates[j] = coord_2
+                        end_coordinates.append(coordinates)
+                        print(coordinates)
+
+                        # print(len(end_coordinates))
+
+                        # # checks if same coordinates are used --> dit werkt zeg maar niet, dan krijg je een memory error
+                        # # maar als je dit weghaalt en regel erboven met append uitcommit, werkt het wel en krijg je meer dan 200.000 uitkomsten.
+                        # while coordinates[i]["y"] != coordinates[j]["y"] \
+                        # or  coordinates[i]["x"] != coordinates[j]["x"]:
+                        #     end_coordinates.append(coordinates)
 
 
-        # for i in range(number):
+        print(len(end_coordinates))
+
+        # # dit hieronder zou ook kunnen, maar ik weet niet wat in de remove(????) moet. Want coordinates erin kan niet.
+        # for i in range(len(coordinates)):
         #     for j in range(len(coordinates)):
-        #         if y_x_coordinates[i]["x"] == 160:
-        #             coordinates.remove(y_x_coordinates[i])
+        #         while coordinates[i]["y"] == coordinates[j]["y"] \
+        #         and  coordinates[i]["x"] == coordinates[j]["x"]:
+        #             end_coordinates.remove(?????)
+        #             # end_coordinates.remove(coordinates[i]["x"])
 
+        # print(len(end_coordinates))
 
-                # if (i == j and y_x_coordinates[i]["x"] == y_x_coordinates[j]["x"] \
-                # and y_x_coordinates[i]["y"] == y_x_coordinates[j]["y"]):
-                #     # Hier nog dat die niet in water mag aan toevoegen
-                #     coordinates.remove(y_x_coordinates[i])
-
-        # print(coordinates)
 
         return y_x_coordinates, coordinates
 
