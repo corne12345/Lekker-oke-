@@ -78,6 +78,18 @@ upper bound that surely will not be met. This upperbound is at **€16.029.000**
 This problem will be displayed as a map of all the houses at their coordinates, as shown in the picture below.
 ![afbeelding](https://user-images.githubusercontent.com/43990565/49215236-a5795080-f3c8-11e8-9583-29a6e7dbe636.png)
 
+## Algorithms
+The first solution to this problem has been attempted by the usage of a random algorithm. This algorithm randomly places all the 
+houses on a certain coordinate and checks whether or not this will lead to a valid siuation. Only valid sets will lead to an output.
+
+Two constructive algorithms have been built. First of all a greedy algorithm that places a house on a coordinate, which will maximize
+the free space of that house and therefore results in a maximal free space of that house. This greedy algorithm is short-sighted and
+doesn't take past or future attemps into account.
+A seconds constructive algorithm is a depth-first algorithm that has been simplified to greatly reduce running time. 
+
+A iterative hill climber was also constructed. This changes the coordinates of a selected house randomly (min and max can be alterered) 
+and saves if this change increases the worth.
+
 ## Structure
 The powerpoint presentations for the weekly meetings are present in the folder /powerpoints.
 The code for the creation of the grid and the building is provided in the folder /grid.
