@@ -46,6 +46,7 @@ class Greed(object):
         random_list = self.create_list_house()
         score = []
         coordinates = []
+        valid_set = []
 
         # (Vraagje: het number_point is toch nooit negatief, dus dan komt hij toch nooit in de if statement?)
         while self.number_point < len(random_list):
@@ -66,28 +67,29 @@ class Greed(object):
                             # volgensmij kan het or statement met y_axe > weg, want die zeg je in het if statement erboven al!
                             pass
                         else:
-                            coordinate = self.calculate_coordinate({"x": x_axe, "y": y_axe }, self.houses[house])
-                            if self.number_point < 1 and coordinate != None:
-                                distance = self.calc_grid_distance(coordinate)
-                                score.append(self.score(distance, self.houses[house]))
-                            elif coordinate != None:
-                                min_distance_other_house = self.min_distance_other_houses(self)
+                            if x_axe + self.houses[house].width < self.grid.width - self.houses[house].detachement and \
+                               y_axe + self.houses[house].length < self.grid.length - self.houses[house].detachement:
+                               coordinates.append({"x": x_axe, "y": y_axe })
 
-
-                            coordinates.append(coordinate)
+            for coordinate in coordinates:
+                if self.number_point < 1 and coordinate != None:
+                    distance = self.calc_grid_distance(self.calculate_coordinate(coordinate, self.houses[house]))
+                    score.append(self.score(distance, self.houses[house]))
+                elif coordinate != None:
+                    distance = self.min_distance_other_houses(coordinate, self.houses[house], valid_set)
+                    score.append(self.score(distance, self.houses[house]))
             index = score.index(max(score))
-            coordinate_max_score = deepcopy(coordinates[index])
+            print(deepcopy(coordinates[index]))
+            valid_set.append(deepcopy(coordinates[index]))
 
             self.number_point += 1
+            print(self.number_point)
+            print(valid_set )
 
 
     def calculate_coordinate(self, calculation_point, house):
-        if calculation_point["x"] + house.width < self.grid.width - house.detachement and \
-           calculation_point["y"] + house.length < self.grid.length - house.detachement:
-           return {"x1": calculation_point["x"], "x2": calculation_point["x"] + house.width,
-                   "y1": calculation_point["y"], "y2": calculation_point["y"] + house.length}
-        else:
-            pass
+        return {"x1": calculation_point["x"], "x2": calculation_point["x"] + house.width,
+                "y1": calculation_point["y"], "y2": calculation_point["y"] + house.length}
 
     def calc_grid_distance(self, coordinate):
         right = coordinate["x1"]
@@ -101,62 +103,52 @@ class Greed(object):
         score = int(house.price * factor)
         return score
 
+    def min_distance_other_houses(self, control_coordinate, house, existing_coordinates):
+        minimum_distance = None
+        valid_set = self.calculate_coordinate(control_coordinate, house)
 
-    # def calculate_point(self):
-    #     # greedy algoritme
-    #     while self.number_point < 20:
-    #         sectors = {}
-    #         degrees_vertical, degrees_horizontal = self.calculate_degree()
-    #         max = []
-    #         distances = []
-    #         max_distance = 0
-    #         max_degree = 0
-    #         # calculate the first point with the greatest point
-    #         if self.points == {}:
-    #             self.points["point" + str(self.number_point)] =({"y": self.length/2, "x": self.width/2})
-    #
-    #         else:
-    #
-    #             # makes different sector
-    #             if self.number_point == 1:
-    #                 count = 0
-    #                 for count in range(1, 5):
-    #
-    #                     # sector1
-    #                     sector_x = self.points["point" + str(self.number_point)]["x"]
-    #                     sector_y = self.points["point" + str(self.number_point)]["y"]
-    #
-    #                     if count == 2:
-    #                         sector_x = self.width - sector_x
-    #
-    #                     elif count == 3:
-    #                         sector_y = self.length - sector_y
-    #
-    #                     elif count == 4:
-    #                         sector_x = self.width - sector_x
-    #                         sector_y = self.length - sector_y
-    #
-    #                     for degree in degrees_horizontal:
-    #                         distances.append({"degree": degree, "distance": (sector_x/degree)})
-    #
-    #                     for degree in degrees_vertical:
-    #                         distances.append({"degree": degree, "distance": (sector_y/degree)})
-    #
-    #
-    #             for key, values in sectors:
-    #                 max_value = None
-    #                 point = self.points["point" + str(self.number_point)]
-    #
-    #                 if distances == []:
-    #                     print("No Data")
-    #                 else:
-    #                     if float(distance["distance"]) > max_distance:
-    #                         print(max_distance)
-    #                         max_distance = distance["distance"]
-    #
-    #             print(max_distance)
-    #
-    #             break
+        for i in range(len(existing_coordinates)):
+            # Skip the comparison between the same data
+            if i == control_coordinate:
+                continue
+
+            selected = self.calculate_coordinate(existing_coordinates[i], house)
+
+            # Use straight line if walls match in horizontal or vertical orientation
+            if valid_set["x1"] <= selected["x1"] <= valid_set["x2"] or valid_set["x1"] <= selected["x2"] <= valid_set["x2"]:
+                dist = min(abs(valid_set["y1"] - selected["y2"]), abs(selected["y1"] - valid_set["y2"]))
+            elif valid_set["y1"] <= selected["y1"] <= valid_set["y2"] or valid_set["y1"] <= selected["y2"] <= valid_set["y2"]:
+                dist = min(abs(valid_set["x1"] - selected["x2"]), abs(selected["x1"] - valid_set["x2"]))
+
+            # Calculate Euclidian distance in other cases
+            else:
+                dist1 = ((valid_set["x1"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y1"]) **2)**0.5
+                dist2 = ((valid_set["x1"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
+                dist3 = ((valid_set["x1"] - selected["x1"]) ** 2 + (valid_set["y2"] - selected["y1"]) **2)**0.5
+                dist4 = ((valid_set["x1"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
+
+                dist5 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y1"]) **2)**0.5
+                dist6 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
+                dist7 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y2"] - selected["y1"]) **2)**0.5
+                dist8 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
+
+                dist9 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y1"]) **2)**0.5
+                dist10 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
+                dist11 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y2"] - selected["y1"]) **2)**0.5
+                dist12 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
+
+                dist13 = ((valid_set["x2"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y1"]) **2)**0.5
+                dist14 = ((valid_set["x2"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
+                dist15 = ((valid_set["x2"] - selected["x2"]) ** 2 + (valid_set["y2"] - selected["y1"]) **2)**0.5
+                dist16 = ((valid_set["x2"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
+                dist = min(dist1, dist2, dist3, dist4, dist5, dist6, dist7, dist8, dist9, dist10, dist11, dist12, dist13, dist14, dist15, dist16)
+
+            if minimum_distance == None or dist < minimum_distance :
+                minimum_distance = dist
+
+        # Compare grid space and house space to find lowest
+        grid_space = self.calc_grid_distance(valid_set)
+        return min(minimum_distance, grid_space)
 
 
 if __name__ == "__main__":

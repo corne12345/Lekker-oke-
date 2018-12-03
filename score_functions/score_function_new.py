@@ -1,4 +1,5 @@
 import random
+import sys
 
 DIMENSIONS = [160,180]
 SMALL = [8, 8, 2]
@@ -113,6 +114,7 @@ def calc_score(distances):
         factor = ((distances[i] - 6) * 6)/100 + 1
         price = 610000 * factor
         score += price
+
     for i in range(int(len(distances) * 0.15) , int(len(distances)* 0.40)):
         if distances[i] < 3:
             return False
@@ -145,9 +147,10 @@ def best_of_random(reps):
         for i in range(len(valid_coordinates)):
             valid_set = valid_coordinates[i]
             temp = calc_distance(valid_set, valid_coordinates, i)
+            print("temp:" + str(temp))
             distances.append(temp)
-
         # print(len(distances))
+        
         check = calc_score(distances)
         # print(check)
         if check != False:

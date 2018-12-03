@@ -9,12 +9,17 @@ for submap in path:
 
 from grid_houses import Grid, Visualator
 from Opzet import LittleHouse, MediumHouse, LargeHouse, Water
+from greedy import Greed
 
 def Main():
         total_houses = 20
         grid = Grid(180, 160)
         grid.create_water(Water(60, 100))
         # grid.make_csv()
+        Greed(grid,       LittleHouse(total_houses, 8, 8, 285000, 2, 0.03),
+                          MediumHouse(total_houses, 10, 7.5, 399000, 3, 0.04),
+                          LargeHouse(total_houses, 11, 10.5, 610000, 6, 0.06))
+        sys.exit()
         grid.create_house(LittleHouse(total_houses, 8, 8, 285000, 2),
                           MediumHouse(total_houses, 10, 7.5, 399000),
                           LargeHouse(total_houses, 11, 10.5, 610000),
