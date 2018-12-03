@@ -80,7 +80,6 @@ class Greed(object):
                     distance = self.min_distance_other_houses(coordinate, self.houses[house], valid_set)
                     score.append(self.score(distance, self.houses[house]))
 
-
             index = score.index(max(score))
             try:
                 valid_set[house].append(deepcopy(coordinates[index]))
@@ -152,7 +151,3 @@ class Greed(object):
         # Compare grid space and house space to find lowest
         grid_space = self.calc_grid_distance(valid_set)
         return min(minimum_distance, grid_space)
-
-
-if __name__ == "__main__":
-    Greed().calculate_point()
