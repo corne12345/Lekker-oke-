@@ -1,5 +1,6 @@
 import math
 from random import sample
+from copy import deepcopy
 
 class Greed(object):
     """
@@ -43,99 +44,63 @@ class Greed(object):
     # creates coordinates for the houses
     def create_coordinates(self):
         random_list = self.create_list_house()
-        house = sample(set(random_list), 1)[0]
+        score = []
+        coordinates = []
 
         # (Vraagje: het number_point is toch nooit negatief, dus dan komt hij toch nooit in de if statement?)
         while self.number_point < len(random_list):
-            self.number_point += 1
-            if self.number_point < 1:
+            house = sample(set(random_list), 1)[0]
 
-                # goes through the grid and looks if the detachment is large enough for the y axis
-                for y_axe in range(len(self.grid)):
-                    if y_axe < self.detachment[house] or \
-                    y_axe > self.grid.length - self.detachment:
-                        pass
-                    else:
+            # goes through the grid and looks if the detachment is large enough for the y axis
+            for y_axe in range(len(self.grid.grid)):
+                if y_axe < self.houses[house].detachement or \
+                y_axe > len(self.grid.grid) - self.houses[house].detachement:
+                    pass
+                else:
 
-                        # looks if the detachment is large enough for the x axis
-                        for x_axe in range(len(y_axe)):
-                            if x_axe < self.detachment[house] or \
-                            y_axe > self.grid.length - self.detachement:
-                                # volgensmij kan het or statement met y_axe > weg, want die zeg je in het if statement erboven al!
-                                pass
-                            elif self.grid[y_axe][x_axe] in range(1, 5):
-                                pass
-
-    def calc_money(self):
-        """
-        This function takes the length of the newly created detachement around the houses
-        and calculates the money each house yields.
-        """
-
-        print(self.houses)
-
-        # create sample coordinates by using random function
-        coordinates = Coordinates(20, 180, 160, self.grid).coordinates
-        comparisons = []
-        distances = []
-        name = list(self.houses.keys())
-
-        # create 4-point coordinates for each house by making 3 large, 5 medium
-        # and 12 small houses
-
-        house_number = 0
-
-        for house in list(self.houses.keys()):
-            number_houses = int(self.houses[house].number)
-            for count in range(number_houses):
-                y = coordinates[house_number]['y']
-                x = coordinates[house_number]['x']
-                temp = CoordinatesHouse(x, y, self.houses[house])
-                temp = temp.coordinates()
-
-                comparisons.append(temp)
-                house_number += 1
-
-
-        print(comparisons)
-
-        # create local variable that cannot be a result value and loop over the list of coordinates
-        for s in range(len(comparisons)):
-            selected = comparisons[s]
-            print(selected)
-
-            # loop over all coordinates of selected house
-            for i in range(4):
-                minimum_distance = 9999.999
-
-                # loop over the list of houses to select one
-                for house in range(len(comparisons)):
-                    if comparisons[house] == selected:
-                        continue
-
-                    # loop over all coordinates of the other houses to put the temp on a value
-                    for j in range(4):
-                        if comparisons[house][0][1] > selected[0][i] > comparisons[house][0][2]:
-                            temp = abs(comparisons[house][1][i] -  selected[1][i])
-
-                        elif comparisons[house][1][0] > selected[1][i] > comparisons[house][1][1]:
-                            temp = abs(comparisons[house][0][i] - selected[0][i])
-
+                    # looks if the detachment is large enough for the x axis
+                    for x_axe in range(len(self.grid.grid[y_axe])):
+                        if x_axe < self.houses[house].detachement or \
+                        x_axe > len(self.grid.grid[y_axe]) - self.houses[house].detachement \
+                        or self.grid.grid[y_axe][x_axe] in range(1, 5):
+                            # volgensmij kan het or statement met y_axe > weg, want die zeg je in het if statement erboven al!
+                            pass
                         else:
-                            temp = ((selected[0][i] - comparisons[house][0][j])**2 + (selected[1][i] - comparisons[house][1][j])**2)**0.5
+                            coordinate = self.calculate_coordinate({"x": x_axe, "y": y_axe }, self.houses[house])
+                            if self.number_point < 1 and coordinate != None:
+                                distance = self.calc_grid_distance(coordinate)
+                                score.append(self.score(distance, self.houses[house]))
+                            elif coordinate != None:
+                                min_distance_other_house = self.min_distance_other_houses(self)
 
-                        # check for house in house and append list of distances if so
-                        if comparisons[house][0][0] < selected[0][i] < comparisons[house][0][2] and comparisons[house][1][0] < selected[1][i] < comparisons[house][1][1]:
-                            distances.append("House in house!")
-                        if temp < minimum_distance:
-                            minimum_distance = temp
 
-            # puts the distance on a specific value
-            temp = min(selected[0][0] - 0, 160 - selected[0][2], selected[1][0] - 0, 180 - selected[1][1])
-            if temp < minimum_distance:
-                minimum_distance = temp
-            print(minimum_distance)
-            distances.append(minimum_distance)
+                            coordinates.append(coordinate)
+            index = score.index(max(score))
+            coordinate_max_score = deepcopy(coordinates[index])
+
+            self.number_point += 1
+
+
+    def calculate_coordinate(self, calculation_point, house):
+        if calculation_point["x"] + house.width < self.grid.width - house.detachement and \
+           calculation_point["y"] + house.length < self.grid.length - house.detachement:
+           return {"x1": calculation_point["x"], "x2": calculation_point["x"] + house.width,
+                   "y1": calculation_point["y"], "y2": calculation_point["y"] + house.length}
+        else:
+            pass
+
+    def calc_grid_distance(self, coordinate):
+        right = coordinate["x1"]
+        left = self.grid.width - coordinate["x2"]
+        south = coordinate["y1"]
+        north = self.grid.length - coordinate["y2"]
+        return min(right, left, south, north)
+
+    def score(self, distance, house):
+        factor = ((distance - house.detachement)* house.price_improvement) + 1
+        score = int(house.price * factor)
+        return score
+
 
     # def calculate_point(self):
     #     # greedy algoritme
