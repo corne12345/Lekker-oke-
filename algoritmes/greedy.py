@@ -10,7 +10,7 @@ class Greed(object):
 
     def __init__(self, grid, little, middle, large):
         self.grid = grid
-        self.houses = {"little": little, "middle": middle, "large": large}
+        self.houses = {"little": little, "medium": middle, "large": large}
         self.points = {}
         self.number_point = 0
         self.count_little = 0
@@ -46,10 +46,11 @@ class Greed(object):
         random_list = self.create_list_house()
         score = []
         coordinates = []
-        valid_set = []
+        valid_set = {}
+        original_length = len(random_list)
 
         # (Vraagje: het number_point is toch nooit negatief, dus dan komt hij toch nooit in de if statement?)
-        while self.number_point < len(random_list):
+        while self.number_point < original_length:
             house = sample(set(random_list), 1)[0]
 
             # goes through the grid and looks if the detachment is large enough for the y axis
@@ -78,14 +79,19 @@ class Greed(object):
                 elif coordinate != None:
                     distance = self.min_distance_other_houses(coordinate, self.houses[house], valid_set)
                     score.append(self.score(distance, self.houses[house]))
-            index = score.index(max(score))
-            print(deepcopy(coordinates[index]))
-            valid_set.append(deepcopy(coordinates[index]))
 
+
+            index = score.index(max(score))
+            try:
+                valid_set[house].append(deepcopy(coordinates[index]))
+            except:
+                valid_set[house] = [deepcopy(coordinates[index])]
+            coordinates = []
+            score = []
             self.number_point += 1
             print(self.number_point)
-            print(valid_set )
-
+            random_list.pop(random_list.index(house))
+        return valid_set
 
     def calculate_coordinate(self, calculation_point, house):
         return {"x1": calculation_point["x"], "x2": calculation_point["x"] + house.width,
@@ -107,44 +113,41 @@ class Greed(object):
         minimum_distance = None
         valid_set = self.calculate_coordinate(control_coordinate, house)
 
-        for i in range(len(existing_coordinates)):
-            # Skip the comparison between the same data
-            if i == control_coordinate:
-                continue
+        for key in existing_coordinates.keys():
+            for i in range(len(existing_coordinates[key])):
+                selected = self.calculate_coordinate(existing_coordinates[key][i] , house)
 
-            selected = self.calculate_coordinate(existing_coordinates[i], house)
+                # Use straight line if walls match in horizontal or vertical orientation
+                if valid_set["x1"] <= selected["x1"] <= valid_set["x2"] or valid_set["x1"] <= selected["x2"] <= valid_set["x2"]:
+                    dist = min(abs(valid_set["y1"] - selected["y2"]), abs(selected["y1"] - valid_set["y2"]))
+                elif valid_set["y1"] <= selected["y1"] <= valid_set["y2"] or valid_set["y1"] <= selected["y2"] <= valid_set["y2"]:
+                    dist = min(abs(valid_set["x1"] - selected["x2"]), abs(selected["x1"] - valid_set["x2"]))
 
-            # Use straight line if walls match in horizontal or vertical orientation
-            if valid_set["x1"] <= selected["x1"] <= valid_set["x2"] or valid_set["x1"] <= selected["x2"] <= valid_set["x2"]:
-                dist = min(abs(valid_set["y1"] - selected["y2"]), abs(selected["y1"] - valid_set["y2"]))
-            elif valid_set["y1"] <= selected["y1"] <= valid_set["y2"] or valid_set["y1"] <= selected["y2"] <= valid_set["y2"]:
-                dist = min(abs(valid_set["x1"] - selected["x2"]), abs(selected["x1"] - valid_set["x2"]))
+                # Calculate Euclidian distance in other cases
+                else:
+                    dist1 = ((valid_set["x1"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y1"]) **2)**0.5
+                    dist2 = ((valid_set["x1"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
+                    dist3 = ((valid_set["x1"] - selected["x1"]) ** 2 + (valid_set["y2"] - selected["y1"]) **2)**0.5
+                    dist4 = ((valid_set["x1"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
 
-            # Calculate Euclidian distance in other cases
-            else:
-                dist1 = ((valid_set["x1"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y1"]) **2)**0.5
-                dist2 = ((valid_set["x1"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
-                dist3 = ((valid_set["x1"] - selected["x1"]) ** 2 + (valid_set["y2"] - selected["y1"]) **2)**0.5
-                dist4 = ((valid_set["x1"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
+                    dist5 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y1"]) **2)**0.5
+                    dist6 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
+                    dist7 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y2"] - selected["y1"]) **2)**0.5
+                    dist8 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
 
-                dist5 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y1"]) **2)**0.5
-                dist6 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
-                dist7 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y2"] - selected["y1"]) **2)**0.5
-                dist8 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
+                    dist9 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y1"]) **2)**0.5
+                    dist10 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
+                    dist11 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y2"] - selected["y1"]) **2)**0.5
+                    dist12 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
 
-                dist9 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y1"]) **2)**0.5
-                dist10 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
-                dist11 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y2"] - selected["y1"]) **2)**0.5
-                dist12 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
+                    dist13 = ((valid_set["x2"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y1"]) **2)**0.5
+                    dist14 = ((valid_set["x2"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
+                    dist15 = ((valid_set["x2"] - selected["x2"]) ** 2 + (valid_set["y2"] - selected["y1"]) **2)**0.5
+                    dist16 = ((valid_set["x2"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
+                    dist = min(dist1, dist2, dist3, dist4, dist5, dist6, dist7, dist8, dist9, dist10, dist11, dist12, dist13, dist14, dist15, dist16)
 
-                dist13 = ((valid_set["x2"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y1"]) **2)**0.5
-                dist14 = ((valid_set["x2"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
-                dist15 = ((valid_set["x2"] - selected["x2"]) ** 2 + (valid_set["y2"] - selected["y1"]) **2)**0.5
-                dist16 = ((valid_set["x2"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
-                dist = min(dist1, dist2, dist3, dist4, dist5, dist6, dist7, dist8, dist9, dist10, dist11, dist12, dist13, dist14, dist15, dist16)
-
-            if minimum_distance == None or dist < minimum_distance :
-                minimum_distance = dist
+                if minimum_distance == None or dist < minimum_distance :
+                    minimum_distance = dist
 
         # Compare grid space and house space to find lowest
         grid_space = self.calc_grid_distance(valid_set)
