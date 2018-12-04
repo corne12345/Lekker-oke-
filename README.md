@@ -104,4 +104,4 @@ It contains calculations of the state space, lower bound and upper bound.
 ### Acknowledgements
 - Stackoverflow
 - Minor Programmeren at University of Amsterdam
-- Angelo Groot (Tech Assistent)
+- Angelo Groot (Technical Assistent)
