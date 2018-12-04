@@ -6,7 +6,7 @@ import random
 import copy
 import csv
 
-# Imports different paths, has to be changed and to be put in main
+# Imports different paths, has to be changed and to be put in main.
 path = pathlib.Path.cwd()
 path = path.absolute()
 path = path.parent
@@ -38,30 +38,30 @@ class Depthfirst(object):
     #     self.length = 180
     #     self.width = 160
 
-    # creates the coordinates
+    # Creates the coordinates.
     def create_coordinates(self):
         list_coordinates = []
         # y_x_coordinates = {}
 
-        # makes lists for all the x and y coordinates
+        # Makes lists for all the x and y coordinates.
         x_list = []
         y_list = []
 
-        # appends all the x and y coordinates
-        for i in range(20, self.width, 20):
+        # Appends all the x and y coordinates.
+        for i in range(10, self.width, 10):
             x_list.append(i)
 
-        for i in range(20, self.length, 20):
+        for i in range(10, self.length, 10):
             y_list.append(i)
 
         print(x_list)
         print(y_list)
 
-        number = 8
+        number = 20
         y_x_coordinates = []
 
         # To do: check if water is on the place!!!!!
-        # appends all the possible coordinates to a list
+        # Appends all the possible coordinates to a list.
         for y_value in y_list:
             for x_value in x_list:
                 y_x_coordinates.append({"y" : y_value,
@@ -74,7 +74,7 @@ class Depthfirst(object):
         end_coordinates = []
         coordinates = []
 
-        # adds the first coordinates to a list with all coordinates
+        # Adds the first coordinates to a list with all coordinates.
         for i, coord in enumerate(y_x_coordinates):
             if i < number:
                 coordinates.append(coord)
@@ -91,16 +91,16 @@ class Depthfirst(object):
         # #         print(coordinates)
         # # print(end_coordinates)
 
-        # changes all the coordinates, until you have all combinations and adds
-        # them to the list with all final coordinates
-        for i in range(len(coordinates)):
-            for j in range(len(coordinates)):
-                for k, coord in enumerate(y_x_coordinates):
-                    for l, coord_2 in enumerate(y_x_coordinates):
-                        coordinates[i] = coord
-                        coordinates[j] = coord_2
-                        end_coordinates.append(coordinates)
-                        print(coordinates)
+        # # changes all the coordinates, until you have all combinations and adds
+        # # them to the list with all final coordinates
+        # for i in range(len(coordinates)):
+        #     for j in range(len(coordinates)):
+        #         for k, coord in enumerate(y_x_coordinates):
+        #             for l, coord_2 in enumerate(y_x_coordinates):
+        #                 coordinates[i] = coord
+        #                 coordinates[j] = coord_2
+        #                 end_coordinates.append(coordinates)
+        #                 print(coordinates)
 
                         # print(len(end_coordinates))
 
@@ -111,7 +111,7 @@ class Depthfirst(object):
                         #     end_coordinates.append(coordinates)
 
 
-        print(len(end_coordinates))
+        # print(len(end_coordinates))
 
         # # dit hieronder zou ook kunnen, maar ik weet niet wat in de remove(????) moet. Want coordinates erin kan niet.
         # for i in range(len(coordinates)):
