@@ -146,9 +146,9 @@ class Grid(object):
 
 # Visualizes the graph
 class Visualator(object):
-    def __init__(self, grid, little_house, medium_house, large_house, water):
+    def __init__(self, grid, little_house, medium_house, large_house, water, coordinates):
         self.grid = grid.grid
-        self.coordinates = grid.coordinates
+        self.coordinates = coordinates
         self.houses = {"little": little_house, "medium": medium_house, "large": large_house}
         self.water, self.waterbody = water, grid.waterbody
 
@@ -189,7 +189,7 @@ class Visualator(object):
                     color="blue", line_color="black")
 
         # makes the houses into the graph
-        for sort in self.coordinates.keys():
+        for sort in self.houses.keys():
             colour = None
 
             for house in self.coordinates[sort]:
