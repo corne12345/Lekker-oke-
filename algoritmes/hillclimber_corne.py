@@ -40,6 +40,7 @@ def hillclimber(reps, steps, randoms):
             new_coordinates[i]["y1"] = new_coordinates[i]["y1"] + mover_y
             new_coordinates[i]["y2"] = new_coordinates[i]["y2"] + mover_y
             new_distances = []
+            # print("hoi")
             for j in range(len(coordinates)):
                 new_distance = calc_distance(new_coordinates[j], new_coordinates, j)
                 new_distances.append(new_distance)
@@ -59,12 +60,14 @@ def hillclimber(reps, steps, randoms):
     print(score, max_score)
     print(distances, max_distances, sep='\n')
     print(coordinates, max_coordinates, sep='\n')
-    return  max_score, max_distances, max_coordinates
+    intermediate  = max_score, max_distances, max_coordinates
+    return random_to_vis(intermediate)
+    # return  max_score, max_distances, max_coordinates
+
 
 if __name__ == "__main__":
     # a = input("how many reps would you like")
     # b = input("in what range can the changes be?")
     # c = input("how many randoms to do first?")
     # hillclimber(a, b, c)
-
-    hillclimber(10, 1, 10)
+    print(random_to_vis(hillclimber(10, 5, 1)))

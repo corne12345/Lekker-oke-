@@ -5,7 +5,7 @@ DIMENSIONS = [160,180]
 SMALL = [8, 8, 2]
 MEDIUM = [10, 7.5, 3]
 LARGE = [11, 10.5, 6]
-NUM_HOUSES = 40
+NUM_HOUSES = 20
 
 def create_valid_coordinates (house_type, valid_coordinates, DIMENSIONS, num_houses):
     counter = 0
@@ -147,10 +147,10 @@ def best_of_random(reps):
         for i in range(len(valid_coordinates)):
             valid_set = valid_coordinates[i]
             temp = calc_distance(valid_set, valid_coordinates, i)
-            print("temp:" + str(temp))
+            # print("temp:" + str(temp))
             distances.append(temp)
         # print(len(distances))
-        
+
         check = calc_score(distances)
         # print(check)
         if check != False:
@@ -178,7 +178,7 @@ def random_to_vis(intermediate):
             little.append(coordinate)
 
     coordinates_ordered = {"little": little, "medium": medium, "large": large}
-    return coordinates_ordered, intermediate[0], intermediate[1]
+    return coordinates_ordered#, intermediate[0], intermediate[1]
 
 
 
