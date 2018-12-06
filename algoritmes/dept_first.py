@@ -47,18 +47,20 @@ class Depthfirst(object):
         x_list = []
         y_list = []
 
+
         # Appends all the x and y coordinates.
-        for i in range(10, self.width, 10):
+        for i in range(3, self.width, 1):
             x_list.append(i)
 
-        for i in range(10, self.length, 10):
+        for i in range(3, self.length, 1):
             y_list.append(i)
 
-        print(x_list)
-        print(y_list)
+        # print(x_list)
+        # print(y_list)
 
         number = 20
         y_x_coordinates = []
+
 
         # To do: check if water is on the place!!!!!
         # Appends all the possible coordinates to a list.
@@ -68,20 +70,37 @@ class Depthfirst(object):
                                         "x" : x_value})
 
 
-        print(y_x_coordinates)
+        # print(y_x_coordinates)
         print(len(y_x_coordinates))
 
         end_coordinates = []
         coordinates = []
 
+        # # Adds the first coordinates to a list with all coordinates.
+        # for i, coord in enumerate(y_x_coordinates):
+        #     if i < number:
+        #         coordinates.append(coord)
+        #
+        # end_coordinates.append(coordinates)
+        #
+        # print(end_coordinates)
+
         # Adds the first coordinates to a list with all coordinates.
+
         for i, coord in enumerate(y_x_coordinates):
-            if i < number:
+            if len(coordinates) <= 20:
+            # if i < number:
                 coordinates.append(coord)
 
-        end_coordinates.append(coordinates)
+                if len(coordinates) > 2:
+                    for i in range(11):
+                        if coordinates[-1]["y"] == coordinates[-2]["y"] \
+                        and (coordinates[-1]["x"] - i) == coordinates[-2]["x"]:
+                            coordinates.remove(coord)
 
-        print(end_coordinates)
+        # end_coordinates.append(coordinates)
+
+        print(coordinates)
 
         # # hier geeft die alleen deel van de coorinaten
         # for i in range(len(coordinates)):

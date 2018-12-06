@@ -21,8 +21,8 @@ def Main(algorithm):
 
         if algorithm == "greedy":
             coordinates = Greed(grid, LittleHouse(total_houses, 8, 8, 285000, 2, 0.03),
-                              MediumHouse(total_houses, 10, 7.5, 399000, 3, 0.04),
-                              LargeHouse(total_houses, 11, 10.5, 610000, 6, 0.06)).coordinates
+                          MediumHouse(total_houses, 10, 7.5, 399000, 3, 0.04),
+                          LargeHouse(total_houses, 11, 10.5, 610000, 6, 0.06)).coordinates
 
         elif algorithm == "hillclimber":
             coordinates = hillclimber(1000, 2, 100)
@@ -37,7 +37,7 @@ def Main(algorithm):
         model = Visualator(grid, LittleHouse(total_houses, 8, 8, 285000, 2, 0.03),
                                  MediumHouse(total_houses, 10, 7.5, 399000, 3, 0.04),
                                  LargeHouse(total_houses, 11, 10.5, 610000, 6, 0.06),
-                             Water(60, 100), coordinates)
+                                 Water(60, 100), coordinates)
         show(model.bokeh())
 
 if __name__ == "__main__":
