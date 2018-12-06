@@ -49,10 +49,10 @@ class Depthfirst(object):
 
 
         # Appends all the x and y coordinates.
-        for i in range(3, self.width, 1):
+        for i in range(2, self.width, 1):
             x_list.append(i)
 
-        for i in range(3, self.length, 1):
+        for i in range(2, self.length, 1):
             y_list.append(i)
 
         # print(x_list)
@@ -75,32 +75,60 @@ class Depthfirst(object):
 
         end_coordinates = []
         coordinates = []
-
-        # # Adds the first coordinates to a list with all coordinates.
-        # for i, coord in enumerate(y_x_coordinates):
-        #     if i < number:
-        #         coordinates.append(coord)
-        #
-        # end_coordinates.append(coordinates)
-        #
-        # print(end_coordinates)
-
-        # Adds the first coordinates to a list with all coordinates.
+        # print(y_x_coordinates)
 
         for i, coord in enumerate(y_x_coordinates):
-            if len(coordinates) <= 20:
-            # if i < number:
+            if len(coordinates) < 20:
                 coordinates.append(coord)
 
-                if len(coordinates) > 2:
-                    for i in range(11):
-                        if coordinates[-1]["y"] == coordinates[-2]["y"] \
-                        and (coordinates[-1]["x"] - i) == coordinates[-2]["x"]:
+                if len(coordinates) > 1:
+                    pause = 0
+                    for i in range(10):
+                        if (coordinates[-1]["y"] == coordinates[-2]["y"] \
+                        and (coordinates[-1]["x"] - i) == coordinates[-2]["x"]):
                             coordinates.remove(coord)
+                            pause = 1
+                            break
+
+                    for i in range(len(coordinates) - 1):
+                        for j in range(10):
+                            if ((coordinates[-1]["y"] - 1) == coordinates[i]["y"] \
+                            and (coordinates[-1]["x"] - j) == coordinates[i]["x"]):
+                                print(coord)
+                                coordinates.remove(coord)
+                                # print("blabla")
+
+                    if pause == 0:
+                        if len(coordinates) >= 12:
+                            if coordinates[-1]["y"] == coordinates[-2]["y"] \
+                            and (coordinates[-1]["x"] - 10) == coordinates[-2]["x"]:
+                                 coordinates.remove(coord)
+
+                            for i in range(len(coordinates) - 1):
+                                    if ((coordinates[-1]["y"] - 1) == coordinates[i]["y"] \
+                                    and (coordinates[-1]["x"] - 10) == coordinates[i]["x"]):
+                                        print("tweede")
+                                        print(coord)
+                                        coordinates.remove(coord)
+
+                        if len(coordinates) >= 17:
+                            if coordinates[-1]["y"] == coordinates[-2]["y"] \
+                            and (coordinates[-1]["x"] - 11) == coordinates[-2]["x"]:
+                                 coordinates.remove(coord)
+
+                            for i in range(len(coordinates) - 1):
+                                    if ((coordinates[-1]["y"] - 1) == coordinates[i]["y"] \
+                                    and (coordinates[-1]["x"] - 11) == coordinates[i]["x"]):
+                                        print("tweede")
+                                        print(coord)
+                                        coordinates.remove(coord)
+
+
 
         # end_coordinates.append(coordinates)
 
         print(coordinates)
+        print(len(coordinates))
 
         # # hier geeft die alleen deel van de coorinaten
         # for i in range(len(coordinates)):
@@ -143,9 +171,21 @@ class Depthfirst(object):
         # print(len(end_coordinates))
 
 
-        return y_x_coordinates, coordinates
+        return coordinates
+
+    def create_coordinates_2(coordinates):
+        """
+        This function calculates all the possible coordinates.
+        """
+
+        # coordinates = all_coordinates[0]
+
+        print(coordinates)
+
 
 if __name__ == "__main__":
     grid = Grid(180, 160)
     test = Depthfirst(8, 180, 160, grid)
-    test.create_coordinates()
+    first = test.create_coordinates()
+    print(first)
+    coordinates = test.create_coordinates_2(first)
