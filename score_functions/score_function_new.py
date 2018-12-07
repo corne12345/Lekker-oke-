@@ -1,5 +1,7 @@
 import random
 import sys
+import csv
+from matplotlib import pyplot as plt
 
 DIMENSIONS = [160,180]
 SMALL = [8, 8, 2]
@@ -183,5 +185,19 @@ def random_to_vis(intermediate):
 
 
 if __name__ == "__main__":
-    intermediate = best_of_random(10)
-    print(intermediate[0], intermediate[1], intermediate[2], sep='\n')
+    counter = 0
+    scores = []
+    while counter < 10000:
+        intermediate = best_of_random(1)
+        counter += 1
+        # Write to csv
+        # f = open("random_total.csv", "a", newline='')
+        # writer = csv.writer(f)
+        # writer.writerow(intermediate)
+        scores.append(intermediate[0])
+
+    plt.hist(scores, bins=50)
+    plt.show()
+
+
+    # print(intermediate[0], intermediate[1], intermediate[2], sep='\n')

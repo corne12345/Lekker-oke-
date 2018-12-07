@@ -80,7 +80,13 @@ This problem will be displayed as a map of all the houses at their coordinates, 
 
 ## Algorithms
 The first solution to this problem has been attempted by the usage of a random algorithm. This algorithm randomly places all the 
-houses on a certain coordinate and checks whether or not this will lead to a valid siuation. Only valid sets will lead to an output.
+houses on a certain coordinate and checks whether or not this will lead to a valid siuation. Only valid sets will lead to an output. 
+This random algorithm is not really an algorithm, since there is no heuristics involved in it. The distribution of the score of 10000
+runs is plotted in the figure below.This shows the distribution is between 8M and 10.7M. 
+![Alt Text](https://github.com/corne12345/Lekker-oke-/blob/master/output/random_run(10000).png)
+
+The "heuristic" approach is to force the algorithm to perform multiple reandom runs and to save the best one. This will result for 1K
+runs in a score of 10.7M (repeated tests). 
 
 Two constructive algorithms have been built. First of all a greedy algorithm that places a house on a coordinate, which will maximize
 the free space of that house and therefore results in a maximal free space of that house. This greedy algorithm is short-sighted and
