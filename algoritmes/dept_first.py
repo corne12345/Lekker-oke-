@@ -90,15 +90,19 @@ class Depthfirst(object):
                             pause = 1
                             break
 
-                    for j in range(len(coordinates) - 1):
-                        for k in range(10):
-                            if ((coordinates[-1]["y"] - 1) == coordinates[j]["y"] \
-                            and (coordinates[-1]["x"] - k) == coordinates[j]["x"]):
-                                print(coord)
-                                coordinates.remove(coord)
-                                # print("blabla")
+
 
                     if pause == 0:
+
+                        for j in range(len(coordinates) - 1):
+                            for k in range(10):
+                                for l in range(10):
+                                    if ((coordinates[-1]["y"] - l) == coordinates[j]["y"] \
+                                    and (coordinates[-1]["x"] - k) == coordinates[j]["x"]):
+                                    # print(coord)
+                                        coordinates.remove(coord)
+                                    # print("blabla")
+                                    
                         if len(coordinates) >= 12:
                             if coordinates[-1]["y"] == coordinates[-2]["y"] \
                             and (coordinates[-1]["x"] - 10) == coordinates[-2]["x"]:
@@ -107,8 +111,8 @@ class Depthfirst(object):
                             for j in range(len(coordinates) - 1):
                                     if ((coordinates[-1]["y"] - 1) == coordinates[j]["y"] \
                                     and (coordinates[-1]["x"] - 10) == coordinates[j]["x"]):
-                                        print("tweede")
-                                        print(coord)
+                                        # print("tweede")
+                                        # print(coord)
                                         coordinates.remove(coord)
 
                         if len(coordinates) >= 17:
@@ -119,8 +123,8 @@ class Depthfirst(object):
                             for j in range(len(coordinates) - 1):
                                     if ((coordinates[-1]["y"] - 1) == coordinates[j]["y"] \
                                     and (coordinates[-1]["x"] - 11) == coordinates[j]["x"]):
-                                        print("tweede")
-                                        print(coord)
+                                        # print("tweede")
+                                        # print(coord)
                                         coordinates.remove(coord)
 
 
