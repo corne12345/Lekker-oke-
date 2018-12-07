@@ -185,19 +185,21 @@ def random_to_vis(intermediate):
 
 
 if __name__ == "__main__":
-    counter = 0
-    scores = []
-    while counter < 10000:
-        intermediate = best_of_random(1)
-        counter += 1
-        # Write to csv
-        # f = open("random_total.csv", "a", newline='')
-        # writer = csv.writer(f)
-        # writer.writerow(intermediate)
-        scores.append(intermediate[0])
+    # counter = 0
+    # scores = []
+    # while counter < 10000:
+    #     intermediate = best_of_random(1)
+    #     counter += 1
+    #     # Write to csv
+    #     # f = open("random_total.csv", "a", newline='')
+    #     # writer = csv.writer(f)
+    #     # writer.writerow(intermediate)
+    #     scores.append(intermediate[0])
+    #
+    # plt.hist(scores, bins=50)
+    # plt.show()
 
-    plt.hist(scores, bins=50)
-    plt.show()
-
+    intermediate = best_of_random(10)
+    print(intermediate[0], intermediate[1], intermediate[2], sep='\n')
 
     # print(intermediate[0], intermediate[1], intermediate[2], sep='\n')

@@ -4,6 +4,7 @@ from bokeh.plotting import show
 import random
 import copy
 import csv
+import matplotlib.pyplot as plt
 
 # # get the path to the classes
 path = pathlib.Path.cwd()
@@ -21,7 +22,7 @@ LARGE = [11, 10.5, 6]
 NUM_HOUSES = 20
 
 
-def hillclimber(reps, steps, randoms):
+def hillclimber(reps, steps, randoms, printplot = False):
     score, distances, coordinates = best_of_random(randoms)
     counter = 0
     new_coordinates = copy.deepcopy(coordinates)
@@ -30,6 +31,8 @@ def hillclimber(reps, steps, randoms):
     # Write to csv
     f = open("result.csv", "w", newline='')
     writer = csv.writer(f)
+    counters = [0]
+    max_scores = [0]
 
     while counter < reps:
         for i in range(len(coordinates)):
@@ -47,6 +50,8 @@ def hillclimber(reps, steps, randoms):
             new_score = calc_score(new_distances)
             if new_score > max_score:
                 max_score = round(new_score)
+                max_scores.append(max_score)
+                counters.append(counter)
                 max_distances = new_distances
                 max_coordinates = new_coordinates
                 writer.writerow([counter, max_score])
@@ -57,9 +62,17 @@ def hillclimber(reps, steps, randoms):
                 new_coordinates[i]["y2"] = new_coordinates[i]["y2"] - mover_y
             counter += 1
 
-    print(score, max_score)
-    print(distances, max_distances, sep='\n')
-    print(coordinates, max_coordinates, sep='\n')
+    if printplot == True:
+        plt.plot(counters, max_scores)
+        plt.xlabel("counter")
+        plt.ylabel("score")
+        plt.title("plot of hillclimber with %i reps" %reps)
+        plt.text(1, 5000000, "final score: %i" %max_score)
+        plt.show()
+
+    # print(score, max_score)
+    # print(distances, max_distances, sep='\n')
+    # print(coordinates, max_coordinates, sep='\n')
     intermediate  = max_score, max_distances, max_coordinates
     return random_to_vis(intermediate)
     # return  max_score, max_distances, max_coordinates
@@ -70,4 +83,4 @@ if __name__ == "__main__":
     # b = input("in what range can the changes be?")
     # c = input("how many randoms to do first?")
     # hillclimber(a, b, c)
-    print(random_to_vis(hillclimber(10, 5, 1)))
+    hillclimber(1000, 5, 1, True)
