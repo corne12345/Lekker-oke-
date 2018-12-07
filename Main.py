@@ -25,7 +25,7 @@ def Main(algorithm):
                           LargeHouse(total_houses, 11, 10.5, 610000, 6, 0.06)).coordinates
 
         elif algorithm == "hillclimber":
-            coordinates = hillclimber(1000, 3, 1000, True)
+            coordinates = hillclimber(1000, 3, 100, True)
 
         # elif algorithm == "random":
         #     coordinates = None
