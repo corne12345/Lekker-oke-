@@ -103,47 +103,48 @@ class Greed(object):
 
         for key in existing_coordinates.keys():
             for i in range(len(existing_coordinates[key])):
-                selected = self.calculate_coordinate(existing_coordinates[key][i] , self.houses[key]) 
+                selected = self.calculate_coordinate(existing_coordinates[key][i] , self.houses[key])
 
 
                 if self.house_in_house(valid_set, selected) == True:
                     return False
 
                 # Use straight line if walls match in horizontal or vertical orientation
-                elif valid_set["x1"] <= selected["x1"] <= valid_set["x2"] or valid_set["x1"] <= selected["x2"] <= valid_set["x2"]:
+                elif (selected["x1"] < valid_set["x1"] < selected["x2"] or selected["x1"] < valid_set["x2"] <= selected["x2"]) and \
+                (selected["y1"] < valid_set["y1"] < selected["y2"] or selected["y1"] < valid_set["y2"] < selected["y2"]):
+                    return False
+
+                elif (valid_set["x1"] <= selected["x1"] <= valid_set["x2"] or valid_set["x1"] <= selected["x2"] <= valid_set["x2"]) and \
+                (valid_set["y1"] < selected["y1"] < valid_set["y2"] or valid_set["y1"] <= selected["y2"] <= valid_set["y2"]):
+                    return False
+
+                if valid_set["x1"] < selected["x1"] < valid_set["x2"] or valid_set["x1"] < selected["x2"] < valid_set["x2"]:
                     dist = min(abs(valid_set["y1"] - selected["y2"]), abs(selected["y1"] - valid_set["y2"]))
-                    if dist < max(house.detachement, self.houses[key].detachement):
-                        return False
-
-                elif valid_set["y1"] <= selected["y1"] <= valid_set["y2"] or valid_set["y1"] <= selected["y2"] <= valid_set["y2"]:
+                elif valid_set["y1"] < selected["y1"] < valid_set["y2"] or valid_set["y1"] <= selected["y2"] <= valid_set["y2"]:
                     dist = min(abs(valid_set["x1"] - selected["x2"]), abs(selected["x1"] - valid_set["x2"]))
-                    if dist < max(house.detachement, self.houses[key].detachement):
+
+                # calculates the minimum distance between a house and the set coordinate
+                else:
+                    if (valid_set["x1"] - selected["x2"]) > 0:
+                        dist1 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y1"]) **2)**0.5
+                        dist2 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
+                        dist3 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y2"] - selected["y1"]) **2)**0.5
+                        dist4 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y2"] - selected["y2"]) **2)**0.5
+
+                    elif (valid_set["x2"] - selected["x1"]) < 0:
+                        dist1 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y1"]) **2)**0.5
+                        dist2 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
+                        dist3 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y2"] - selected["y1"]) **2)**0.5
+                        dist4 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y2"] - selected["y2"]) **2)**0.5
+                    else:
                         return False
 
-                # Calculate Euclidian distance in other cases
-                else:
-                    dist1 = ((valid_set["x1"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y1"]) **2)**0.5
-                    dist2 = ((valid_set["x1"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
-                    dist3 = ((valid_set["x1"] - selected["x1"]) ** 2 + (valid_set["y2"] - selected["y1"]) **2)**0.5
-                    dist4 = ((valid_set["x1"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
+                    dist = min(dist1, dist2, dist3, dist4)
 
-                    dist5 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y1"]) **2)**0.5
-                    dist6 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
-                    dist7 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y2"] - selected["y1"]) **2)**0.5
-                    dist8 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
-
-                    dist9 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y1"]) **2)**0.5
-                    dist10 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
-                    dist11 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y2"] - selected["y1"]) **2)**0.5
-                    dist12 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
-
-                    dist13 = ((valid_set["x2"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y1"]) **2)**0.5
-                    dist14 = ((valid_set["x2"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
-                    dist15 = ((valid_set["x2"] - selected["x2"]) ** 2 + (valid_set["y2"] - selected["y1"]) **2)**0.5
-                    dist16 = ((valid_set["x2"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
-                    dist = min(dist1, dist2, dist3, dist4, dist5, dist6, dist7, dist8, dist9, dist10, dist11, dist12, dist13, dist14, dist15, dist16)
-
-                if minimum_distance == None or dist < minimum_distance:
+                # checks if the distance bigger then the detachement
+                if dist < max(house.detachement, self.houses[key].detachement):
+                    return False
+                elif minimum_distance == None or dist < minimum_distance:
                     minimum_distance = dist
 
         # Compare grid space and house space to find lowest
@@ -152,12 +153,12 @@ class Greed(object):
 
 
 
-    def house_in_house (self, valid_set, valid_coordinates):
-        test = valid_coordinates
+    def house_in_house (self, valid_set, selected):
+        test = selected
         x1 = test["x1"] <= valid_set["x1"] <= test["x2"]
         x2 = test["x1"] <= valid_set["x2"] <= test["x2"]
         y1 = test["y1"] <= valid_set["y1"] <= test["y2"]
         y2 = test["y1"] <= valid_set["y2"] <= test["y2"]
-        if (x1 or x2) and (y1 or y2):
+        if (x1 == True or x2 == True) and (y1 == True or y2 == True):
             return True
         return False
