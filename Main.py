@@ -10,22 +10,26 @@ for submap in path:
 from grid_houses import Grid, Visualator
 from Opzet import LittleHouse, MediumHouse, LargeHouse, Water
 from greedy import Greed
-from score_function_new import random_to_vis
+from score_function_new import random_to_vis, best_of_random
 from hillclimber_corne import hillclimber
 
-def Main(algorithm):
+def Main(algorithm, reps = 0, steps = 0, randoms = 0):
         total_houses = 20
         grid = Grid(180, 160)
         grid.create_water(Water(60, 100))
         # grid.make_csv()
 
-        if algorithm == "greedy":
+        if algorithm == "random":
+            coordinates = best_of_random(1)
+            coordinates = random_to_vis(coordinates)
+
+        elif algorithm == "greedy":
             coordinates = Greed(grid, LittleHouse(total_houses, 8, 8, 285000, 2, 0.03),
                           MediumHouse(total_houses, 10, 7.5, 399000, 3, 0.04),
                           LargeHouse(total_houses, 11, 10.5, 610000, 6, 0.06)).coordinates
 
         elif algorithm == "hillclimber":
-            coordinates = hillclimber(1000, 2, 100)
+            coordinates = hillclimber(100, 3, 100, True)
 
         # elif algorithm == "random":
         #     coordinates = None
@@ -41,4 +45,5 @@ def Main(algorithm):
         show(model.bokeh())
 
 if __name__ == "__main__":
-    Main("hillclimber")
+    # Main("hillclimber", 100, 3, 100)
+    Main("greedy")
