@@ -121,4 +121,5 @@ It contains calculations of the state space, lower bound and upper bound.
 - "normaalverdeling" gemaakt voor random algoritme
 - Mogelijkheid om plot te printen voor effecten van hillclimber
 - Random visualisatie zet wel nog huizen in het water
+- Score function werkt op greedy, hillclimber en random
 
