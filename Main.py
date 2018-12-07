@@ -10,7 +10,7 @@ for submap in path:
 from grid_houses import Grid, Visualator
 from Opzet import LittleHouse, MediumHouse, LargeHouse, Water
 from greedy import Greed
-from score_function_new import random_to_vis, best_of_random
+from score_function_new import random_to_vis, best_of_random, vis_to_random, calc_score_greedy
 from hillclimber_corne import hillclimber
 
 def Main(algorithm, reps = 0, steps = 0, randoms = 0):
@@ -27,9 +27,10 @@ def Main(algorithm, reps = 0, steps = 0, randoms = 0):
             coordinates = Greed(grid, LittleHouse(total_houses, 8, 8, 285000, 2, 0.03),
                           MediumHouse(total_houses, 10, 7.5, 399000, 3, 0.04),
                           LargeHouse(total_houses, 11, 10.5, 610000, 6, 0.06)).coordinates
+            calc_score_greedy(coordinates)
 
         elif algorithm == "hillclimber":
-            coordinates = hillclimber(100, 3, 100, True)
+            coordinates = hillclimber(1000, 3, 10, True)
 
         # elif algorithm == "random":
         #     coordinates = None

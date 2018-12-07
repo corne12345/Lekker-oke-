@@ -183,6 +183,46 @@ def random_to_vis(intermediate):
     coordinates_ordered = {"little": little, "medium": medium, "large": large}
     return coordinates_ordered#, intermediate[0], intermediate[1]
 
+def vis_to_random(coordinates):
+    coordinates_simple = []
+    for i in range(len(coordinates["large"])):
+        selected = coordinates["large"][i]
+        x1 = selected["x"]
+        x2 = selected["x"] + 11
+        y1 = selected["y"]
+        y2 = selected["y"] + 10.5
+        temp = {"x1":x1, "y1":y1, "x2":x2, "y2":y2}
+        coordinates_simple.append(temp)
+    for i in range(len(coordinates["medium"])):
+        selected = coordinates["medium"][i]
+        x1 = selected["x"]
+        x2 = selected["x"] + 10
+        y1 = selected["y"]
+        y2 = selected["y"] + 7.5
+        temp = {"x1":x1, "y1":y1, "x2":x2, "y2":y2}
+        coordinates_simple.append(temp)
+    for i in range(len(coordinates["little"])):
+        selected = coordinates["little"][i]
+        x1 = selected["x"]
+        x2 = selected["x"] + 8
+        y1 = selected["y"]
+        y2 = selected["y"] + 8
+        temp = {"x1":x1, "y1":y1, "x2":x2, "y2":y2}
+        coordinates_simple.append(temp)
+    return coordinates_simple
+
+def calc_score_greedy(coordinates):
+    # Moet allemaal in greedy komen, met de benodigde imports (Coen was hier echter mee bezig)
+    coordinates_simple = vis_to_random(coordinates)
+    distances = []
+    print(coordinates_simple)
+    for i in range(len(coordinates_simple)):
+        valid_set = coordinates_simple[i]
+        # print(valid_set)
+        temp = calc_distance(valid_set, coordinates_simple, i )
+        distances.append(temp)
+    check = calc_score(distances)
+    print(check)
 
 
 if __name__ == "__main__":
