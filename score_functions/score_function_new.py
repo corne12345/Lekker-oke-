@@ -73,9 +73,9 @@ def calc_distance(valid_set, valid_coordinates, index):
         selected = valid_coordinates[i]
 
         # Use straight line if walls match in horizontal or vertical orientation
-        if valid_set["x1"] <= selected["x1"] <= valid_set["x2"] or valid_set["x1"] <= selected["x2"] <= valid_set["x2"]:
+        if valid_set["x1"] <= selected["x1"] <= valid_set["x2"] or valid_set["x1"] <= selected["x2"] <= valid_set["x2"] or selected["x1"] <= valid_set["x1"] <= selected["x2"] or selected["x1"] <= valid_set["x2"] <= selected["x2"]  :
             dist = min(abs(valid_set["y1"] - selected["y2"]), abs(selected["y1"] - valid_set["y2"]))
-        elif valid_set["y1"] <= selected["y1"] <= valid_set["y2"] or valid_set["y1"] <= selected["y2"] <= valid_set["y2"]:
+        elif valid_set["y1"] <= selected["y1"] <= valid_set["y2"] or valid_set["y1"] <= selected["y2"] <= valid_set["y2"] or selected["y1"] <= valid_set["y1"] <= selected["y2"] or selected["y1"] <= valid_set["y2"] <= selected["y2"]:
             dist = min(abs(valid_set["x1"] - selected["x2"]), abs(selected["x1"] - valid_set["x2"]))
 
         # Calculate Euclidian distance in other cases
@@ -163,6 +163,7 @@ def best_of_random(reps):
                 max_distances = distances
                 max_coordinates = valid_coordinates
 
+    print(max_score)
     # print("great succes")
     return max_score, max_distances, max_coordinates
 
