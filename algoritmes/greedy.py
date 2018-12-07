@@ -103,7 +103,7 @@ class Greed(object):
 
         for key in existing_coordinates.keys():
             for i in range(len(existing_coordinates[key])):
-                selected = self.calculate_coordinate(existing_coordinates[key][i] , self.houses[key])
+                selected = self.calculate_coordinate(existing_coordinates[key][i] , self.houses[key]) 
 
 
                 if self.house_in_house(valid_set, selected) == True:
