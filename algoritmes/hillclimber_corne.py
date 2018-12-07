@@ -68,7 +68,9 @@ def hillclimber(reps, steps, randoms, printplot = False):
         plt.ylabel("score")
         plt.title("plot of hillclimber with %i reps" %reps)
         plt.text(1, 5000000, "final score: %i" %max_score)
+        plt.savefig('hillclimber.png')
         plt.show()
+
 
     # print(score, max_score)
     # print(distances, max_distances, sep='\n')
