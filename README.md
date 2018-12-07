@@ -114,3 +114,11 @@ It contains calculations of the state space, lower bound and upper bound.
 - Stackoverflow
 - Minor Programmeren at University of Amsterdam
 - Angelo Groot (Technical Assistent)
+
+### Voor Angelo IDEA punten toevoegingen
+
+- Greedy werkt helemaal (ook 60-variant)
+- "normaalverdeling" gemaakt voor random algoritme
+- Mogelijkheid om plot te printen voor effecten van hillclimber
+- Random visualisatie zet wel nog huizen in het water
+
