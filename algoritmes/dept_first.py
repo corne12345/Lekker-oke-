@@ -55,9 +55,6 @@ class Depthfirst(object):
         for i in range(2, self.length, 1):
             y_list.append(i)
 
-        # print(x_list)
-        # print(y_list)
-
         number = 20
         y_x_coordinates = []
 
@@ -102,7 +99,7 @@ class Depthfirst(object):
                                     # print(coord)
                                         coordinates.remove(coord)
                                     # print("blabla")
-                                    
+
                         if len(coordinates) >= 12:
                             if coordinates[-1]["y"] == coordinates[-2]["y"] \
                             and (coordinates[-1]["x"] - 10) == coordinates[-2]["x"]:
