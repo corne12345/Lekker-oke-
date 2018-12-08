@@ -41,7 +41,6 @@ class Depthfirst(object):
     # Creates the coordinates.
     def create_coordinates(self):
         list_coordinates = []
-        # y_x_coordinates = {}
 
         # Makes lists for all the x and y coordinates.
         x_list = []
@@ -54,9 +53,6 @@ class Depthfirst(object):
 
         for i in range(2, self.length, 1):
             y_list.append(i)
-
-        # print(x_list)
-        # print(y_list)
 
         number = 20
         y_x_coordinates = []
@@ -75,9 +71,9 @@ class Depthfirst(object):
 
         end_coordinates = []
         coordinates = []
-        # print(y_x_coordinates)
 
         for i, coord in enumerate(y_x_coordinates):
+            # print(coordinates)
             if len(coordinates) < 20:
                 coordinates.append(coord)
 
@@ -90,42 +86,71 @@ class Depthfirst(object):
                             pause = 1
                             break
 
-
-
                     if pause == 0:
 
-                        for j in range(len(coordinates) - 1):
-                            for k in range(10):
-                                for l in range(10):
-                                    if ((coordinates[-1]["y"] - l) == coordinates[j]["y"] \
-                                    and (coordinates[-1]["x"] - k) == coordinates[j]["x"]):
-                                    # print(coord)
-                                        coordinates.remove(coord)
-                                    # print("blabla")
-                                    
-                        if len(coordinates) >= 12:
+
+                        if len(coordinates) > 12:
                             if coordinates[-1]["y"] == coordinates[-2]["y"] \
                             and (coordinates[-1]["x"] - 10) == coordinates[-2]["x"]:
                                  coordinates.remove(coord)
 
-                            for j in range(len(coordinates) - 1):
-                                    if ((coordinates[-1]["y"] - 1) == coordinates[j]["y"] \
-                                    and (coordinates[-1]["x"] - 10) == coordinates[j]["x"]):
-                                        # print("tweede")
-                                        # print(coord)
-                                        coordinates.remove(coord)
+                            # for j in range(len(coordinates) - 1):
+                            #         if ((coordinates[-1]["y"] - 1) == coordinates[j]["y"] \
+                            #         and (coordinates[-1]["x"] - 10) == coordinates[j]["x"]):
+                            #             # print("tweede")
+                            #             # print(coord)
+                            #             coordinates.remove(coord)
+
+                            for j in range(len(coordinates) -1):
+                                # for k in range(10):
+                                        if ((coordinates[-1]["y"] - 11) == coordinates[j]["y"] \
+                                        and (coordinates[-1]["x"] - 11) == coordinates[j]["x"]):
+                                            print("removed_2")
+                                            print(coord)
+                                            coordinates.remove(coord)
+                                # break
 
                         if len(coordinates) >= 17:
                             if coordinates[-1]["y"] == coordinates[-2]["y"] \
                             and (coordinates[-1]["x"] - 11) == coordinates[-2]["x"]:
                                  coordinates.remove(coord)
 
+                            # for j in range(len(coordinates) - 1):
+                            #         if ((coordinates[-1]["y"] - 1) == coordinates[j]["y"] \
+                            #         and (coordinates[-1]["x"] - 11) == coordinates[j]["x"]):
+                            #             # print("tweede")
+                            #             # print(coord)
+                            #             coordinates.remove(coord)
+
                             for j in range(len(coordinates) - 1):
-                                    if ((coordinates[-1]["y"] - 1) == coordinates[j]["y"] \
-                                    and (coordinates[-1]["x"] - 11) == coordinates[j]["x"]):
-                                        # print("tweede")
-                                        # print(coord)
+                                # for k in range(10):
+                                        if ((coordinates[-1]["y"] - 12) == coordinates[j]["y"] \
+                                        and (coordinates[-1]["x"] - 12) == coordinates[j]["x"]):
+                                            print("removed_3")
+                                            print(coord)
+                                            coordinates.remove(coord)
+                                            break
+
+                        # Ik zie niet wat ik fout doe en ik doe hier:
+                        # 1. alle coordinaten afgaan (van het eerste to degene voor het coordinaat waar je naar kijkt)
+                        # 2. in de y-coordinaat gaan kijken of een coordinaat dichter dan 10 in zijn buurt zit
+                        # 3. in de x-coordinaat gaan kijken of een coordinaat dichter dan 10 in zijn buurt zit en hem dan verwijderen
+                        # maar ik begrijp niet dat het (3, 12) append, terwijl deze dicht dan 10 bij (2, 12 zit)
+                        for j in range(len(coordinates) - 1):
+                            for k in range(10):
+                                for l in range(10):
+                                    print("y coord")
+                                    print(coordinates[-1]["y"])
+                                    print(coordinates[0]["y"])
+                                    print("x coord")
+                                    print(coordinates[-1]["x"])
+                                    print(coordinates[0]["x"])
+                                    if ((coordinates[-1]["y"] - l) == coordinates[j]["y"] \
+                                    and (coordinates[-1]["x"] - k) == coordinates[j]["x"]):
+                                        print("removed_1")
+                                        print(coord)
                                         coordinates.remove(coord)
+                                break
 
 
 
