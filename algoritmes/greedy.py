@@ -50,8 +50,8 @@ class Greed(object):
                         if x_axe < self.houses[house].detachement or \
                         x_axe > len(self.grid.grid[y_axe]) - self.houses[house].detachement \
                         or self.grid.grid[y_axe][x_axe] in range(1, 5):
-                            # volgensmij kan het or statement met y_axe > weg, want die zeg je in het if statement erboven al!
                             pass
+
                         else:
                             if x_axe + self.houses[house].width < self.grid.width - self.houses[house].detachement and \
                                y_axe + self.houses[house].length < self.grid.length - self.houses[house].detachement:
@@ -104,42 +104,10 @@ class Greed(object):
         for key in existing_coordinates.keys():
             for i in range(len(existing_coordinates[key])):
                 selected = self.calculate_coordinate(existing_coordinates[key][i] , self.houses[key])
+                dist = self.controle_function(valid_set, selected)
 
-
-                if self.house_in_house(valid_set, selected) == True:
+                if dist == False:
                     return False
-
-                # Use straight line if walls match in horizontal or vertical orientation
-                elif (selected["x1"] < valid_set["x1"] < selected["x2"] or selected["x1"] < valid_set["x2"] <= selected["x2"]) and \
-                (selected["y1"] < valid_set["y1"] < selected["y2"] or selected["y1"] < valid_set["y2"] < selected["y2"]):
-                    return False
-
-                elif (valid_set["x1"] <= selected["x1"] <= valid_set["x2"] or valid_set["x1"] <= selected["x2"] <= valid_set["x2"]) and \
-                (valid_set["y1"] < selected["y1"] < valid_set["y2"] or valid_set["y1"] <= selected["y2"] <= valid_set["y2"]):
-                    return False
-
-                if valid_set["x1"] < selected["x1"] < valid_set["x2"] or valid_set["x1"] < selected["x2"] < valid_set["x2"]:
-                    dist = min(abs(valid_set["y1"] - selected["y2"]), abs(selected["y1"] - valid_set["y2"]))
-                elif valid_set["y1"] < selected["y1"] < valid_set["y2"] or valid_set["y1"] <= selected["y2"] <= valid_set["y2"]:
-                    dist = min(abs(valid_set["x1"] - selected["x2"]), abs(selected["x1"] - valid_set["x2"]))
-
-                # calculates the minimum distance between a house and the set coordinate
-                else:
-                    if (valid_set["x1"] - selected["x2"]) > 0:
-                        dist1 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y1"]) **2)**0.5
-                        dist2 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
-                        dist3 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y2"] - selected["y1"]) **2)**0.5
-                        dist4 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y2"] - selected["y2"]) **2)**0.5
-
-                    elif (valid_set["x2"] - selected["x1"]) < 0:
-                        dist1 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y1"]) **2)**0.5
-                        dist2 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
-                        dist3 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y2"] - selected["y1"]) **2)**0.5
-                        dist4 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y2"] - selected["y2"]) **2)**0.5
-                    else:
-                        return False
-
-                    dist = min(dist1, dist2, dist3, dist4)
 
                 # checks if the distance bigger then the detachement
                 if dist < max(house.detachement, self.houses[key].detachement):
@@ -162,3 +130,50 @@ class Greed(object):
         if (x1 == True or x2 == True) and (y1 == True or y2 == True):
             return True
         return False
+
+    def controle_function (self, check, existing):
+        valid_set = check
+        selected = existing
+
+        # Checks if the house is in a a house
+        if self.house_in_house(valid_set, selected) == True:
+            return False
+
+
+        # dit stuk code verplaatsen naar de house in house stuk
+        elif (selected["x1"] < valid_set["x1"] < selected["x2"] or selected["x1"] < valid_set["x2"] <= selected["x2"]) and \
+        (selected["y1"] < valid_set["y1"] < selected["y2"] or selected["y1"] < valid_set["y2"] < selected["y2"]):
+            return False
+
+        elif (valid_set["x1"] <= selected["x1"] <= valid_set["x2"] or valid_set["x1"] <= selected["x2"] <= valid_set["x2"]) and \
+        (valid_set["y1"] < selected["y1"] < valid_set["y2"] or valid_set["y1"] <= selected["y2"] <= valid_set["y2"]):
+            return False
+
+        # Checks if the house is in a vertical or horizontal position of the checkcoordianate
+        if valid_set["x1"] < selected["x1"] < valid_set["x2"] or valid_set["x1"] < selected["x2"] < valid_set["x2"]:
+            dist = min(abs(valid_set["y1"] - selected["y2"]), abs(selected["y1"] - valid_set["y2"]))
+
+        elif valid_set["y1"] < selected["y1"] < valid_set["y2"] or valid_set["y1"] <= selected["y2"] <= valid_set["y2"]:
+            dist = min(abs(valid_set["x1"] - selected["x2"]), abs(selected["x1"] - valid_set["x2"]))
+
+        # Calculates the if the house are diagonal in eachother
+        else:
+
+            # Checks if the house are left or right from eachother
+            if (valid_set["x1"] - selected["x2"]) > 0:
+                dist1 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y1"]) **2)**0.5
+                dist2 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
+                dist3 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y2"] - selected["y1"]) **2)**0.5
+                dist4 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y2"] - selected["y2"]) **2)**0.5
+
+            elif (valid_set["x2"] - selected["x1"]) < 0:
+                dist1 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y1"]) **2)**0.5
+                dist2 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
+                dist3 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y2"] - selected["y1"]) **2)**0.5
+                dist4 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y2"] - selected["y2"]) **2)**0.5
+            else:
+                return False
+
+            dist = min(dist1, dist2, dist3, dist4)
+
+        return dist
