@@ -53,6 +53,8 @@ def hillclimber(reps, steps, randoms, printplot = False):
                 new_distance = calc_distance(new_coordinates[j], new_coordinates, j)
                 new_distances.append(new_distance)
             new_score = calc_score(new_distances)
+            
+            # Changes all the data to the new coordinates.             
             if new_score > max_score:
                 max_score = round(new_score)
                 max_scores.append(max_score)
@@ -60,11 +62,14 @@ def hillclimber(reps, steps, randoms, printplot = False):
                 max_distances = new_distances
                 max_coordinates = new_coordinates
                 writer.writerow([counter, max_score])
+                
+            # Changes the coordinates otherwise back.           
             else:
                 for dim in [("x1", mover_x), ("x2", mover_x), ("y1", mover_y), ("y2", mover_y)]:
                     new_coordinates[i][dim[0]] = new_coordinates[i][dim[0]] - dim[1]
             counter += 1
 
+    # Shows a plot of the score against the amount of runs.    
     if printplot == True:
         plt.plot(counters, max_scores)
         plt.xlabel("counter")
