@@ -1,6 +1,10 @@
 from Opzet import Water, Bungalow, SingleHome, Maison
 
 class Total_Water(object):
+    """
+    Makes the coordinates for the water.
+    """
+    
     def __init__(self, object):
         self.object_list = []
         self.object = object
