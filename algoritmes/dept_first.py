@@ -8,15 +8,11 @@ import csv
 
 # Imports different paths, has to be changed and to be put in main.
 path = pathlib.Path.cwd()
-path = path.absolute()
-path = path.parent
 path = pathlib.Path(path).iterdir()
-
 for submap in path:
     sys.path.append(str(submap))
+
 from grid_houses import Grid
-
-
 from Opzet import LittleHouse, MediumHouse, LargeHouse, Water
 
 class Depthfirst(object):
@@ -68,6 +64,7 @@ class Depthfirst(object):
 
         # print(y_x_coordinates)
         print(len(y_x_coordinates))
+        print(y_x_coordinates)
 
         end_coordinates = []
         coordinates = []
@@ -137,7 +134,7 @@ class Depthfirst(object):
                         # 3. in de x-coordinaat gaan kijken of een coordinaat dichter dan 10 in zijn buurt zit en hem dan verwijderen
                         # maar ik begrijp niet dat het (3, 12) append, terwijl deze dicht dan 10 bij (2, 12 zit)
                         # het lijkt erop dat hij niet de hele lijst l in range 10 doorgaat, want l blijft altijd 0 als die bij coordinates[j]["x"] == 32 is, terwijl hij dan ook t/m 10 moet gaan tellen.
-                        # Hierdoor komt hij niet op: (coordinates[-1]["y"] - l) == coordinates[j]["y"] 
+                        # Hierdoor komt hij niet op: (coordinates[-1]["y"] - l) == coordinates[j]["y"]
                         for j in range(len(coordinates) - 1):
                             # print("reokoe roeko roek")
                             # print(len(coordinates))
