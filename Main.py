@@ -30,7 +30,7 @@ def Main(algorithm, reps = 0, steps = 0, randoms = 0):
             calc_score_greedy(coordinates)
 
         elif algorithm == "hillclimber":
-            coordinates = hillclimber(1000, 3, 10, True)
+            coordinates = hillclimber(500, 3, 10, True)
 
         # elif algorithm == "random":
         #     coordinates = None
@@ -46,5 +46,5 @@ def Main(algorithm, reps = 0, steps = 0, randoms = 0):
         show(model.bokeh())
 
 if __name__ == "__main__":
-    # Main("hillclimber", 100, 3, 100)
-    Main("greedy")
+    Main("hillclimber")
+    # Main("greedy")

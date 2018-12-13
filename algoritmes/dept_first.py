@@ -8,16 +8,13 @@ import csv
 
 # Imports different paths, has to be changed and to be put in main.
 path = pathlib.Path.cwd()
-path = path.absolute()
-path = path.parent
 path = pathlib.Path(path).iterdir()
-
 for submap in path:
     sys.path.append(str(submap))
+
 from grid_houses import Grid
-
-
 from Opzet import LittleHouse, MediumHouse, LargeHouse, Water
+from score_function_new import *
 
 class Depthfirst(object):
     """
@@ -67,7 +64,7 @@ class Depthfirst(object):
 
 
         # print(y_x_coordinates)
-        print(len(y_x_coordinates))
+        # print(len(y_x_coordinates))
 
         end_coordinates = []
         coordinates = []
@@ -137,29 +134,30 @@ class Depthfirst(object):
                         # 3. in de x-coordinaat gaan kijken of een coordinaat dichter dan 10 in zijn buurt zit en hem dan verwijderen
                         # maar ik begrijp niet dat het (3, 12) append, terwijl deze dicht dan 10 bij (2, 12 zit)
                         # het lijkt erop dat hij niet de hele lijst l in range 10 doorgaat, want l blijft altijd 0 als die bij coordinates[j]["x"] == 32 is, terwijl hij dan ook t/m 10 moet gaan tellen.
-                        # Hierdoor komt hij niet op: (coordinates[-1]["y"] - l) == coordinates[j]["y"] 
+                        # Hierdoor komt hij niet op: (coordinates[-1]["y"] - l) == coordinates[j]["y"]
                         for j in range(len(coordinates) - 1):
                             # print("reokoe roeko roek")
                             # print(len(coordinates))
-                            print(coordinates)
+                            # print(coordinates)
                             for k in range(10):
                                 for l in range(10):
                                     # print("j")
                                     # print(j)
                                     if coordinates[j]["x"] == 32:
-                                        print("l")
+                                        # print("l")
                                         print(l)
-                                        print("y coord")
-                                        print(coordinates[-1]["y"])
-                                        print(coordinates[j]["y"])
-                                        print(coordinates[-1]["y"] - l)
-                                        print("x coord")
-                                        print(coordinates[-1]["x"])
-                                        print(coordinates[j]["x"])
-                                        print(coordinates[-1]["x"] - k)
+                                        # print("y coord")
+                                        # print(coordinates[-1]["y"])
+                                        # print(coordinates[j]["y"])
+                                        # print(coordinates[-1]["y"] - l)
+                                        # print("x coord")
+                                        # print(coordinates[-1]["x"])
+                                        # print(coordinates[j]["x"])
+                                        # print(coordinates[-1]["x"] - k)
                                     if ((coordinates[-1]["y"] - l) == coordinates[j]["y"] \
                                     and (coordinates[-1]["x"] - k) == coordinates[j]["x"]):
                                         # print("removed_1")
+                                        # print("dit is coord")
                                         # print(coord)
                                         coordinates.remove(coord)
                                     break
@@ -167,8 +165,10 @@ class Depthfirst(object):
 
         # end_coordinates.append(coordinates)
 
-        print(coordinates)
-        print(len(coordinates))
+        # print(coordinates)
+
+
+        # print(len(coordinates))
 
         # # hier geeft die alleen deel van de coorinaten
         # for i in range(len(coordinates)):
@@ -247,7 +247,8 @@ class Depthfirst(object):
                             and (coordinates[-1]["x"] - k) == coordinates[j]["x"]):
                                 coordinates.remove(coord)
                                 pause = 1
-                                break
+                            break
+                        break
 
                     for j in range(len(coordinates) - 1):
                         for k in range(10):
@@ -255,6 +256,8 @@ class Depthfirst(object):
                             and (coordinates[-1]["x"] - k) == coordinates[j]["x"]):
                                 # print(coord)
                                 coordinates.remove(coord)
+                            break
+                        break
                                 # print("blabla")
 
                     if pause == 0:
@@ -285,10 +288,23 @@ class Depthfirst(object):
 
                 # if ((coordinates[-1]["y"] - 1) == coordinates[i]["y"] \
                 # and (coordinates[-1]["x"] - 11) == coordinates[i]["x"]):
-        print("tweede")
-        print(coordinates)
+        # print("tweede")
+        # print(coordinates)
                 #     coordinates.remove(coord)
 
+        # Score function implementation for Depthfirst
+        print(coordinates)
+        for i in range(len(coordinates)):
+            valid_set = coordinates[i]
+            coordinates[i] = calc_all_coordinates(valid_set["x"], valid_set["y"], [8,8,2])
+
+        distances = []
+        for i in range(len(coordinates)):
+            valid_set = coordinates[i]
+            distance = calc_distance(valid_set, coordinates, i)
+            distances.append(distance)
+
+        print(calc_score(distances))
 
 
 if __name__ == "__main__":
@@ -296,3 +312,4 @@ if __name__ == "__main__":
     test = Depthfirst(8, 180, 160, grid)
     first = test.create_coordinates()
     coordinates = test.create_coordinates_2(first)
+    # print(coordinates)
