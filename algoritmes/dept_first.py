@@ -157,7 +157,8 @@ class Depthfirst(object):
                                     if ((coordinates[-1]["y"] - l) == coordinates[j]["y"] \
                                     and (coordinates[-1]["x"] - k) == coordinates[j]["x"]):
                                         # print("removed_1")
-                                        # print(coord)
+                                        print("dit is coord")
+                                        print(coord)
                                         coordinates.remove(coord)
                                     break
 
