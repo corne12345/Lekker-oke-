@@ -30,7 +30,7 @@ class Greed(object):
         Creates the coordinates that need to be calculated and will get the
         coordinate that gives the highest score
         """
-        
+
         random_list = self.create_list_house()
         coordinates = []
         valid_set = {}
@@ -58,7 +58,7 @@ class Greed(object):
                         else:
                             if x_axe + self.houses[house].width < self.grid.width - self.houses[house].detachement and \
                                y_axe + self.houses[house].length < self.grid.length - self.houses[house].detachement:
-                               coordinates.append({"x": x_axe, "y": y_axe }
+                               coordinates.append({"x": x_axe, "y": y_axe })
 
             max_score_coordinate = self.max_score(coordinates)
 
@@ -75,10 +75,9 @@ class Greed(object):
 
 
     def max_score(self, coordinates):
-    """
-    Calculates the max_score in the grid and returns the max_score
-    """
-
+        """
+        Calculates the max_score in the grid and returns the max_score
+        """
         score = []
 
         for coordinate in coordinates:
