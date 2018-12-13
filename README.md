@@ -18,11 +18,15 @@ theoretically. It is necessar therefore to define the state space, upper and low
 compare the result and define the best (by means of a score function) and possibly a division of the problem in subproblems or a flow.
 
 ### State space
-For this problem, there is a grid of 180 * 160. This means there are 28800 places to plant the first house. For the 20-houses solution, 
-this results in 28800<sup>20</sup>=  1.54 * 10<sup>89</sup> solutions. However, this allows houses to be placed on top of each other and next to or on
-the boundaries of the grid. Correcting for these constraints still leaves **2.57 * 10<sup>87</sup>** options. 
-This state space doesn't take the correctness in terms of interdependent free space and water, since the calculations of these
-constriants is dependent on the actual locations of earlier houses. 
+For this problem, there is a grid of 180 * 160. This means there are 28800 places to plant the first house. 
+* For the 20-houses solution, this results in 28800<sup>20</sup>=  1.54 * 10<sup>89</sup> solutions. However, this allows houses to be 
+placed on top of each other and next to or on the boundaries of the grid. Correcting for these constraints still leaves **2.57 * 
+10<sup>87</sup>** options. This state space doesn't take the correctness in terms of interdependent free space and water, since the 
+calculations of these constriants is dependent on the actual locations of earlier houses. 
+* For the 40-houses solution, this results in 28800<sup>40</sup> = 2.38 * 10<sup>178</sup> solutions. Tightening the constraints still
+leaves **1.98 * 10<sup>174</sup>** options.
+* The 60-houses solutions, this results in 28800<sup>60</ssup> = 3.66 * 10<sup>267</sup> solutions. Taking the above mentioned
+constraints into account leaves **4.17 * 10<sup>260</sup>** options.
 
 ### Problem type and score function
 As a base case, the objecctive of this problem is to place the required houses in a grid of 180 * 160 meters and to place a maximum
@@ -68,7 +72,8 @@ scoreM = 399000 * 1.04 <sup>min ((160 - 7,5)/2, (180-10)/2) - 3</sup> = **€7.0
 
 scoreS = 285000 * 1.03 <sup>min ((160 - 8)/2, (180-8)/2) - 3</sup> = **€2.465.825**
 
-The total upper bound is **€165.393.185**. With all the constraints as they are, this situation is far from reality
+The total upper bound is **€165.393.185** for 20 houses, **€330.786.370** for 40 houses and **€496.179.550** for 20 houses  .
+With all the constraints as they are, this situation is far from reality.
 
 The upper bound is a situation in which the free space is totally taken up by the maisons, since an increase in its free space will 
 result in the maximal relative and absolute increase in total worth. This (unrealistic) situation will return an relatively loose
