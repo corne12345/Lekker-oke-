@@ -31,8 +31,8 @@ def hillclimber(reps, steps, randoms, printplot = False):
     # Write to csv
     f = open("result.csv", "w", newline='')
     writer = csv.writer(f)
-    counters = [0]
-    max_scores = [0]
+    counters = []
+    max_scores = []
 
     while counter < reps:
         for i in range(len(coordinates)):
@@ -68,6 +68,7 @@ def hillclimber(reps, steps, randoms, printplot = False):
         plt.ylabel("score")
         plt.title("plot of hillclimber with %i reps" %reps)
         plt.text(1, 5000000, "final score: %i" %max_score)
+        plt.text(1, 7000000, "initial score: %i" %score)
         plt.savefig('hillclimber.png')
         plt.show()
 
