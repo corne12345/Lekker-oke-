@@ -1,7 +1,7 @@
 import sys
 import math
 import datetime
-from multiprocessing import Process
+from multiprocessing import Process, Pipe
 from random import sample
 from copy import deepcopy
 
@@ -18,8 +18,8 @@ class Greed(object):
         self.points = {}
         self.number_point = 0
         self.steps = steps
-        self.minimum_distance = []
         self.coordinates = self.create_coordinates()
+        self.scores = []
 
     # creates a list with all the houses name with the correct number
     def create_list_house(self):
@@ -44,7 +44,7 @@ class Greed(object):
         # Makes the coordinate and checks if the coordinates are valid
         while self.number_point < original_length:
             print(self.number_point)
-            print(valid_set.keys())
+            print(valid_set)
             house = sample(set(random_list), 1)[0]
 
             # goes through the grid and looks if the detachment is large enough for the y axis
@@ -67,7 +67,7 @@ class Greed(object):
                                 coordinates.append({"x": x_axe, "y": y_axe })
 
             score_coordinate = self.max_score(coordinates, house, valid_set)
-
+            print("score" + str(score_coordinate))
             # Will append to the right key or will create the key.
             try:
                 valid_set[house].append(deepcopy(score_coordinate))
@@ -85,9 +85,13 @@ class Greed(object):
         Calculates the max_score in the grid and returns the max_score
         """
         score = []
-        self.minimum_distance = []
+        self.scores = []
         threads = {}
         processes = {}
+        receivers = []
+        max_score = None
+        max_coordinate = None
+        list = []
 
         if self.number_point < 1:
             for coordinate in coordinates:
@@ -98,34 +102,40 @@ class Greed(object):
             return coordinates[index]
 
         else:
-            keys = list(valid_set.keys())
-            for count in range(len(valid_set.keys())):
-                print("joe")
-                processes["process" + str(count)] = Thread(coordinates, self.houses, house, valid_set[keys[count]], keys[count])
+            # make 4 different lists
+            half = len(coordinates)//2
 
-            print(processes)
+            half1 = coordinates[:half]
+            half2 = coordinates[half:]
+            quarter = len(half1)//2
+            list.append(half1[:quarter])
+            list.append(half1[quarter:])
+            list.append(half2[:quarter])
+            list.append(half2[quarter:])
+
+            for count in range(len(list)):
+                parent_conn, child_conn = Pipe()
+                receivers.append({"parent" + str(count): parent_conn, "child" + str(count): child_conn })
+                processes["process" + str(count)] = Thread(list[count], self.houses, house, valid_set, self.grid)
+
             for count, key in enumerate(processes.keys()):
-                print(key)
-                threads["thread" + str(count)] = Process(target=processes[key].run, args=())
+                threads["thread" + str(count)] = Process(target=processes[key].run, args=(receivers[count]["child" + str(count)], ))
 
             for key in threads.keys():
                 threads[key].start()
 
-            threads.append(thread1)
-            threads.append(thread2)
-            threads.append(thread3)
-
-
-
-            for t in range(len(threads)):
-                if processes[t].minimum_distance != None:
-                    self.minimum_distance.append(deepcopy(processes[t].minimum_distance))
+            for count, t in enumerate(threads.keys()):
+                self.scores.append(deepcopy(receivers[count]["parent" + str(count)].recv()))
                 threads[t].join()
-                print(threads[t].is_alive())
 
-            minimum_distance = min(self.minimum_distance)
+            print(self.scores)
+            for score in self.scores:
 
-        return coordinates[index]
+                if max_score == None or max_score < score["score"]:
+                    max_score = score["score"]
+                    max_coordinate = score["coordinate"]
+        self.score= []
+        return deepcopy(max_coordinate)
 
     def calc_grid_distance(self, coordinate):
         """
@@ -156,13 +166,23 @@ class Thread (object):
     Multithreading and fast calculations
     """
 
-    def __init__(self, control_coordinate, houses, check_house, existing_coordinates, key):
-        self.valid_set = control_coordinate
+    def __init__(self, control_coordinate, houses, key, existing_coordinates, grid):
+        self.grid = grid
+        self.coordinates = control_coordinate
         self.houses = houses
         self.key = key
-        self.check_house = check_house
         self.existing_coordinates = existing_coordinates
-        self.minimum_distance = 0
+        self.max_score = None
+
+    def calc_grid_distance(self, coordinate):
+        """
+        Calculates the distance between the coordinate and the border of the grid
+        """
+        right = coordinate["x1"]
+        left = self.grid.width - coordinate["x2"]
+        south = coordinate["y1"]
+        north = self.grid.length - coordinate["y2"]
+        return min(right, left, south, north)
 
     def house_in_house (self, valid_set, selected):
         """
@@ -235,27 +255,63 @@ class Thread (object):
         return {"x1": calculation_point["x"], "x2": calculation_point["x"] + house.width,
                 "y1": calculation_point["y"], "y2": calculation_point["y"] + house.length}
 
-    def run(self):
-        # Get lock to synchronize threads
-        for check in self.valid_set:
-            for coordinate in coordinates:
-                minimum_distance = None
+    def score(self, distance, house):
+        """
+        Calculates the score.
+        """
 
-                valid_set = self.calculate_coordinate(self.valid_set , self.check_house)
-                # calculations
-                for coordinate in self.existing_coordinates:
-                    selected = self.calculate_coordinate(coordinate , self.houses[self.key])
-                    dist = self.controle_function(valid_set, selected)
+        factor = ((distance - house.detachement)* house.price_improvement) + 1
+        score = int(house.price * factor)
+        return score
+
+    def run(self, conn):
+        score = []
+        max_score = None
+        minimum_distance = None
+
+        for coordinate in self.coordinates:
+            minimum_distance = None
+            control = True
+            selected = self.calculate_coordinate(coordinate , self.houses[self.key])
+
+            for key, check in self.existing_coordinates.items():
+                for check_coordinate in check:
+                    valid = self.calculate_coordinate(check_coordinate, self.houses[key])
+                    if valid == selected:
+                        control = False
+                        break
+
+                    dist = self.controle_function(valid, selected)
 
                     if dist == False:
-                        return False
+                        control = False
+                        break
 
                     # checks if the distance bigger then the detachement
-                    if dist < max(self.check_house.detachement, self.houses[self.key].detachement):
-                        return False
+                    if dist < max(self.houses[key].detachement, self.houses[self.key].detachement):
+                        control = False
+                        break
+
                     elif minimum_distance == None or dist < minimum_distance:
                         minimum_distance = dist
 
-                if self.minimum_distance != None:
-                    self.minimum_distance = minimum_distance
-        print(minimum_distance)
+                if control == False:
+                    score.append(0)
+                    break
+
+            if control == False:
+                control = True
+            else:
+                grid_space = self.calc_grid_distance(selected)
+                distance = min(grid_space, minimum_distance)
+                if grid_space < self.houses[self.key].detachement:
+                    score.append(0)
+                    break
+                    
+                else:
+                    score.append(self.score(minimum_distance, self.houses[self.key]))
+
+        index = score.index(max(score))
+        max_score = {"score": score[index], "coordinate": self.coordinates[index]}
+        conn.send(max_score)
+        conn.close()
