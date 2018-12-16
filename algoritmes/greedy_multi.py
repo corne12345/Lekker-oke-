@@ -42,31 +42,22 @@ class Greed(object):
         valid_set = {}
         original_length = len(random_list)
 
+        # Makes the x, y coordinates to itterate throught
+        for y_axe in range(0, self.grid.length, self.steps):
+
+            # Itterates over the x length and controles the detachment in the corners.
+            for x_axe in range(0, self.grid.width, self.steps):
+                if self.grid.grid[y_axe][x_axe] in range(1, 5):
+                    pass
+
+                # Adds the coordinate if it complies the detachment conditions.
+                else:
+                    coordinates.append({"x": x_axe, "y": y_axe })
+
+
         # Makes the coordinates and checks if the coordinates are valid.
         while self.number_point < original_length:
-            print(self.number_point)
-            print(valid_set)
             house = sample(set(random_list), 1)[0]
-
-            # Goes through the grid and looks if the detachment is large enough for the y axis.
-            for y_axe in range(0, self.grid.length, self.steps):
-                if y_axe < self.houses[house].detachement or \
-                y_axe > self.grid.length - self.houses[house].detachement:
-                    pass
-                else:
-
-                    # Itterates over the x length and controles the detachment in the corners.
-                    for x_axe in range(0, self.grid.width, self.steps):
-                        if x_axe < self.houses[house].detachement or \
-                        x_axe > len(self.grid.grid[y_axe]) - self.houses[house].detachement or \
-                        self.grid.grid[y_axe][x_axe] in range(1, 5):
-                            pass
-
-                        # Adds the coordinate if it complies the detachment conditions.
-                        else:
-                            if (x_axe + self.houses[house].width < self.grid.width - self.houses[house].detachement) and \
-                            (y_axe + self.houses[house].length < self.grid.length - self.houses[house].detachement):
-                                coordinates.append({"x": x_axe, "y": y_axe })
 
             # Calculates the score of the coordinates.
             score_coordinate = self.max_score(coordinates, house, valid_set)
@@ -110,37 +101,35 @@ class Greed(object):
 
         else:
 
-            # Makes 4 lists from the coordinates.
+            # Makes 2 lists from the coordinates.
             half = len(coordinates) // 2
 
-            half1 = coordinates[:half]
-            half2 = coordinates[half:]
-
-            quarter = len(half1) // 2
-
-            for quart in [half1, half2]:
-                list_final.append(quart[:quarter])
-                list_final.append(quart[quarter:])
+            list.append(coordinates[:half])
+            list.append(coordinates[half:])
 
             # !!!!!!!!!!!!! Wat gebeurt hier precies? Nog iets meer commends :) !!!!!!!!!!!!!
+
+            # Get the data for the threads and start the thread.
             for count in range(len(list)):
                 parent_conn, child_conn = Pipe()
                 receivers.append({"parent" + str(count): parent_conn, "child" + str(count): child_conn })
                 processes["process" + str(count)] = Thread(list[count], self.houses, house, valid_set, self.grid)
 
+            # Make the processes.
             for count, key in enumerate(processes.keys()):
                 threads["thread" + str(count)] = Process(target=processes[key].run, args=(receivers[count]["child" + str(count)], ))
 
+            # Start the processes.
             for key in threads.keys():
                 threads[key].start()
 
+            # Sync the threads.
             for count, t in enumerate(threads.keys()):
                 self.scores.append(deepcopy(receivers[count]["parent" + str(count)].recv()))
                 threads[t].join()
 
-            print(self.scores)
+            # Get the max scores and the coordinate
             for score in self.scores:
-
                 if max_score == None or max_score < score["score"]:
                     max_score = score["score"]
                     max_coordinate = score["coordinate"]
@@ -343,7 +332,6 @@ class Thread (object):
                 distance = min(grid_space, minimum_distance)
                 if grid_space < self.houses[self.key].detachement:
                     score.append(0)
-                    break
 
                 else:
                     score.append(self.score(minimum_distance, self.houses[self.key]))
