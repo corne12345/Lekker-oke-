@@ -1,13 +1,12 @@
 class CoordinatesHouse(object):
     """
-    Creates coordinates for little houses (one family homes)
+    Creates coordinates for little houses (one-family homes)
     """
 
     def __init__(self, y, x, house):
         self.y = y
         self.x = x
         self.house = house
-
 
     def coordinates(self):
         coordinates = []
