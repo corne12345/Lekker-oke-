@@ -24,10 +24,10 @@ NUM_HOUSES = 20
 
 def hillclimber(reps, steps, randoms, printplot = False):
     """
-    Tries to calculate the best score by changing coordinates of the houses. 
+    Tries to calculate the best score by changing coordinates of the houses.
     """
-    
-    # Defines the start coordinates of the houses and other constants.   
+
+    # Defines the start coordinates of the houses and other constants.
     score, distances, coordinates = best_of_random(randoms)
     counter = 0
     new_coordinates = copy.deepcopy(coordinates)
@@ -39,7 +39,7 @@ def hillclimber(reps, steps, randoms, printplot = False):
     counters = []
     max_scores = []
 
-    # Changes a coordinate of one house.    
+    # Changes a coordinate of one house.
     while counter < reps:
         for i in range(len(coordinates)):
             mover_x = random.randint(-steps, steps)
@@ -47,14 +47,14 @@ def hillclimber(reps, steps, randoms, printplot = False):
             for dim in [("x1", mover_x), ("x2", mover_x), ("y1", mover_y), ("y2", mover_y)]:
                 new_coordinates[i][dim[0]] = new_coordinates[i][dim[0]] + dim[1]
             new_distances = []
-            
-            # Checks if the score of the new coordinates is higher than the last score.             
+
+            # Checks if the score of the new coordinates is higher than the last score.
             for j in range(len(coordinates)):
                 new_distance = calc_distance(new_coordinates[j], new_coordinates, j)
                 new_distances.append(new_distance)
             new_score = calc_score(new_distances)
-            
-            # Changes all the data to the new coordinates.             
+
+            # Changes all the data to the new coordinates.
             if new_score > max_score:
                 max_score = round(new_score)
                 max_scores.append(max_score)
@@ -62,14 +62,14 @@ def hillclimber(reps, steps, randoms, printplot = False):
                 max_distances = new_distances
                 max_coordinates = new_coordinates
                 writer.writerow([counter, max_score])
-                
-            # Changes the coordinates otherwise back.           
+
+            # Changes the coordinates otherwise back.
             else:
                 for dim in [("x1", mover_x), ("x2", mover_x), ("y1", mover_y), ("y2", mover_y)]:
                     new_coordinates[i][dim[0]] = new_coordinates[i][dim[0]] - dim[1]
             counter += 1
 
-    # Shows a plot of the score against the amount of runs.    
+    # Shows a plot of the score against the amount of runs.
     if printplot == True:
         plt.plot(counters, max_scores)
         plt.xlabel("counter")
@@ -80,14 +80,10 @@ def hillclimber(reps, steps, randoms, printplot = False):
         plt.savefig('hillclimber.png')
         plt.show()
 
-
-    # print(score, max_score)
-    # print(distances, max_distances, sep='\n')
-    # print(coordinates, max_coordinates, sep='\n')
     intermediate  = max_score, max_distances, max_coordinates
+
     return random_to_vis(intermediate)
     # return  max_score, max_distances, max_coordinates
-
 
 if __name__ == "__main__":
     # a = input("How many reps would you like?")
