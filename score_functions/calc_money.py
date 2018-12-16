@@ -21,8 +21,8 @@ class Calculations(object):
 
     def calc_money(self):
         """
-        This function takes the length of the newly created detachement around the houses
-        and calculates the money each house yields.
+        This function takes the length of the newly created detachement around
+        the houses and calculates the money each house yields.
         """
 
         # Create sample coordinates.
@@ -106,8 +106,8 @@ class Calculations(object):
 
     def calc_score(self, distances):
         """
-        This function takes the distances of all the houses to its closest neighbour
-        as input and returns the worth of the neigborhood.
+        This function takes the distances of all the houses to its closest
+        neighbour as input and returns the worth of the neigborhood.
         """
 
         worth = 0
