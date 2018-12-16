@@ -1,4 +1,3 @@
-
 def calc_water_surface (length, width, surface):
     """
     This function takes the length and width of the newly created waterbody
@@ -6,4 +5,3 @@ def calc_water_surface (length, width, surface):
     calculated suface.
     """
     new_surface = length * width
-    

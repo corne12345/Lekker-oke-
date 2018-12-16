@@ -18,14 +18,14 @@ class Calculations(object):
         and calculates the money each house yields.
         """
 
-        # Create sample coordinates by using random
+        # Create sample coordinates.
         coordinates = Coordinates(20, 180, 160).coordinates
-        # print(coordinates)
+
         comparisons = []
         distances = []
 
         # Create 4-point coordinates for each house by making 3 large, 5 medium
-        # and 12 small houses
+        # and 12 little houses.
         for i in range(20):
             y = coordinates[i]['y']
             x = coordinates[i]['x']
@@ -38,46 +38,47 @@ class Calculations(object):
             temp = temp.coordinates()
             comparisons.append(temp)
 
-
-        # comparisions = [ x for x in range(20 )]
-
-        # print(comparisons)
-        # Create local variable that can't be a result value and loop over the list of coordinates
+        # Create local variable that cannot be a result value
+        # and loop over the list of coordinates
         for s in range(len(comparisons)):
             selected = comparisons[s]
+
             # loop over all coordinates of selected house
             for i in range(4):
                 minimum_distance = 9999.999
-                # Loop over the list of houses to select one
+
+                # Loop over the list of houses to select one.
                 for house in range(len(comparisons)):
                     if comparisons[house] == selected:
                         continue
-                    # Loop over all coordinates of the other houses
+
+                    # Loop over all coordinates of the other houses.
                     for j in range(4):
                         temp = ((selected[0][i] - comparisons[house][0][j])**2 + (selected[1][i] - comparisons[house][1][j])**2)**0.5
 
-                        # Check for house in house and append lisst of distances if so
+                        # Check for house in house and append list of distances if so.
                         if comparisons[house][0][0] < selected[0][i] < comparisons[house][0][2] and comparisons[house][1][0] < selected[1][i] < comparisons[house][1][1]:
                             distances.append("House in house")
                         if temp < minimum_distance:
                             minimum_distance = temp
+
+            # Checks for the minimal distance.
             temp = min(selected[0][0] - 0, 160 - selected[0][2], selected[1][0] - 0, 180 - selected[1][1])
             if temp < minimum_distance:
                 minimum_distance = temp
-                # print("BOUNDS", minimum_distance, sep='\t')
+
             distances.append(minimum_distance)
 
-        # print("temp")
-        # print(temp)
-
-        # print(distances)
         return(coordinates, distances, comparisons)
 
     def calc_validity(self, distances):
         """
         This function checks if the distances provided as a list as argument fulfill
-        the constraints in terms of free space and checks if the house is not in water. It returns a boolean.
+        the constraints in terms of free space and checks if the house is not in water.
+        It returns a boolean.
         """
+
+        # Defines variables with functions.
         calculations = self.calc_money()
         coordinates = calculations[0]
         print(coordinates)
@@ -86,56 +87,39 @@ class Calculations(object):
         create_water = grid.create_water(Water(60, 100))
         waterlist = create_water[1]
 
-        # print("lentgh")
-        # print(len(distances))
-
-        # for i in waterlist
-        print("hallo")
         print(grid)
-
         print(create_water[1])
 
+        # Takes a value from the coordinates.
         for dict in coordinates:
             print(dict)
             dict.values()
             value = dict.values()
-            # x_co = dict.get("x")
             print(value)
-            # print(item)
 
-            # print(i[0])
-            # print(i[1])
-
-
+        # Checks the detachment of all houses.
         if (len(distances) != 20):
-            # print("fout")
             return False
         else:
-            print("hoiiiiiiii")
             for i in range(len(distances)):
                 print("dit is i")
                 print(i)
                 if i < 3:
-                    # print("1hoi")
                     if distances[i] < 6:
                         return False
                 elif i < 8:
-                    # print("2hoi")/
                     if distances[i] < 3:
                         return False
                 else:
-                    # print("3hoi")
                     if distances[i] < 2:
                         return False
-
-
 
         return True
 
     def calc_score(self, distances):
         """
         This function takes the distances of all the houses to its closest neighbour
-        as input and returns the worth of the neigborhood
+        as input and returns the worth of the neigborhood.
         """
 
         worth = 0
@@ -156,11 +140,19 @@ class Calculations(object):
         return worth
 
 class Check (object):
-    def __init__(self):
+    """
+    Checks everything together of the coordinates.
+    """
 
+    def __init__(self):
         self.calculations = Calculations()
 
     def check(self):
+        """
+        Checks the validity of the coordinates and eventually the score.
+        """
+
+        # Defines variables.
         instances = 0
         tries = 0
         max_worth = 0
@@ -170,7 +162,7 @@ class Check (object):
         distances = None
         houses = {"large": [], "medium": [], "little": []}
 
-        # total check
+        # Checks all together.
         while(instances < 1):
             money = []
             check = False
@@ -191,7 +183,7 @@ class Check (object):
             max_coordinates = coordinates
             max_distances = distances
 
-        # put the distances by the right house
+        # Puts the distances by the right house.
         for count in range(len(max_coordinates)):
             if count < 3:
                 houses["large"].append(max_coordinates[count])
@@ -208,8 +200,6 @@ class Check (object):
 
         # return houses
         return instances, tries, max_coordinates, max_distances, max_worth
-
-
 
 def place_water(comparisons):
     """

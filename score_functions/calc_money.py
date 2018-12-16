@@ -50,7 +50,7 @@ class Calculations(object):
         for s in range(len(comparisons)):
             selected = comparisons[s]
 
-            # loop over all coordinates of the selected house.
+            # Loop over all coordinates of the selected house.
             for i in range(4):
                 minimum_distance = 9999.999
 
@@ -129,7 +129,7 @@ class Calculations(object):
 
 class Check (object):
     """
-    Th
+    Checks everything together of the coordinates.
     """
 
     def __init__(self, grid):
@@ -186,6 +186,12 @@ class Check (object):
         # print(max_distances)
         return houses
         # return instances, tries, max_coordinates, max_distances, max_worth
+
+    def place_water(comparisons):
+        """
+        This function looks for the four biggest water bodies to be placed on the grid
+        and returns its coordinates and dimensions
+        """
 
 if __name__ == "__main__":
     calculations = Check()
