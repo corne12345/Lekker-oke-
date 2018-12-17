@@ -70,7 +70,8 @@ def calc_all_coordinates(y_coordinate, x_coordinate, house_type):
     Gives the coordinates of a house.
     """
 
-    return {"y1": y_coordinate, "x1": x_coordinate, "y2": y_coordinate + house_type[0], "x2": x_coordinate + house_type[1]}
+    return {"y1": y_coordinate, "x1": x_coordinate, "y2": y_coordinate + house_type[0], \
+    "x2": x_coordinate + house_type[1]}
 
 def house_in_house (valid_set, valid_coordinates):
     """
@@ -104,9 +105,11 @@ def calc_distance(valid_set, valid_coordinates, index):
         selected = valid_coordinates[i]
 
         # Use straight line if walls match in horizontal or vertical orientation.
-        if valid_set["x1"] <= selected["x1"] <= valid_set["x2"] or valid_set["x1"] <= selected["x2"] <= valid_set["x2"] or selected["x1"] <= valid_set["x1"] <= selected["x2"] or selected["x1"] <= valid_set["x2"] <= selected["x2"]  :
+        if valid_set["x1"] <= selected["x1"] <= valid_set["x2"] or valid_set["x1"] <= selected["x2"] <= valid_set["x2"] \
+        or selected["x1"] <= valid_set["x1"] <= selected["x2"] or selected["x1"] <= valid_set["x2"] <= selected["x2"] :
             dist = min(abs(valid_set["y1"] - selected["y2"]), abs(selected["y1"] - valid_set["y2"]))
-        elif valid_set["y1"] <= selected["y1"] <= valid_set["y2"] or valid_set["y1"] <= selected["y2"] <= valid_set["y2"] or selected["y1"] <= valid_set["y1"] <= selected["y2"] or selected["y1"] <= valid_set["y2"] <= selected["y2"]:
+        elif valid_set["y1"] <= selected["y1"] <= valid_set["y2"] or valid_set["y1"] <= selected["y2"] <= valid_set["y2"] \
+        or selected["y1"] <= valid_set["y1"] <= selected["y2"] or selected["y1"] <= valid_set["y2"] <= selected["y2"]:
             dist = min(abs(valid_set["x1"] - selected["x2"]), abs(selected["x1"] - valid_set["x2"]))
 
         # Calculate Euclidian distance in other cases.
@@ -126,7 +129,8 @@ def calc_distance(valid_set, valid_coordinates, index):
                 return False
 
             for coord in ([["y1", "y1"], ["y1", "y2"], ["y2", "y1"], ["y2", "y2"]]):
-                dist = ((valid_set[x_valid] - selected[x_selected]) ** 2 + (valid_set[coord[0]] - selected[coord[1]]) **2)**0.5
+                dist = ((valid_set[x_valid] - selected[x_selected]) ** 2 + \
+                (valid_set[coord[0]] - selected[coord[1]]) **2)**0.5
                 list_dist.append(dist)
 
             dist = min(list_dist)
