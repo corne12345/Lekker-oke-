@@ -9,7 +9,7 @@ MEDIUM = [10, 7.5, 3]
 LARGE = [11, 10.5, 6]
 NUM_HOUSES = 20
 
-def create_valid_coordinates (house_type, valid_coordinates, DIMENSIONS, num_houses):
+def create_valid_coordinates (house_type, valid_coordinates, DIMENSIONS, num_houses, grid):
     """
     Creates coordinates for the houses which meet the conditions.
     """
@@ -22,6 +22,9 @@ def create_valid_coordinates (house_type, valid_coordinates, DIMENSIONS, num_hou
         valid_set = {}
         x_coordinate = random.randint(0, DIMENSIONS[0])
         y_coordinate = random.randint(0, DIMENSIONS[1])
+        while grid[y_coordinate - 1][x_coordinate - 1] in range(1, 5):
+            x_coordinate = random.randint(0, DIMENSIONS[0])
+            y_coordinate = random.randint(0, DIMENSIONS[1])
 
         # Checks if the coordinates meet the conditions.
         grid_space = calc_min_grid_space(x_coordinate, y_coordinate, DIMENSIONS, house_type)
@@ -32,7 +35,7 @@ def create_valid_coordinates (house_type, valid_coordinates, DIMENSIONS, num_hou
                     valid_coordinates.append(valid_set)
                     counter += 1
                 else:
-                    mistakes +=1
+                    mistakes += 1
             elif len(valid_coordinates) == 0:
                 valid_coordinates.append(valid_set)
                 counter += 1
@@ -108,25 +111,29 @@ def calc_distance(valid_set, valid_coordinates, index):
 
         # Calculate Euclidian distance in other cases.
         else:
-            distance_list = []
+            list_dist = []
+            # Checks if the houses are left or right from eachother and
+            # calculates the minimum distance.
+            if (valid_set["x1"] - selected["x2"]) > 0:
+                x_valid = "x1"
+                x_selected = "x2"
 
-            for coord in [("x1", "x1" "y1", "y1"), ("x1", "x1", "y1", "y2"), ("x1", "x1", "y2", "y1"), ("x1", "x1", "y2", "y2"),
-                          ("x1", "x2" "y1", "y1"), ("x1", "x2", "y1", "y2"), ("x1", "x2", "y2", "y1"), ("x1", "x2", "y2", "y2"),
-                          ("x2", "x1" "y1", "y1"), ("x2", "x1", "y1", "y2"), ("x2", "x1", "y2", "y1"), ("x2", "x1", "y2", "y2"),
-                          ("x2", "x2" "y1", "y1"), ("x2", "x2", "y1", "y2"), ("x2", "x2", "y2", "y1"), ("x2", "x2", "y2", "y2")]:
+            elif (valid_set["x2"] - selected["x1"]) < 0:
+                x_valid = "x2"
+                x_selected = "x1"
 
-                distan = ((valid_set[coord[0]] - selected[coord[1]]) ** 2 + (valid_set[coord[2]] - selected[coord[3]]) ** 2) ** 0.5
-                distance_list.append(distan);
+            else:
+                return False
 
-        dist = min(distance_list)
+            for coord in ([["y1", "y1"], ["y1", "y2"], ["y2", "y1"], ["y2", "y2"]]):
+                dist = ((valid_set[x_valid] - selected[x_selected]) ** 2 + (valid_set[coord[0]] - selected[coord[1]]) **2)**0.5
+                list_dist.append(dist)
 
-        if dist < minimum_distance:
-            minimum_distance = dist
-
+            dist = min(list_dist)
     # Compare grid space and house space to find the lowest.
     grid_space = calc_min_grid_space2(valid_set, DIMENSIONS)
 
-    return min(minimum_distance, grid_space)
+    return min(dist, grid_space)
 
 def calc_score(distances):
     """
@@ -158,7 +165,7 @@ def calc_score(distances):
 
     return score
 
-def best_of_random(reps):
+def best_of_random(reps, grid):
     """
     Defines the best of all random coordinates.
     """
@@ -170,9 +177,9 @@ def best_of_random(reps):
     # Makes a specific amount of valid coordinates of the houses.
     while counter < reps:
         valid_coordinates = []
-        create_valid_coordinates (LARGE, valid_coordinates, DIMENSIONS, NUM_HOUSES * 0.15)
-        create_valid_coordinates (MEDIUM, valid_coordinates, DIMENSIONS, NUM_HOUSES * 0.25)
-        create_valid_coordinates (SMALL, valid_coordinates, DIMENSIONS, NUM_HOUSES * 0.6)
+        create_valid_coordinates (LARGE, valid_coordinates, DIMENSIONS, NUM_HOUSES * 0.15, grid)
+        create_valid_coordinates (MEDIUM, valid_coordinates, DIMENSIONS, NUM_HOUSES * 0.25, grid)
+        create_valid_coordinates (SMALL, valid_coordinates, DIMENSIONS, NUM_HOUSES * 0.6, grid)
 
         distances = []
         for i in range(len(valid_coordinates)):
