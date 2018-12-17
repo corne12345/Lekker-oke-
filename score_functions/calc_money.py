@@ -61,21 +61,26 @@ class Calculations(object):
 
                     # Loop over all coordinates of the other houses.
                     for j in range(4):
-                        if comparisons[house][0][1] > selected[0][i] > comparisons[house][0][2]:
+                        if comparisons[house][0][1] > selected[0][i] > \
+                        comparisons[house][0][2]:
                             temp = abs(comparisons[house][1][i] -  selected[1][i])
-                        elif comparisons[house][1][0] > selected[1][i] > comparisons[house][1][1]:
+                        elif comparisons[house][1][0] > selected[1][i] > \
+                        comparisons[house][1][1]:
                             temp = abs(comparisons[house][0][i] - selected[0][i])
                         else:
-                            temp = ((selected[0][i] - comparisons[house][0][j])**2 + (selected[1][i] - comparisons[house][1][j])**2)**0.5
+                            temp = ((selected[0][i] - comparisons[house][0][j])**2 + \
+                            (selected[1][i] - comparisons[house][1][j])**2)**0.5
 
                         # Check for house in house and append list of distances if so.
-                        if comparisons[house][0][0] < selected[0][i] < comparisons[house][0][2] and comparisons[house][1][0] < selected[1][i] < comparisons[house][1][1]:
+                        if comparisons[house][0][0] < selected[0][i] < comparisons[house][0][2] \
+                        and comparisons[house][1][0] < selected[1][i] < comparisons[house][1][1]:
                             distances.append("House in house")
                         if temp < minimum_distance:
                             minimum_distance = temp
 
             # Checks for the minimal distance.
-            temp = min(selected[0][0] - 0, 160 - selected[0][2], selected[1][0] - 0, 180 - selected[1][1])
+            temp = min(selected[0][0] - 0, 160 - selected[0][2], \
+                   selected[1][0] - 0, 180 - selected[1][1])
             if temp < minimum_distance:
                 minimum_distance = temp
 
@@ -85,8 +90,8 @@ class Calculations(object):
 
     def calc_validity(self, distances):
         """
-        This function checks if the distances provided as a list as argument fulfill
-        the constraints in terms of free space. It returns a boolean.
+        This function checks if the distances provided as a list as argument
+        fulfill the constraints in terms of free space. It returns a boolean.
         """
 
         if (len(distances) != 20):
@@ -186,12 +191,6 @@ class Check (object):
         # print(max_distances)
         return houses
         # return instances, tries, max_coordinates, max_distances, max_worth
-
-    def place_water(comparisons):
-        """
-        This function looks for the four biggest water bodies to be placed on the grid
-        and returns its coordinates and dimensions
-        """
 
 if __name__ == "__main__":
     calculations = Check()
