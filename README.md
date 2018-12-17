@@ -88,7 +88,7 @@ The first solution to this problem has been attempted by the usage of a random a
 houses on a certain coordinate and checks whether or not this will lead to a valid siuation. Only valid sets will lead to an output. 
 This random algorithm is not really an algorithm, since there is no heuristics involved in it. The distribution of the score of 10000
 runs is plotted in the figure below.This shows the distribution is between 8M and 10.7M. 
-![Alt Text](https://github.com/corne12345/Lekker-oke-/blob/master/output/random_run(10000).png)
+![Alt Text](https://github.com/corne12345/Lekker-oke-/blob/master/Eindpresentatie/Distribution.png)
 
 The "heuristic" approach is to force the algorithm to perform multiple reandom runs and to save the best one. This will result for 1K
 runs in a score of 10.7M (repeated tests). 
@@ -100,7 +100,7 @@ A seconds constructive algorithm is a depth-first algorithm that has been simpli
 
 A iterative hill climber was also constructed. This changes the coordinates of a selected house randomly (min and max can be alterered) 
 and saves if this change increases the worth. The hillclimber loops a certain amount of times through the dataset provided as input 
-(a best of n randoms), at which point you cna choose to print a graph of the hill climber as provided below. 
+(a best of n randoms), at which point you can choose to print a graph of the hill climber as provided below. 
 ![Alt Text](https://github.com/corne12345/Lekker-oke-/blob/master/output/hillclimber_run(1000%20reps).png)
 
 
