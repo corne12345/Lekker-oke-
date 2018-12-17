@@ -137,13 +137,16 @@ class Grid(object):
                     for place in range(len(self.grid[0])):
 
                         # Fill the first x position.
-                        if self.grid[row][place] not in range(1, 5) and first_width_position == None and place == x_axis:
+                        if self.grid[row][place] not in range(1, 5) and \
+                        first_width_position == None and place == x_axis:
                             first_width_position = place
                             self.grid[row][place] = 2
 
                         # Fill the grid in with houses.
-                        elif first_width_position != None and self.grid[row][place] not in range(1, 5) and \
-                        first_width_position + little_house.width > place and place - first_width_position >= 0:
+                        elif first_width_position != None and \
+                        self.grid[row][place] not in range(1, 5) and \
+                        first_width_position + little_house.width > place and \
+                        place - first_width_position >= 0:
                             self.grid[row][place] = 2
 
     def create_medium_house(self, file):
@@ -175,13 +178,16 @@ class Grid(object):
                     for place in range(len(self.grid[0])):
 
                         # Fill the first x position.
-                        if self.grid[row][place] not in range(1, 5) and first_width_position == None and place == x_axis:
+                        if self.grid[row][place] not in range(1, 5) and \
+                        first_width_position == None and place == x_axis:
                             first_width_position = place
                             self.grid[row][place] = 3
 
                         # Fill the grid in with houses.
-                        elif first_width_position != None and self.grid[row][place] not in range(1, 5) and \
-                        first_width_position + medium_house.width > place and place - first_width_position >= 0:
+                        elif first_width_position != None and \
+                        self.grid[row][place] not in range(1, 5) and \
+                        first_width_position + medium_house.width > place and \
+                        place - first_width_position >= 0:
                             self.grid[row][place] = 3
 
 
@@ -214,13 +220,16 @@ class Grid(object):
                     for place in range(len(self.grid[0])):
 
                         # Fill the first x position.
-                        if self.grid[row][place] not in range(1, 5) and first_width_position == None and place == x_axis:
+                        if self.grid[row][place] not in range(1, 5) and \
+                        first_width_position == None and place == x_axis:
                             first_width_position = place
                             self.grid[row][place] = 4
 
                         # Fill the grid in with houses.
-                        elif first_width_position != None and self.grid[row][place] not in range(1, 5) and \
-                        first_width_position + large_house.width > place and place - first_width_position >= 0:
+                        elif first_width_position != None and \
+                        self.grid[row][place] not in range(1, 5) and \
+                        first_width_position + large_house.width > place and \
+                        place - first_width_position >= 0:
                             self.grid[row][place] = 4
 
 class Visualator(object):
@@ -298,10 +307,11 @@ class Visualator(object):
                         color = "yellow"
                     else:
                         color = "green"
-                    graph.patch(x=[house["x"], house["x"], (house["x"] + self.little_house.width), (house["x"] + self.little_house.width)],
-                                y=[house["y"], (house["y"] + self.little_house.length), (house["y"] + self.little_house.length), house["y"]],
+                    graph.patch(x=[house["x"], house["x"], (house["x"] + \
+                                self.little_house.width), (house["x"] + self.little_house.width)], \
+                                y=[house["y"], (house["y"] + self.little_house.length), \
+                                (house["y"] + self.little_house.length), house["y"]], \
                                 color=color, line_color="black")
-
 
                 except:
                     print("No valid coordinates")
@@ -321,5 +331,7 @@ if __name__ == "__main__":
     grid.create_large_house(LargeHouse(total_houses, 11, 10.5, 610000))
 
 
-    x = Visualator(grid.grid, LittleHouse(total_houses, 8, 8, 285000, 2), MediumHouse(total_houses, 10, 7.5, 399000), LargeHouse(total_houses, 11, 10.5, 610000))
+    x = Visualator(grid.grid, LittleHouse(total_houses, 8, 8, 285000, 2), \
+        MediumHouse(total_houses, 10, 7.5, 399000), \
+        LargeHouse(total_houses, 11, 10.5, 610000))
     show(x.bokeh())
