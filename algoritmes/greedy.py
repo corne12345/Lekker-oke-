@@ -56,8 +56,10 @@ class Greed(object):
                             pass
 
                         else:
-                            if x_axe + self.houses[house].width < self.grid.width - self.houses[house].detachement and \
-                               y_axe + self.houses[house].length < self.grid.length - self.houses[house].detachement:
+                            if x_axe + self.houses[house].width < self.grid.width - \
+                               self.houses[house].detachement and \
+                               y_axe + self.houses[house].length < self.grid.length - \
+                               self.houses[house].detachement:
                                coordinates.append({"x": x_axe, "y": y_axe })
 
             max_score_coordinate = self.max_score(coordinates)
@@ -82,10 +84,12 @@ class Greed(object):
 
         for coordinate in coordinates:
             if self.number_point < 1 and coordinate != None:
-                distance = self.calc_grid_distance(self.calculate_coordinate(coordinate, self.houses[house]))
+                distance = self.calc_grid_distance(self.calculate_coordinate
+                (coordinate, self.houses[house]))
                 score.append(self.score(distance, self.houses[house]))
             elif coordinate != None:
-                distance = self.min_distance_other_houses(coordinate, self.houses[house], valid_set)
+                distance = self.min_distance_other_houses
+                (coordinate, self.houses[house], valid_set)
 
                 if distance != False:
                     score.append(self.score(distance, self.houses[house]))
@@ -130,7 +134,8 @@ class Greed(object):
 
         for key in existing_coordinates.keys():
             for i in range(len(existing_coordinates[key])):
-                selected = self.calculate_coordinate(existing_coordinates[key][i] , self.houses[key])
+                selected = self.calculate_coordinate(existing_coordinates[key][i],
+                           self.houses[key])
                 dist = self.controle_function(valid_set, selected)
 
                 if dist == False:
@@ -154,13 +159,17 @@ class Greed(object):
         """
 
         # Checks if the existing house is in the selected coordinates
-        if (selected["x1"] <= valid_set["x1"] <= selected["x2"] or selected["x1"] <= valid_set["x2"] <= selected["x2"]) and \
-        (selected["y1"] <= valid_set["y1"] <= selected["y2"] or selected["y1"] <= valid_set["y2"] <= selected["y2"]):
+        if (selected["x1"] <= valid_set["x1"] <= selected["x2"] or \
+        selected["x1"] <= valid_set["x2"] <= selected["x2"]) and \
+        (selected["y1"] <= valid_set["y1"] <= selected["y2"] or \
+        selected["y1"] <= valid_set["y2"] <= selected["y2"]):
             return False
 
         # Checks if the house is in a existing house
-        elif (valid_set["x1"] <= selected["x1"] <= valid_set["x2"] or valid_set["x1"] <= selected["x2"] <= valid_set["x2"]) and \
-        (valid_set["y1"] <= selected["y1"] <= valid_set["y2"] or valid_set["y1"] <= selected["y2"] <= valid_set["y2"]):
+        elif (valid_set["x1"] <= selected["x1"] <= valid_set["x2"] or \
+        valid_set["x1"] <= selected["x2"] <= valid_set["x2"]) and \
+        (valid_set["y1"] <= selected["y1"] <= valid_set["y2"] or \
+        valid_set["y1"] <= selected["y2"] <= valid_set["y2"]):
             return False
 
         else:
@@ -180,10 +189,12 @@ class Greed(object):
             return False
 
         # Checks if the house is in a vertical or horizontal position of the checkcoordianate
-        if valid_set["x1"] < selected["x1"] < valid_set["x2"] or valid_set["x1"] < selected["x2"] < valid_set["x2"]:
+        if valid_set["x1"] < selected["x1"] < valid_set["x2"] or \
+        valid_set["x1"] < selected["x2"] < valid_set["x2"]:
             dist = min(abs(valid_set["y1"] - selected["y2"]), abs(selected["y1"] - valid_set["y2"]))
 
-        elif valid_set["y1"] < selected["y1"] < valid_set["y2"] or valid_set["y1"] < selected["y2"] < valid_set["y2"]:
+        elif valid_set["y1"] < selected["y1"] < valid_set["y2"] or \
+        valid_set["y1"] < selected["y2"] < valid_set["y2"]:
             dist = min(abs(valid_set["x1"] - selected["x2"]), abs(selected["x1"] - valid_set["x2"]))
 
         # Calculates the if the house are diagonal from eachother.
@@ -191,16 +202,24 @@ class Greed(object):
 
             # Checks if the house are left or right from eachother and calculate minimum_distance.
             if (valid_set["x1"] - selected["x2"]) > 0:
-                dist1 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y1"]) **2)**0.5
-                dist2 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
-                dist3 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y2"] - selected["y1"]) **2)**0.5
-                dist4 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y2"] - selected["y2"]) **2)**0.5
+                dist1 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y1"] \
+                        - selected["y1"]) **2)**0.5
+                dist2 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y1"] \
+                         - selected["y2"]) **2)**0.5
+                dist3 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y2"] \
+                         - selected["y1"]) **2)**0.5
+                dist4 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y2"] \
+                        - selected["y2"]) **2)**0.5
 
             elif (valid_set["x2"] - selected["x1"]) < 0:
-                dist1 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y1"]) **2)**0.5
-                dist2 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
-                dist3 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y2"] - selected["y1"]) **2)**0.5
-                dist4 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y2"] - selected["y2"]) **2)**0.5
+                dist1 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y1"] \
+                         - selected["y1"]) **2)**0.5
+                dist2 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y1"] \
+                        - selected["y2"]) **2)**0.5
+                dist3 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y2"] \
+                        - selected["y1"]) **2)**0.5
+                dist4 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y2"] \
+                        - selected["y2"]) **2)**0.5
             else:
                 return False
 
