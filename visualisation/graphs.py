@@ -7,27 +7,32 @@ class Graph(object):
     Gives the data of a csv.
     """
 
-    def __init__(self):
-        self.bokeh(self.load_csv("visualisation_hill.csv"))
+    def make_csv(self, score, name):
+        name = name + str(max(score)) + ".csv"
+        with open(name, "w") as infile:
+            writer = csv.writer(infile, delimiter=",")
+            for count in range(len(score)):
+                writer.writerow([count + 1, score[count]])
 
-    def load_csv(self, data):
-        iteration = []
+        return name
+
+    def load_csv(self, file):
         value = []
-
+        iteration = []
         # Reads the values in the data.
-        with open(data, "r") as data:
+        with open(file, "r") as data:
             reader = csv.reader(data)
             for line in reader:
-                line = line[0].split(";")
+                print(line)
                 try:
-                    value.append(int(line[0]))
-                    iteration.append(int(line[1]))
+                    value.append(float(line[1]))
+                    iteration.append(int(line[0]))
                 except:
                     print("No number")
 
         return iteration, value
 
-    def bokeh(self, data):
+    def bokeh(self, data, name):
         """
         Makes a bokeh plot from the data.
         """
@@ -35,9 +40,12 @@ class Graph(object):
         iteration, value = data
         graph = figure(plot_width=1600, plot_height=1600)
 
-        graph.line(value, iteration, line_width=2)
+        for count in range(len(value)):
+            graph.scatter(iteration[count], value[count], marker="circle", size=15,
+                          line_color="navy", fill_color="orange", alpha=0.5)
 
-        export_png(graph, filename="hillclimber.png")
+
+        export_png(graph, name + str(max(value)) + ".png")
 
 if __name__ == "__main__":
     Graph()
