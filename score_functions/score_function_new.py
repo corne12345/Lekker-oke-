@@ -1,6 +1,7 @@
 import random
 import sys
 import csv
+from copy import deepcopy
 from matplotlib import pyplot as plt
 
 class newScore(object):
@@ -13,32 +14,50 @@ class newScore(object):
         """
         Creates coordinates for the houses which meet the conditions.
         """
-
+        coordinates = []
         counter = 0
-        mistakes = 0
 
         # Makes valid coordinates of the houses.
         while counter < num_houses:
-            valid_set = {}
+            control = False
+            dist = None
+
             x_coordinate = random.randint(0, self.grid.width)
             y_coordinate = random.randint(0, self.grid.length)
             while self.grid.grid[y_coordinate - 1][x_coordinate - 1] in range(1, 5):
                 x_coordinate = random.randint(0, self.grid.width)
                 y_coordinate = random.randint(0, self.grid.length)
 
-            # Checks if the coordinates meet the conditions.
-            grid_space = self.calc_min_grid_space(x_coordinate, y_coordinate, house_type)
-            if grid_space >= house_type.detachement:
-                valid_set = self.calc_all_coordinates(y_coordinate, x_coordinate, house_type)
-                if len(valid_coordinates) > 0:
-                    if self.house_in_house(valid_set, valid_coordinates):
-                        valid_coordinates.append(valid_set)
-                        counter += 1
-                    else:
-                        mistakes += 1
-                elif len(valid_coordinates) == 0:
-                    valid_coordinates.append(valid_set)
+            if valid_coordinates == {}:
+                valid_set = self.calc_all_coordinates(y_coordinate, x_coordinate, self.houses[house_type])
+                valid_coordinates[house_type] = [deepcopy({"y": y_coordinate, "x": x_coordinate})]
+                counter += 1
+                continue
+
+            while control == False:
+
+                # Checks if the coordinates meet the conditions.
+                valid_set = self.calc_all_coordinates(y_coordinate, x_coordinate, self.houses[house_type])
+                dist = self.calc_distance(valid_set, valid_coordinates)
+                grid_space = self.calc_min_grid_space2(valid_set)
+                dist = min(dist, grid_space)
+
+                if self.house_in_house(valid_set, valid_coordinates) == True and \
+                dist > self.houses[house_type].detachement:
+                    # Will append to the right key or will create the key.
+                    try:
+                        valid_coordinates[house_type].append(deepcopy({"y": y_coordinate, "x": x_coordinate}))
+                    except:
+                        valid_coordinates[house_type] = [deepcopy({"y": y_coordinate, "x": x_coordinate})]
+                    control = True
                     counter += 1
+                else:
+                    x_coordinate = random.randint(0, self.grid.width)
+                    y_coordinate = random.randint(0, self.grid.length)
+
+
+
+
 
     def calc_min_grid_space (self, x_coordinate, y_coordinate, house):
         """
@@ -53,7 +72,7 @@ class newScore(object):
 
         return min(temp1, temp2, temp3, temp4)
 
-    def calc_min_grid_space2 (self, valid_set):
+    def calc_min_grid_space2(self, valid_set):
         """
         This function returns the shortest distance to the grid of a certain house
         with given coordinates.
@@ -77,61 +96,62 @@ class newScore(object):
         Checks if two houses are placed in eachother.
         """
 
-        for selected in valid_coordinates:
+        for key in valid_coordinates.keys():
+            for coordinate in valid_coordinates[key]:
+                selected = self.calc_all_coordinates(coordinate["x"], coordinate["y"], self.houses[key])
 
-            # Checks if the existing house is in the selected coordinates
-            if (selected["x1"] <= valid_set["x1"] <= selected["x2"] or selected["x1"] <= valid_set["x2"] <= selected["x2"]) and \
-            (selected["y1"] <= valid_set["y1"] <= selected["y2"] or selected["y1"] <= valid_set["y2"] <= selected["y2"]):
-                return False
+                # Checks if the existing house is in the selected coordinates
+                if (selected["x1"] <= valid_set["x1"] <= selected["x2"] or selected["x1"] <= valid_set["x2"] <= selected["x2"]) and \
+                (selected["y1"] <= valid_set["y1"] <= selected["y2"] or selected["y1"] <= valid_set["y2"] <= selected["y2"]):
+                    return False
 
-            # Checks if the house is in a existing house
-            elif (valid_set["x1"] <= selected["x1"] <= valid_set["x2"] or valid_set["x1"] <= selected["x2"] <= valid_set["x2"]) and \
-            (valid_set["y1"] <= selected["y1"] <= valid_set["y2"] or valid_set["y1"] <= selected["y2"] <= valid_set["y2"]):
-                return False
+                # Checks if the house is in a existing house
+                elif (valid_set["x1"] <= selected["x1"] <= valid_set["x2"] or valid_set["x1"] <= selected["x2"] <= valid_set["x2"]) and \
+                (valid_set["y1"] <= selected["y1"] <= valid_set["y2"] or valid_set["y1"] <= selected["y2"] <= valid_set["y2"]):
+                    return False
 
         return True
 
-    def calc_distance(self, valid_set, valid_coordinates, index):
+    def calc_distance(self, valid_set, valid_coordinates):
         """
         Calculates the distances between houses.
         """
+        dist = None
 
         # Calculates the distances by iterating over the valid coordinates.
-        for i in range(len(valid_coordinates)):
+        for key in valid_coordinates.keys():
+            for coordinate in valid_coordinates[key]:
 
-            # Skip the comparison between the same data.
-            if i == index:
-                continue
+                selected = self.calc_all_coordinates(coordinate["x"], coordinate["y"], self.houses[key])
+                # Checks if the house is in a vertical or horizontal position of the checkcoordianate
+                if valid_set["x1"] <= selected["x1"] <= valid_set["x2"] or valid_set["x1"] <= selected["x2"] <= valid_set["x2"]:
+                    dist = min(abs(valid_set["y1"] - selected["y2"]), abs(selected["y1"] - valid_set["y2"]))
 
-            selected = valid_coordinates[i]
+                elif valid_set["y1"] <= selected["y1"] <= valid_set["y2"] or valid_set["y1"] <= selected["y2"] <= valid_set["y2"]:
+                    dist = min(abs(valid_set["x1"] - selected["x2"]), abs(selected["x1"] - valid_set["x2"]))
 
-            # Use straight line if walls match in horizontal or vertical orientation.
-            if valid_set["x1"] <= selected["x1"] <= valid_set["x2"] or valid_set["x1"] <= selected["x2"] <= valid_set["x2"] or selected["x1"] <= valid_set["x1"] <= selected["x2"] or selected["x1"] <= valid_set["x2"] <= selected["x2"]  :
-                dist = min(abs(valid_set["y1"] - selected["y2"]), abs(selected["y1"] - valid_set["y2"]))
-            elif valid_set["y1"] <= selected["y1"] <= valid_set["y2"] or valid_set["y1"] <= selected["y2"] <= valid_set["y2"] or selected["y1"] <= valid_set["y1"] <= selected["y2"] or selected["y1"] <= valid_set["y2"] <= selected["y2"]:
-                dist = min(abs(valid_set["x1"] - selected["x2"]), abs(selected["x1"] - valid_set["x2"]))
-
-            # Calculate Euclidian distance in other cases.
-            else:
-                list_dist = []
-                # Checks if the houses are left or right from eachother and
-                # calculates the minimum distance.
-                if (valid_set["x1"] - selected["x2"]) > 0:
-                    x_valid = "x1"
-                    x_selected = "x2"
-
-                elif (valid_set["x2"] - selected["x1"]) < 0:
-                    x_valid = "x2"
-                    x_selected = "x1"
-
+                # Calculate Euclidian distance in other cases.
                 else:
-                    return False
+                    list_dist = []
+                    # Checks if the houses are left or right from eachother and
+                    # calculates the minimum distance.
+                    if (valid_set["x1"] - selected["x2"]) > 0:
+                        x_valid = "x1"
+                        x_selected = "x2"
 
-                for coord in ([["y1", "y1"], ["y1", "y2"], ["y2", "y1"], ["y2", "y2"]]):
-                    dist = ((valid_set[x_valid] - selected[x_selected]) ** 2 + (valid_set[coord[0]] - selected[coord[1]]) **2)**0.5
-                    list_dist.append(dist)
+                    elif (valid_set["x2"] - selected["x1"]) < 0:
+                        x_valid = "x2"
+                        x_selected = "x1"
 
-                dist = min(list_dist)
+                    else:
+                        return False
+
+                    for coord in ([["y1", "y1"], ["y1", "y2"], ["y2", "y1"], ["y2", "y2"]]):
+                        dist = ((valid_set[x_valid] - selected[x_selected]) ** 2 + (valid_set[coord[0]] - selected[coord[1]]) **2)**0.5
+                        list_dist.append(dist)
+
+                    dist = min(list_dist)
+
         # Compare grid space and house space to find the lowest.
         grid_space = self.calc_min_grid_space2(valid_set)
 
@@ -144,6 +164,7 @@ class newScore(object):
         """
 
         score = 0
+        print(distances)
         for i in range(int(len(distances) * 0.15)):
             if distances[i] < 6:
                 return False
@@ -167,7 +188,7 @@ class newScore(object):
 
         return score
 
-    def best_of_random(self, reps, grid, nr_of_houses):
+    def best_of_random(self, reps):
         """
         Defines the best of all random coordinates.
         """
@@ -176,25 +197,26 @@ class newScore(object):
         counter = 0
         check = False
 
-        # Makes a specific amount of valid coordinates of the houses.
-        while counter < reps:
-            valid_coordinates = []
-            for key in self.houses.keys():
-                self.create_valid_coordinates (self.houses[key], valid_coordinates, nr_of_houses)
+        # Makes a specific amount of valid coordinates of the houses
+        valid_coordinates = {}
+        for key in self.houses.keys():
+            self.create_valid_coordinates(key, valid_coordinates, self.houses[key].number)
 
-            distances = []
-            for count in range(len(valid_coordinates)):
-                valid_set = valid_coordinates[count]
-                temp = self.calc_distance(valid_set, valid_coordinates, count)
+        distances = []
+        for key in valid_coordinates.keys():
+            for coordinate in valid_coordinates[key]:
+                valid_set = self.calc_all_coordinates(coordinate["y"], coordinate["x"], self.houses[key])
+                temp = self.calc_distance(valid_set, valid_coordinates)
+                print(temp)
                 distances.append(temp)
 
-            check = self.calc_score(distances)
-            if check != False:
-                counter += 1
-                if check > max_score:
-                    max_score = check
-                    max_distances = distances
-                    max_coordinates = valid_coordinates
+        check = self.calc_score(distances)
+        if check != False:
+            counter += 1
+            if check > max_score:
+                max_score = check
+                max_distances = distances
+                max_coordinates = valid_coordinates
 
         print(max_score)
 
@@ -262,13 +284,14 @@ class newScore(object):
         """
 
         # Moet allemaal in greedy komen, met de benodigde imports (Coen was hier echter mee bezig) !!!!!!!!!!!!!!!!!
-        coordinates_simple = vis_to_random(coordinates)
         distances = []
 
         # Calculates the shortest distance between all houses and the closest neighbor.
-        for i in range(len(coordinates_simple)):
-            valid_set = coordinates_simple[i]
-            temp = calc_distance(valid_set, coordinates_simple, i )
-            distances.append(temp)
-        check = calc_score(distances)
+        for key in coordinates.keys():
+            for coordinate in coordinates[key]:
+                valid_set = self.calc_all_coordinates(coordinate["y"], coordinate["x"], self.houses[key])
+                temp = self.calc_distance(valid_set, coordinates)
+                distances.append(temp)
+        check = self.calc_score(distances)
+
         return check
