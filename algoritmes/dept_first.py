@@ -14,7 +14,7 @@ for submap in path:
 
 from grid_houses import Grid
 from Opzet import LittleHouse, MediumHouse, LargeHouse, Water
-from score_function_new import *
+from score_function_new import newScore
 
 class Depthfirst(object):
     """
@@ -22,11 +22,12 @@ class Depthfirst(object):
     in steps of ten.
     """
 
-    def __init__(self, number, length, width, grid):
+    def __init__(self, number, length, width, grid, score_function):
         self.number = number
         self.grid = grid
         self.length = 180
         self.width = 160
+        self.score_function = score_function
         # self.coordinates = self.create_coordinates(number)
         self.points = {}
         self.number_point = 1
@@ -64,32 +65,89 @@ class Depthfirst(object):
 
 
         # print(y_x_coordinates)
-        # print(len(y_x_coordinates))
+        print("length y x alles")
+        print(len(y_x_coordinates))
+
+        print("macht")
+        macht = 28124**20
+        print(macht)
 
         end_coordinates = []
         coordinates = []
+        all_coordinates = []
 
         for i, coord in enumerate(y_x_coordinates):
             # print(coordinates)
             if len(coordinates) < 20:
                 coordinates.append(coord)
 
-                if len(coordinates) > 1:
-                    pause = 0
-                    for j in range(10):
-                        if (coordinates[-1]["y"] == coordinates[-2]["y"] \
-                        and (coordinates[-1]["x"] - j) == coordinates[-2]["x"]):
-                            coordinates.remove(coord)
-                            pause = 1
-                            break
+        all_coordinates.append(coordinates)
+        print("jjeidsajgah")
+        print(coordinates)
+        print(len(coordinates))
 
-                    if pause == 0:
+        # coordinates.remove(coordinates[-1])
+
+        print("poepie")
+        print(coordinates)
+
+        for i in range(len(coordinates)):
+            for j, coord in enumerate(y_x_coordinates):
+                coordinates = copy.copy(coordinates)
+                coordinates.remove(coordinates[-i])
+                # if len(coordinates) < 20:
+                #     coordinates.append(coord)
+                # for j in range(len(coordinates) - 1):
+
+                # coordinates.append(coord)
+                # print(coordinates)
+                # print(len(coordinates))
+
+                if len(coordinates) < 20:
+                    # print(coord)
+                    coordinates.append(coord)
+                    # print(len(coordinates))
+                    all_coordinates.append(coordinates)
+
+                    # for i in range(1, 5000, 300):
+                    # print("cooordi")
+                # print(coordinates)
+
+        print("tweeede")
+        print(coordinates)
+
+        print("alles")
+        print(all_coordinates[200])
+        print(all_coordinates[201])
+        print(all_coordinates[400])
+        print(all_coordinates[600])
+        print(all_coordinates[800])
+        print(all_coordinates[1000])
+        print(all_coordinates[1200])
+        print(all_coordinates[1400])
+        print(all_coordinates[1600])
+        print(all_coordinates[1800])
+
+        print(all_coordinates[2000])
+
+        print(len(all_coordinates))
 
 
-                        if len(coordinates) > 12:
-                            if coordinates[-1]["y"] == coordinates[-2]["y"] \
-                            and (coordinates[-1]["x"] - 10) == coordinates[-2]["x"]:
-                                 coordinates.remove(coord)
+                # if len(coordinates) > 1:
+                #     pause = 0
+                #     for j in range(10):
+                #         if (coordinates[-1]["y"] == coordinates[-2]["y"] \
+                #         and (coordinates[-1]["x"] - j) == coordinates[-2]["x"]):
+                #             coordinates.remove(coord)
+                #             pause = 1
+                #             break
+                #
+                #     if pause == 0:
+
+                        # if len(coordinates) > 12:
+                        #     if coordinates[-1]["y"] == coordinates[-2]["y"] \
+                        #     and (coordinates[-1]["x"] - 10) == coordinates[-2]["x"]:
+                        #          coordinates.remove(coord)
 
                             # for j in range(len(coordinates) - 1):
                             #         if ((coordinates[-1]["y"] - 1) == coordinates[j]["y"] \
@@ -107,10 +165,10 @@ class Depthfirst(object):
                             #                 coordinates.remove(coord)
                             #       break
 
-                        if len(coordinates) >= 17:
-                            if coordinates[-1]["y"] == coordinates[-2]["y"] \
-                            and (coordinates[-1]["x"] - 11) == coordinates[-2]["x"]:
-                                 coordinates.remove(coord)
+                        # if len(coordinates) >= 17:
+                        #     if coordinates[-1]["y"] == coordinates[-2]["y"] \
+                        #     and (coordinates[-1]["x"] - 11) == coordinates[-2]["x"]:
+                        #          coordinates.remove(coord)
 
                             # for j in range(len(coordinates) - 1):
                             #         if ((coordinates[-1]["y"] - 1) == coordinates[j]["y"] \
@@ -134,41 +192,37 @@ class Depthfirst(object):
                         # 3. in de x-coordinaat gaan kijken of een coordinaat dichter dan 10 in zijn buurt zit en hem dan verwijderen
                         # maar ik begrijp niet dat het (3, 12) append, terwijl deze dicht dan 10 bij (2, 12 zit)
                         # het lijkt erop dat hij niet de hele lijst l in range 10 doorgaat, want l blijft altijd 0 als die bij coordinates[j]["x"] == 32 is, terwijl hij dan ook t/m 10 moet gaan tellen.
-                        # Hierdoor komt hij niet op: (coordinates[-1]["y"] - l) == coordinates[j]["y"]
-                        for j in range(len(coordinates) - 1):
-                            # print("reokoe roeko roek")
-                            # print(len(coordinates))
-                            # print(coordinates)
-                            for k in range(10):
-                                for l in range(10):
-                                    # print("j")
-                                    # print(j)
-                                    if coordinates[j]["x"] == 32:
-                                        # print("l")
-                                        print(l)
-                                        # print("y coord")
-                                        # print(coordinates[-1]["y"])
-                                        # print(coordinates[j]["y"])
-                                        # print(coordinates[-1]["y"] - l)
-                                        # print("x coord")
-                                        # print(coordinates[-1]["x"])
-                                        # print(coordinates[j]["x"])
-                                        # print(coordinates[-1]["x"] - k)
-                                    if ((coordinates[-1]["y"] - l) == coordinates[j]["y"] \
-                                    and (coordinates[-1]["x"] - k) == coordinates[j]["x"]):
-                                        # print("removed_1")
-                                        # print("dit is coord")
-                                        # print(coord)
-                                        coordinates.remove(coord)
-                                    break
+                        # # Hierdoor komt hij niet op: (coordinates[-1]["y"] - l) == coordinates[j]["y"]
+                        # for j in range(len(coordinates) - 1):
+                        #     # print("reokoe roeko roek")
+                        #     # print(len(coordinates))
+                        #     # print(coordinates)
+                        #     for k in range(10):
+                        #         for l in range(10):
+                        #             # print("j")
+                        #             # print(j)
+                        #             # if coordinates[j]["x"] == 32:
+                        #                 # print("l")
+                        #                 # print(l)
+                        #                 # print("y coord")
+                        #                 # print(coordinates[-1]["y"])
+                        #                 # print(coordinates[j]["y"])
+                        #                 # print(coordinates[-1]["y"] - l)
+                        #                 # print("x coord")
+                        #                 # print(coordinates[-1]["x"])
+                        #                 # print(coordinates[j]["x"])
+                        #                 # print(coordinates[-1]["x"] - k)
+                        #             if ((coordinates[-1]["y"] - l) == coordinates[j]["y"] \
+                        #             and (coordinates[-1]["x"] - k) == coordinates[j]["x"]):
+                        #                 # print("removed_1")
+                        #                 # print("dit is coord")
+                        #                 # print(coord)
+                        #                 coordinates.remove(coord)
+                        #             break
 
 
         # end_coordinates.append(coordinates)
 
-        # print(coordinates)
-
-
-        # print(len(coordinates))
 
         # # hier geeft die alleen deel van de coorinaten
         # for i in range(len(coordinates)):
@@ -221,10 +275,12 @@ class Depthfirst(object):
         coordinates = all_coordinates[0]
         y_x_coordinates = all_coordinates[1]
 
-
         # print(coordinates)
         # print(y_x_coordinates)
         coordinates.remove(coordinates[-1])
+
+        print("poepie")
+        print(coordinates)
 
         for i, coord in enumerate(y_x_coordinates):
             # if len(coordinates) < 20:
@@ -238,52 +294,55 @@ class Depthfirst(object):
             if len(coordinates) < 20:
                 coordinates.append(coord)
 
-                if len(coordinates) > 1:
-                    pause = 0
-                    for j in range(len(coordinates) - 1):
-                        for k in range(10):
-                            # print(coordinates)
-                            if (coordinates[-1]["y"] == coordinates[j]["y"] \
-                            and (coordinates[-1]["x"] - k) == coordinates[j]["x"]):
-                                coordinates.remove(coord)
-                                pause = 1
-                            break
-                        break
+        print("tweeede")
+        print(coordinates)
 
-                    for j in range(len(coordinates) - 1):
-                        for k in range(10):
-                            if ((coordinates[-1]["y"] - 1) == coordinates[j]["y"] \
-                            and (coordinates[-1]["x"] - k) == coordinates[j]["x"]):
-                                # print(coord)
-                                coordinates.remove(coord)
-                            break
-                        break
-                                # print("blabla")
-
-                    if pause == 0:
-                        if len(coordinates) >= 12:
-                            if coordinates[-1]["y"] == coordinates[-2]["y"] \
-                            and (coordinates[-1]["x"] - 10) == coordinates[-2]["x"]:
-                                 coordinates.remove(coord)
-
-                            for j in range(len(coordinates) - 1):
-                                    if ((coordinates[-1]["y"] - 1) == coordinates[j]["y"] \
-                                    and (coordinates[-1]["x"] - 10) == coordinates[j]["x"]):
-                                        # print("tweede")
-                                        # print(coord)
-                                        coordinates.remove(coord)
-
-                        if len(coordinates) >= 17:
-                            if coordinates[-1]["y"] == coordinates[-2]["y"] \
-                            and (coordinates[-1]["x"] - 11) == coordinates[-2]["x"]:
-                                 coordinates.remove(coord)
-
-                            for j in range(len(coordinates) - 1):
-                                    if ((coordinates[-1]["y"] - 1) == coordinates[j]["y"] \
-                                    and (coordinates[-1]["x"] - 11) == coordinates[j]["x"]):
-                                        # print("tweede")
-                                        # print(coord)
-                                        coordinates.remove(coord)
+                # if len(coordinates) > 1:
+                #     pause = 0
+                #     for j in range(len(coordinates) - 1):
+                #         for k in range(10):
+                #             # print(coordinates)
+                #             if (coordinates[-1]["y"] == coordinates[j]["y"] \
+                #             and (coordinates[-1]["x"] - k) == coordinates[j]["x"]):
+                #                 coordinates.remove(coord)
+                #                 pause = 1
+                #             break
+                #         break
+                #
+                #     for j in range(len(coordinates) - 1):
+                #         for k in range(10):
+                #             if ((coordinates[-1]["y"] - 1) == coordinates[j]["y"] \
+                #             and (coordinates[-1]["x"] - k) == coordinates[j]["x"]):
+                #                 # print(coord)
+                #                 coordinates.remove(coord)
+                #             break
+                #         break
+                #                 # print("blabla")
+                #
+                #     if pause == 0:
+                #         if len(coordinates) >= 12:
+                #             if coordinates[-1]["y"] == coordinates[-2]["y"] \
+                #             and (coordinates[-1]["x"] - 10) == coordinates[-2]["x"]:
+                #                  coordinates.remove(coord)
+                #
+                #             for j in range(len(coordinates) - 1):
+                #                     if ((coordinates[-1]["y"] - 1) == coordinates[j]["y"] \
+                #                     and (coordinates[-1]["x"] - 10) == coordinates[j]["x"]):
+                #                         # print("tweede")
+                #                         # print(coord)
+                #                         coordinates.remove(coord)
+                #
+                #         if len(coordinates) >= 17:
+                #             if coordinates[-1]["y"] == coordinates[-2]["y"] \
+                #             and (coordinates[-1]["x"] - 11) == coordinates[-2]["x"]:
+                #                  coordinates.remove(coord)
+                #
+                #             for j in range(len(coordinates) - 1):
+                #                     if ((coordinates[-1]["y"] - 1) == coordinates[j]["y"] \
+                #                     and (coordinates[-1]["x"] - 11) == coordinates[j]["x"]):
+                #                         # print("tweede")
+                #                         # print(coord)
+                #                         coordinates.remove(coord)
 
 
                 # if ((coordinates[-1]["y"] - 1) == coordinates[i]["y"] \
@@ -292,19 +351,23 @@ class Depthfirst(object):
         # print(coordinates)
                 #     coordinates.remove(coord)
 
-        # Score function implementation for Depthfirst
+        # Score function implementation for depth first.
         print(coordinates)
+
         for i in range(len(coordinates)):
+            print("yes")
+            print(coordinates[i])
             valid_set = coordinates[i]
-            coordinates[i] = calc_all_coordinates(valid_set["x"], valid_set["y"], [8,8,2])
+            print(valid_set)
+            coordinates[i] = {"y1": valid_set["y"], "x1": valid_set["x"], "y2": valid_set["y"] + 8, "x2": valid_set["x"] + 8}
 
         distances = []
         for i in range(len(coordinates)):
             valid_set = coordinates[i]
-            distance = calc_distance(valid_set, coordinates, i)
+            distance =  self.score_function.calc_distance(valid_set, coordinates, i)
             distances.append(distance)
 
-        print(calc_score(distances))
+        print(self.score_function.calc_score(distances))
 
 
 if __name__ == "__main__":
