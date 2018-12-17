@@ -58,10 +58,12 @@ class Calculations(object):
 
                     # Loop over all coordinates of the other houses.
                     for j in range(4):
-                        temp = ((selected[0][i] - comparisons[house][0][j])**2 + (selected[1][i] - comparisons[house][1][j])**2)**0.5
+                        temp = ((selected[0][i] - comparisons[house][0][j])**2 + \
+                        (selected[1][i] - comparisons[house][1][j])**2)**0.5
 
                         # Check for house in house and append lisst of distances if so
-                        if comparisons[house][0][0] < selected[0][i] < comparisons[house][0][2] and comparisons[house][1][0] < selected[1][i] < comparisons[house][1][1]:
+                        if comparisons[house][0][0] < selected[0][i] < comparisons[house][0][2] \
+                        and comparisons[house][1][0] < selected[1][i] < comparisons[house][1][1]:
                             distances.append("House in house")
                         if temp < minimum_distance:
                             minimum_distance = temp
@@ -95,10 +97,12 @@ class Calculations(object):
 
                     # Loop over all coordinates of the other houses.
                     for j in range(4):
-                        temp = ((selected[0][i] - comparisons[house][0][j])**2 + (selected[1][i] - comparisons[house][1][j])**2)**0.5
+                        temp = ((selected[0][i] - comparisons[house][0][j])**2 + \
+                        (selected[1][i] - comparisons[house][1][j])**2)**0.5
 
                         # Check for house in house and append list of distances if so.
-                        if comparisons[house][0][0] < selected[0][i] < comparisons[house][0][2] and comparisons[house][1][0] < selected[1][i] < comparisons[house][1][1]:
+                        if comparisons[house][0][0] < selected[0][i] < comparisons[house][0][2] \
+                        and comparisons[house][1][0] < selected[1][i] < comparisons[house][1][1]:
                             distances.append("House in house")
                         if temp < minimum_distance:
                             minimum_distance = temp
@@ -200,12 +204,6 @@ class Check (object):
                 houses["little"].append(max_coordinates[count])
 
         return houses
-
-def place_water(comparisons):
-    """
-    This function looks for the four biggest water bodies to be placed on the grid
-    and returns its coordinates and dimensions
-    """
 
 if __name__ == "__main__":
 
