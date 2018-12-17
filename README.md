@@ -101,7 +101,7 @@ A seconds constructive algorithm is a depth-first algorithm that has been simpli
 A iterative hill climber was also constructed. This changes the coordinates of a selected house randomly (min and max can be alterered) 
 and saves if this change increases the worth. The hillclimber loops a certain amount of times through the dataset provided as input 
 (a best of n randoms), at which point you can choose to print a graph of the hill climber as provided below. 
-![Alt Text](https://github.com/corne12345/Lekker-oke-/blob/master/output/hillclimber_run(1000%20reps).png)
+![Alt Text](https://github.com/corne12345/Lekker-oke-/blob/master/Eindpresentatie/hillclimber_performance.png)
 
 
 ## Structure
