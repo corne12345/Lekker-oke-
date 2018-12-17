@@ -14,8 +14,8 @@ from grid_houses import *
 class Calculations(object):
     def calc_money(self):
         """
-        This function takes the length of the newly created detachement around the houses
-        and calculates the money each house yields.
+        This function takes the length of the newly created detachement around
+        the houses and calculates the money each house yields.
         """
 
         # Create sample coordinates.
@@ -54,16 +54,19 @@ class Calculations(object):
 
                     # Loop over all coordinates of the other houses.
                     for j in range(4):
-                        temp = ((selected[0][i] - comparisons[house][0][j])**2 + (selected[1][i] - comparisons[house][1][j])**2)**0.5
+                        temp = ((selected[0][i] - comparisons[house][0][j])**2 \
+                        + (selected[1][i] - comparisons[house][1][j])**2)**0.5
 
                         # Check for house in house and append list of distances if so.
-                        if comparisons[house][0][0] < selected[0][i] < comparisons[house][0][2] and comparisons[house][1][0] < selected[1][i] < comparisons[house][1][1]:
+                        if comparisons[house][0][0] < selected[0][i] < comparisons[house][0][2] \
+                        and comparisons[house][1][0] < selected[1][i] < comparisons[house][1][1]:
                             distances.append("House in house")
                         if temp < minimum_distance:
                             minimum_distance = temp
 
             # Checks for the minimal distance.
-            temp = min(selected[0][0] - 0, 160 - selected[0][2], selected[1][0] - 0, 180 - selected[1][1])
+            temp = min(selected[0][0] - 0, 160 - selected[0][2], \
+            selected[1][0] - 0, 180 - selected[1][1])
             if temp < minimum_distance:
                 minimum_distance = temp
 
@@ -118,8 +121,8 @@ class Calculations(object):
 
     def calc_score(self, distances):
         """
-        This function takes the distances of all the houses to its closest neighbour
-        as input and returns the worth of the neigborhood.
+        This function takes the distances of all the houses to its closest
+        neighbour as input and returns the worth of the neighbourhood.
         """
 
         worth = 0
@@ -203,8 +206,8 @@ class Check (object):
 
 def place_water(comparisons):
     """
-    This function looks for the four biggest water bodies to be placed on the grid
-    and returns its coordinates and dimensions
+    This function looks for the four biggest water bodies to be placed on the
+    grid and returns its coordinates and dimensions
     """
 
 
