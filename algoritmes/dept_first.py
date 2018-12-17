@@ -368,6 +368,7 @@ class Depthfirst(object):
             distances.append(distance)
 
         print(self.score_function.calc_score(distances))
+        # Change
 
 
 if __name__ == "__main__":
