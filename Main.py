@@ -25,8 +25,16 @@ def Main(algorithm, reps = 0, steps = 0, randoms = 0):
     print(algorithm)
     # Defines if a random, greedy or hillclimber algorithm will be used.
     if algorithm == "random":
-        coordinates = best_of_random(1)
-        coordinates = random_to_vis(coordinates)
+        counter = 0
+        print("How many itterations")
+        itterations = input("> ")
+        while name.isdigit() == False or int(name) > len(algoritme):
+            print("wrong input")
+            itterations = input("> ")
+        while counter < int(itterations):
+            coordinates = best_of_random(1, grid.grid)
+            coordinates = random_to_vis(coordinates)
+            counter += 1
 
     elif algorithm == "greedy":
         counter = 0
