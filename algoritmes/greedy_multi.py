@@ -92,7 +92,8 @@ class Greed(object):
         # Appends the score if the number point is less than 1.
         if self.number_point < 1:
             for coordinate in coordinates:
-                distance = self.calc_grid_distance(self.calculate_coordinate(coordinate, self.houses[house]))
+                distance = self.calc_grid_distance(self.calculate_coordinate\
+                           (coordinate, self.houses[house]))
                 score.append(self.score(distance, self.houses[house]))
 
             index = score.index(max(score))
@@ -112,12 +113,15 @@ class Greed(object):
             # Get the data for the threads and start the thread.
             for count in range(len(list)):
                 parent_conn, child_conn = Pipe()
-                receivers.append({"parent" + str(count): parent_conn, "child" + str(count): child_conn })
-                processes["process" + str(count)] = Thread(list[count], self.houses, house, valid_set, self.grid)
+                receivers.append({"parent" + str(count): parent_conn, "child" + \
+                                                         str(count): child_conn })
+                processes["process" + str(count)] = Thread(list[count], self.houses,\
+                                                    house, valid_set, self.grid)
 
             # Make the processes.
             for count, key in enumerate(processes.keys()):
-                threads["thread" + str(count)] = Process(target=processes[key].run, args=(receivers[count]["child" + str(count)], ))
+                threads["thread" + str(count)] = Process(target=processes[key].run,
+                                                 args=(receivers[count]["child" + str(count)],))
 
             # Start the processes.
             for key in threads.keys():
@@ -201,13 +205,17 @@ class Thread (object):
         """
 
         # Checks if the existing house is in the selected coordinates.
-        if (selected["x1"] <= valid_set["x1"] <= selected["x2"] or selected["x1"] <= valid_set["x2"] <= selected["x2"]) and \
-        (selected["y1"] <= valid_set["y1"] <= selected["y2"] or selected["y1"] <= valid_set["y2"] <= selected["y2"]):
+        if (selected["x1"] <= valid_set["x1"] <= selected["x2"] or \
+        selected["x1"] <= valid_set["x2"] <= selected["x2"]) and \
+        (selected["y1"] <= valid_set["y1"] <= selected["y2"] or \
+        selected["y1"] <= valid_set["y2"] <= selected["y2"]):
             return False
 
         # Checks if the house is in a existing house.
-        elif (valid_set["x1"] <= selected["x1"] <= valid_set["x2"] or valid_set["x1"] <= selected["x2"] <= valid_set["x2"]) and \
-        (valid_set["y1"] <= selected["y1"] <= valid_set["y2"] or valid_set["y1"] <= selected["y2"] <= valid_set["y2"]):
+        elif (valid_set["x1"] <= selected["x1"] <= valid_set["x2"] or \
+        valid_set["x1"] <= selected["x2"] <= valid_set["x2"]) and \
+        (valid_set["y1"] <= selected["y1"] <= valid_set["y2"] or \
+        valid_set["y1"] <= selected["y2"] <= valid_set["y2"]):
             return False
 
         else:
@@ -230,12 +238,14 @@ class Thread (object):
         # Checks if the house is in a vertical or horizontal position of the checkcoordinate.
         elif valid_set["x1"] < selected["x1"] < valid_set["x2"] or \
         valid_set["x1"] < selected["x2"] < valid_set["x2"]:
-            dist = min(abs(valid_set["y1"] - selected["y2"]), abs(selected["y1"] - valid_set["y2"]))
+            dist = min(abs(valid_set["y1"] - selected["y2"]), \
+                   abs(selected["y1"] - valid_set["y2"]))
             return dist
 
         elif valid_set["y1"] < selected["y1"] < valid_set["y2"] or \
         valid_set["y1"] < selected["y2"] < valid_set["y2"]:
-            dist = min(abs(valid_set["x1"] - selected["x2"]), abs(selected["x1"] - valid_set["x2"]))
+            dist = min(abs(valid_set["x1"] - selected["x2"]), \
+                   abs(selected["x1"] - valid_set["x2"]))
             return dist
 
         # Calculates if the houses are diagonal from eachother.
@@ -254,10 +264,14 @@ class Thread (object):
             else:
                 return False
 
-            dist1 = ((valid_set[x_valid] - selected[x_selected]) ** 2 + (valid_set["y1"] - selected["y1"]) **2)**0.5
-            dist2 = ((valid_set[x_valid] - selected[x_selected]) ** 2 + (valid_set["y1"] - selected["y2"]) **2)**0.5
-            dist3 = ((valid_set[x_valid] - selected[x_selected]) ** 2 + (valid_set["y2"] - selected["y1"]) **2)**0.5
-            dist4 = ((valid_set[x_valid] - selected[x_selected]) ** 2 + (valid_set["y2"] - selected["y2"]) **2)**0.5
+            dist1 = ((valid_set[x_valid] - selected[x_selected]) ** 2 + (valid_set["y1"] \
+                    - selected["y1"]) **2)**0.5
+            dist2 = ((valid_set[x_valid] - selected[x_selected]) ** 2 + (valid_set["y1"] \
+                     - selected["y2"]) **2)**0.5
+            dist3 = ((valid_set[x_valid] - selected[x_selected]) ** 2 + (valid_set["y2"] \
+                     - selected["y1"]) **2)**0.5
+            dist4 = ((valid_set[x_valid] - selected[x_selected]) ** 2 + (valid_set["y2"] \
+                    - selected["y2"]) **2)**0.5
 
             # # !!!!!!!!! Nog checken of dit kan!!!!!!!!!!!!!!!!!!!!
             # for coord in [("dist1", "y1", "y1"), ("dist2", "y1", "y2"), ("dist3", "y2", "y1"), ("dist4", "y2", "y2")]:
