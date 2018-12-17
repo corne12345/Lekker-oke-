@@ -3,11 +3,13 @@ import sys
 import csv
 from matplotlib import pyplot as plt
 
-DIMENSIONS = [160, 180]
-SMALL = [8, 8, 2]
-MEDIUM = [10, 7.5, 3]
-LARGE = [11, 10.5, 6]
-NUM_HOUSES = 20
+class newScore(object):
+    def __init__(self, grid, small, medium, large):
+        DIMENSIONS = [len(grid), 180]
+        SMALL = [8, 8, 2]
+        MEDIUM = [10, 7.5, 3]
+        LARGE = [11, 10.5, 6]
+        NUM_HOUSES = 20
 
 def create_valid_coordinates (house_type, valid_coordinates, DIMENSIONS, num_houses, grid):
     """
@@ -31,7 +33,8 @@ def create_valid_coordinates (house_type, valid_coordinates, DIMENSIONS, num_hou
         if grid_space >= house_type[2]:
             valid_set = calc_all_coordinates(y_coordinate, x_coordinate, house_type)
             if len(valid_coordinates) > 0:
-                if house_in_house(valid_set, valid_coordinates) == False:
+                print(valid_coordinates)
+                if house_in_house(valid_set, valid_coordinates):
                     valid_coordinates.append(valid_set)
                     counter += 1
                 else:
@@ -59,9 +62,9 @@ def calc_min_grid_space2 (valid_set, DIMENSIONS):
     with given coordinates.
     """
 
-    temp1 = valid_set["x1"] - 0
+    temp1 = valid_set["x1"]
     temp2 = DIMENSIONS[0] - valid_set["x2"]
-    temp3 = valid_set["y1"] - 0
+    temp3 = valid_set["y1"]
     temp4 = DIMENSIONS[1] - valid_set["y2"]
     return min(temp1, temp2, temp3, temp4)
 
@@ -70,31 +73,29 @@ def calc_all_coordinates(y_coordinate, x_coordinate, house_type):
     Gives the coordinates of a house.
     """
 
-    return {"y1": y_coordinate, "x1": x_coordinate, "y2": y_coordinate + house_type[0], \
-    "x2": x_coordinate + house_type[1]}
+    return {"y1": y_coordinate, "x1": x_coordinate, "y2": y_coordinate + house_type[0], "x2": x_coordinate + house_type[1]}
 
 def house_in_house (valid_set, valid_coordinates):
     """
     Checks if two houses are placed in eachother.
     """
+    for selected for valid_coordinates:
+        # Checks if the existing house is in the selected coordinates
+        if (selected["x1"] <= valid_set["x1"] <= selected["x2"] or selected["x1"] <= valid_set["x2"] <= selected["x2"]) and \
+        (selected["y1"] <= valid_set["y1"] <= selected["y2"] or selected["y1"] <= valid_set["y2"] <= selected["y2"]):
+            return False
 
-    for i in range(len(valid_coordinates)):
-        test = valid_coordinates[i]
-        x1 = test["x1"] <= valid_set["x1"] <= test["x2"]
-        x2 = test["x1"] <= valid_set["x2"] <= test["x2"]
-        y1 = test["y1"] <= valid_set["y1"] <= test["y2"]
-        y2 = test["y1"] <= valid_set["y2"] <= test["y2"]
-        if (x1 or x2) and (y1 or y2):
-            return True
+        # Checks if the house is in a existing house
+        elif (valid_set["x1"] <= selected["x1"] <= valid_set["x2"] or valid_set["x1"] <= selected["x2"] <= valid_set["x2"]) and \
+        (valid_set["y1"] <= selected["y1"] <= valid_set["y2"] or valid_set["y1"] <= selected["y2"] <= valid_set["y2"]):
+            return False
 
-    return False
+    return True
 
 def calc_distance(valid_set, valid_coordinates, index):
     """
     Calculates the distances between houses.
     """
-
-    minimum_distance = 9999
 
     # Calculates the distances by iterating over the valid coordinates.
     for i in range(len(valid_coordinates)):
@@ -102,14 +103,13 @@ def calc_distance(valid_set, valid_coordinates, index):
         # Skip the comparison between the same data.
         if i == index:
             continue
+
         selected = valid_coordinates[i]
 
         # Use straight line if walls match in horizontal or vertical orientation.
-        if valid_set["x1"] <= selected["x1"] <= valid_set["x2"] or valid_set["x1"] <= selected["x2"] <= valid_set["x2"] \
-        or selected["x1"] <= valid_set["x1"] <= selected["x2"] or selected["x1"] <= valid_set["x2"] <= selected["x2"] :
+        if valid_set["x1"] <= selected["x1"] <= valid_set["x2"] or valid_set["x1"] <= selected["x2"] <= valid_set["x2"] or selected["x1"] <= valid_set["x1"] <= selected["x2"] or selected["x1"] <= valid_set["x2"] <= selected["x2"]  :
             dist = min(abs(valid_set["y1"] - selected["y2"]), abs(selected["y1"] - valid_set["y2"]))
-        elif valid_set["y1"] <= selected["y1"] <= valid_set["y2"] or valid_set["y1"] <= selected["y2"] <= valid_set["y2"] \
-        or selected["y1"] <= valid_set["y1"] <= selected["y2"] or selected["y1"] <= valid_set["y2"] <= selected["y2"]:
+        elif valid_set["y1"] <= selected["y1"] <= valid_set["y2"] or valid_set["y1"] <= selected["y2"] <= valid_set["y2"] or selected["y1"] <= valid_set["y1"] <= selected["y2"] or selected["y1"] <= valid_set["y2"] <= selected["y2"]:
             dist = min(abs(valid_set["x1"] - selected["x2"]), abs(selected["x1"] - valid_set["x2"]))
 
         # Calculate Euclidian distance in other cases.
@@ -129,8 +129,7 @@ def calc_distance(valid_set, valid_coordinates, index):
                 return False
 
             for coord in ([["y1", "y1"], ["y1", "y2"], ["y2", "y1"], ["y2", "y2"]]):
-                dist = ((valid_set[x_valid] - selected[x_selected]) ** 2 + \
-                (valid_set[coord[0]] - selected[coord[1]]) **2)**0.5
+                dist = ((valid_set[x_valid] - selected[x_selected]) ** 2 + (valid_set[coord[0]] - selected[coord[1]]) **2)**0.5
                 list_dist.append(dist)
 
             dist = min(list_dist)
@@ -267,7 +266,6 @@ def calc_score_greedy(coordinates):
     # Moet allemaal in greedy komen, met de benodigde imports (Coen was hier echter mee bezig) !!!!!!!!!!!!!!!!!
     coordinates_simple = vis_to_random(coordinates)
     distances = []
-    print(coordinates_simple)
 
     # Calculates the shortest distance between all houses and the closest neighbor.
     for i in range(len(coordinates_simple)):
@@ -275,22 +273,4 @@ def calc_score_greedy(coordinates):
         temp = calc_distance(valid_set, coordinates_simple, i )
         distances.append(temp)
     check = calc_score(distances)
-    print(check)
-
-if __name__ == "__main__":
-    # counter = 0
-    # scores = []
-    # while counter < 10000:
-    #     intermediate = best_of_random(1)
-    #     counter += 1
-    #     # Write to csv
-    #     # f = open("random_total.csv", "a", newline='')
-    #     # writer = csv.writer(f)
-    #     # writer.writerow(intermediate)
-    #     scores.append(intermediate[0])
-    #
-    # plt.hist(scores, bins=50)
-    # plt.show()
-
-    intermediate = best_of_random(10)
-    print(intermediate[0], intermediate[1], intermediate[2], sep='\n')
+    return check

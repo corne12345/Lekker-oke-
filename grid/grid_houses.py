@@ -136,9 +136,7 @@ class Grid(object):
                         for place in range(len(self.grid[0])):
 
                             # Fill the first x position.
-                            if self.grid[row][place] not in range(1, 5) and \
-                            first_width_position == None and \
-                            place == round(coordinate["x"]):
+                            if self.grid[row][place] not in range(1, 5) and first_width_position == None and place == round(coordinate["x"]):
                                 first_width_position = place
                                 if house == "little":
                                     self.grid[row][place] = 2
@@ -148,10 +146,8 @@ class Grid(object):
                                     self.grid[row][place] = 4
 
                             # Fill the grid in with houses.
-                            elif first_width_position != None and \
-                            self.grid[row][place] not in range(1, 5) and \
-                            first_width_position + houses[house].width > place \
-                            and place - first_width_position >= 0:
+                            elif first_width_position != None and self.grid[row][place] not in range(1, 5) and \
+                            first_width_position + houses[house].width > place and place - first_width_position >= 0:
                                 if house == "little":
                                     self.grid[row][place] = 2
                                 elif house == "medium":
@@ -167,8 +163,7 @@ class Visualator(object):
     def __init__(self, grid, little_house, medium_house, large_house, water, coordinates):
         self.grid = grid.grid
         self.coordinates = coordinates
-        self.houses = {"little": little_house, "medium": medium_house, \
-                       "large": large_house}
+        self.houses = {"little": little_house, "medium": medium_house, "large": large_house}
         self.water, self.waterbody = water, grid.waterbody
 
     def bokeh(self):
@@ -222,10 +217,8 @@ class Visualator(object):
                         colour = "yellow"
                     else:
                         colour = "green"
-                    graph.patch(x=[house["x"], house["x"], (house["x"] + self.houses[sort].width), \
-                                (house["x"] + self.houses[sort].width)], \
-                                y=[house["y"], (house["y"] + self.houses[sort].length), \
-                                 (house["y"] + self.houses[sort].length), house["y"]], \
+                    graph.patch(x=[house["x"], house["x"], (house["x"] + self.houses[sort].width), (house["x"] + self.houses[sort].width)],
+                                y=[house["y"], (house["y"] + self.houses[sort].length), (house["y"] + self.houses[sort].length), house["y"]],
                                 color=colour, line_color="black")
                 except:
                     print("No valid coordinates")
