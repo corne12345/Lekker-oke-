@@ -14,6 +14,7 @@ class Greed(object):
         self.points = {}
         self.number_point = 0
         self.steps = steps
+        self.valid_set = {}
         self.coordinates = self.create_coordinates()
 
     # creates a list with all the houses name with the correct number
@@ -33,77 +34,65 @@ class Greed(object):
 
         random_list = self.create_list_house()
         coordinates = []
-        valid_set = {}
         original_length = len(random_list)
+
+        # goes through the grid and looks if the detachment is large enough for the y axis
+        for y_axe in range(0, self.grid.length, self.steps):
+
+            # Itterate over the x length and controle the detachment in the corners
+            for x_axe in range(0, self.grid.width, self.steps):
+                if self.grid.grid[y_axe][x_axe] in range(1, 5):
+                    pass
+
+                else:
+                   coordinates.append({"x": x_axe, "y": y_axe })
 
         # Makes the coordinate and checks if the coordinates are valid
         while self.number_point < original_length:
             print(self.number_point)
             house = sample(set(random_list), 1)[0]
-
-            # goes through the grid and looks if the detachment is large enough for the y axis
-            for y_axe in range(0, self.grid.length, self.steps):
-                if y_axe < self.houses[house].detachement or \
-                y_axe > self.grid.length - self.houses[house].detachement:
-                    pass
-                else:
-
-                    # Itterate over the x length and controle the detachment in the corners
-                    for x_axe in range(0, self.grid.width, self.steps):
-                        if x_axe < self.houses[house].detachement or \
-                        x_axe > len(self.grid.grid[y_axe]) - self.houses[house].detachement \
-                        or self.grid.grid[y_axe][x_axe] in range(1, 5):
-                            pass
-
-                        else:
-                            if x_axe + self.houses[house].width < self.grid.width - \
-                               self.houses[house].detachement and \
-                               y_axe + self.houses[house].length < self.grid.length - \
-                               self.houses[house].detachement:
-                               coordinates.append({"x": x_axe, "y": y_axe })
-
-            max_score_coordinate = self.max_score(coordinates)
+            max_score_coordinate = self.max_score(coordinates, house)
 
             # Will append to the right key or will create the key.
             try:
-                valid_set[house].append(deepcopy(coordinates[index]))
+                self.valid_set[house].append(deepcopy(max_score_coordinate))
             except:
-                valid_set[house] = [deepcopy(coordinates[index])]
+                self.valid_set[house] = [deepcopy(max_score_coordinate)]
 
-
+            # reduces house list
             random_list.pop(random_list.index(house))
             self.number_point += 1
-        return valid_set
+        return self.valid_set
 
 
-    def max_score(self, coordinates):
+    def max_score(self, coordinates, house):
         """
         Calculates the max_score in the grid and returns the max_score
         """
         score = []
 
+        # goues through the coordinates to get the max_score
         for coordinate in coordinates:
             if self.number_point < 1 and coordinate != None:
-                distance = self.calc_grid_distance(self.calculate_coordinate
-                (coordinate, self.houses[house]))
+                distance = self.calc_grid_distance(self.calculate_coordinate(coordinate, self.houses[house]))
                 score.append(self.score(distance, self.houses[house]))
+
             elif coordinate != None:
-                distance = self.min_distance_other_houses
-                (coordinate, self.houses[house], valid_set)
+                distance = self.min_distance_other_houses(coordinate, self.houses[house], self.valid_set)
 
                 if distance != False:
                     score.append(self.score(distance, self.houses[house]))
                 else:
                     score.append(0)
 
-            if all(0 == point for point in score):
-                print("Failed them guys, we will get them next tine")
-                sys.exit()
+        if all(0 == point for point in score):
+            print("Failed them guys, we will get them next tine")
+            sys.exit()
 
-            else:
-                index = score.index(max(score))
+        else:
+            index = score.index(max(score))
 
-            return coordinates[index]
+        return coordinates[index]
 
     def calculate_coordinate(self, calculation_point, house):
         return {"x1": calculation_point["x"], "x2": calculation_point["x"] + house.width,
@@ -132,10 +121,14 @@ class Greed(object):
         minimum_distance = None
         valid_set = self.calculate_coordinate(control_coordinate, house)
 
+        # calculate the minimum distance from the other houses
         for key in existing_coordinates.keys():
             for i in range(len(existing_coordinates[key])):
-                selected = self.calculate_coordinate(existing_coordinates[key][i],
-                           self.houses[key])
+                selected = self.calculate_coordinate(existing_coordinates[key][i] , self.houses[key])
+
+                if selected == valid_set:
+                    return False
+
                 dist = self.controle_function(valid_set, selected)
 
                 if dist == False:
@@ -159,21 +152,16 @@ class Greed(object):
         """
 
         # Checks if the existing house is in the selected coordinates
-        if (selected["x1"] <= valid_set["x1"] <= selected["x2"] or \
-        selected["x1"] <= valid_set["x2"] <= selected["x2"]) and \
-        (selected["y1"] <= valid_set["y1"] <= selected["y2"] or \
-        selected["y1"] <= valid_set["y2"] <= selected["y2"]):
+        if (selected["x1"] <= valid_set["x1"] <= selected["x2"] or selected["x1"] <= valid_set["x2"] <= selected["x2"]) and \
+        (selected["y1"] <= valid_set["y1"] <= selected["y2"] or selected["y1"] <= valid_set["y2"] <= selected["y2"]):
             return False
 
         # Checks if the house is in a existing house
-        elif (valid_set["x1"] <= selected["x1"] <= valid_set["x2"] or \
-        valid_set["x1"] <= selected["x2"] <= valid_set["x2"]) and \
-        (valid_set["y1"] <= selected["y1"] <= valid_set["y2"] or \
-        valid_set["y1"] <= selected["y2"] <= valid_set["y2"]):
+        elif (valid_set["x1"] <= selected["x1"] <= valid_set["x2"] or valid_set["x1"] <= selected["x2"] <= valid_set["x2"]) and \
+        (valid_set["y1"] <= selected["y1"] <= valid_set["y2"] or valid_set["y1"] <= selected["y2"] <= valid_set["y2"]):
             return False
 
-        else:
-            return True
+        return True
 
 
     def controle_function (self, check, existing):
@@ -189,45 +177,33 @@ class Greed(object):
             return False
 
         # Checks if the house is in a vertical or horizontal position of the checkcoordianate
-        if valid_set["x1"] < selected["x1"] < valid_set["x2"] or \
-        valid_set["x1"] < selected["x2"] < valid_set["x2"]:
+        if valid_set["x1"] < selected["x1"] < valid_set["x2"] or valid_set["x1"] < selected["x2"] < valid_set["x2"]:
             dist = min(abs(valid_set["y1"] - selected["y2"]), abs(selected["y1"] - valid_set["y2"]))
 
-        elif valid_set["y1"] < selected["y1"] < valid_set["y2"] or \
-        valid_set["y1"] < selected["y2"] < valid_set["y2"]:
+        elif valid_set["y1"] < selected["y1"] < valid_set["y2"] or valid_set["y1"] < selected["y2"] < valid_set["y2"]:
             dist = min(abs(valid_set["x1"] - selected["x2"]), abs(selected["x1"] - valid_set["x2"]))
 
         # Calculates the if the house are diagonal from eachother.
         else:
+            list_dist = []
 
-            # Checks if the house are left or right from eachother and calculate minimum_distance.
+            # Checks if the houses are left or right from eachother and
+            # calculates the minimum distance.
             if (valid_set["x1"] - selected["x2"]) > 0:
-                dist1 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y1"] \
-                        - selected["y1"]) **2)**0.5
-                dist2 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y1"] \
-                         - selected["y2"]) **2)**0.5
-                dist3 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y2"] \
-                         - selected["y1"]) **2)**0.5
-                dist4 = ((valid_set["x1"] - selected["x2"]) ** 2 + (valid_set["y2"] \
-                        - selected["y2"]) **2)**0.5
+                x_valid = "x1"
+                x_selected = "x2"
 
             elif (valid_set["x2"] - selected["x1"]) < 0:
-                dist1 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y1"] \
-                         - selected["y1"]) **2)**0.5
-                dist2 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y1"] \
-                        - selected["y2"]) **2)**0.5
-                dist3 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y2"] \
-                        - selected["y1"]) **2)**0.5
-                dist4 = ((valid_set["x2"] - selected["x1"]) ** 2 + (valid_set["y2"] \
-                        - selected["y2"]) **2)**0.5
+                x_valid = "x2"
+                x_selected = "x1"
+
             else:
                 return False
 
-            dist = min(dist1, dist2, dist3, dist4)
+            for coord in ([["y1", "y1"], ["y1", "y2"], ["y2", "y1"], ["y2", "y2"]]):
+                dist = ((valid_set[x_valid] - selected[x_selected]) ** 2 + (valid_set[coord[0]] - selected[coord[1]]) **2)**0.5
+                list_dist.append(dist)
+
+            dist = min(list_dist)
 
         return dist
-
-class Score(object):
-    def __init__(self, coordinates):
-        print(coordinates)
-        self.coordinates = coordinates
