@@ -33,6 +33,9 @@ def Main(algorithm, reps = 0, steps = 0, randoms = 0):
     score_function = newScore(grid,  LittleHouse(total_houses, 8, 8, 285000, 2, 0.03),
                                      MediumHouse(total_houses, 10, 7.5, 399000, 3, 0.04),
                                      LargeHouse(total_houses, 11, 10.5, 610000, 6, 0.06))
+    list_houses = {"little": LittleHouse(total_houses, 8, 8, 285000, 2, 0.03),
+                   "medium":MediumHouse(total_houses, 10, 7.5, 399000, 3, 0.04),
+                   "large":LargeHouse(total_houses, 11, 10.5, 610000, 6, 0.06) }
 
     # Calls random algorithm.
     if algorithm == "random":
@@ -50,6 +53,7 @@ def Main(algorithm, reps = 0, steps = 0, randoms = 0):
             print(coordinates)
             score_list.append(coordinates[0])
             counter += 1
+            coordinates = coordinates[2]
 
         print("Do you want to make a graph? y/n")
         graph = input("> ").strip()
@@ -67,7 +71,6 @@ def Main(algorithm, reps = 0, steps = 0, randoms = 0):
 
     # Calls depth first.
     elif algorithm == "depthfirst":
-        print("true")
         depth = Depthfirst(8, grid.length, grid.width, grid.grid)
         first = depth.create_coordinates()
         depth.create_coordinates_2(first)
@@ -82,7 +85,6 @@ def Main(algorithm, reps = 0, steps = 0, randoms = 0):
             print("wrong input")
             itterations = input("> ")
         while counter < int(itterations):
-            print(total_houses)
             coordinates = Greed(grid, LittleHouse(total_houses, 8, 8, 285000, 2, 0.03),
                           MediumHouse(total_houses, 10, 7.5, 399000, 3, 0.04),
                           LargeHouse(total_houses, 11, 10.5, 610000, 6, 0.06), 1).coordinates
@@ -109,7 +111,7 @@ def Main(algorithm, reps = 0, steps = 0, randoms = 0):
             itterations = input("> ")
 
         while counter < int(itterations):
-            coordinates = hillclimber(500, 3, 10, score_function)
+            coordinates = hillclimber(500, 3, 10, score_function, list_houses)
             score_list.append(score_function.calc_score_greedy(coordinates))
             counter += 1
 
@@ -130,7 +132,7 @@ def Main(algorithm, reps = 0, steps = 0, randoms = 0):
     model = Visualator(grid, LittleHouse(total_houses, 8, 8, 285000, 2, 0.03),
                              MediumHouse(total_houses, 10, 7.5, 399000, 3, 0.04),
                              LargeHouse(total_houses, 11, 10.5, 610000, 6, 0.06),
-                             Water(60, 100), coordinates, max(score_list), algorithm)
+                             Water(60, 100), coordinates)
 
     show(model.bokeh())
 
