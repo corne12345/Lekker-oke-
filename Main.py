@@ -88,6 +88,7 @@ def Main(algorithm, reps = 0, steps = 0, randoms = 0):
             coordinates = Greed(grid, LittleHouse(total_houses, 8, 8, 285000, 2, 0.03),
                           MediumHouse(total_houses, 10, 7.5, 399000, 3, 0.04),
                           LargeHouse(total_houses, 11, 10.5, 610000, 6, 0.06), 1).coordinates
+            print(coordinates)
             score_list.append(score_function.calc_score_greedy(coordinates))
             counter += 1
 
@@ -97,8 +98,10 @@ def Main(algorithm, reps = 0, steps = 0, randoms = 0):
         yes_no = ["n", "y"]
         while graph not in yes_no:
             graph = input("> ")
-        file = Graph().make_csv(score_list, algorithm)
-        Graph().bokeh(Graph().load_csv(file), algorithm)
+
+        if graph != "n":
+            file = Graph().make_csv(score_list, algorithm)
+            Graph().bokeh(Graph().load_csv(file), algorithm)
 
     elif algorithm == "hillclimber":
         score_list = []
