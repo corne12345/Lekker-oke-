@@ -87,16 +87,17 @@ def hillclimber(reps, steps, randoms, score_function, houses, printplot = False)
             mover_y = random.randint(-steps, steps)
             for dim in [("x1", mover_x), ("x2", mover_x), ("y1", mover_y), ("y2", mover_y)]:
                 new_coordinates[i][dim[0]] = new_coordinates[i][dim[0]] + dim[1]
-            new_distances = []
+            new_distances = {}
 
             check_coordinates = random_to_vis(new_coordinates)
             # Checks if the score of the new coordinates is higher than the last score.
             for key in check_coordinates.keys():
+                new_distances[key] = []
                 for coordinate in check_coordinates[key]:
                     valid_set = {"y1": coordinate["y"], "x1": coordinate["x"],
                                  "y2": coordinate["y"] + houses[key].length, "x2": coordinate["x"]+ houses[key].width}
-                    new_distance = score_function.calc_distance(valid_set, check_coordinates)
-                    new_distances.append(new_distance)
+                    new_distance = score_function.calc_distance(key, valid_set, check_coordinates)
+                    new_distances[key].append(new_distance)
             new_score = score_function.calc_score(new_distances)
 
             # Changes all the data to the new coordinates.
@@ -127,4 +128,4 @@ def hillclimber(reps, steps, randoms, score_function, houses, printplot = False)
     print(max_coordinates)
     intermediate  = max_score, max_distances, max_coordinates
 
-    return random_to_vis(# NOTE: max_coordinates)
+    return random_to_vis(max_coordinates)
