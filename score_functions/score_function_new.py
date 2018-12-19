@@ -42,7 +42,8 @@ class newScore(object):
             dist = 0
 
             while dist == False or \
-            self.grid.grid[y_coordinate - 1][x_coordinate - 1] in range(1, 5):
+            self.grid.grid[y_coordinate - 1][x_coordinate - 1] in range(1, 5) \
+            or dist < self.houses[house_type].detachement:
                 x_coordinate = random.randint(0, self.grid.width)
                 y_coordinate = random.randint(0, self.grid.length)
                 valid_set = self.calc_all_coordinates(y_coordinate, x_coordinate, self.houses[house_type])

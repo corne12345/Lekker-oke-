@@ -1,10 +1,13 @@
 import pathlib as pathlib
 import sys
-from bokeh.plotting import show
 import random
 import copy
 import csv
 import matplotlib.pyplot as plt
+from bokeh.plotting import figure, output_file, show
+from bokeh.models import Range1d
+from bokeh.io import export_png
+
 
 # Get the path to the classes.
 path = pathlib.Path.cwd()
@@ -31,44 +34,35 @@ def calc_grid_distance(coordinate, grid):
     north = grid.length - coordinate["y2"]
     return min(right, left, south, north)
 
-def vis_to_random(coordinates, houses):
-    """
-    Gives the corners of all the coordinates of the houses.
-    """
 
-    coordinates_simple = []
+def graph(coordinates, file, houses, score):
+    graph = figure(title = "Amstelhaege" + str(score))
 
-    for key in coordinates.keys():
-        for selected in coordinates[key]:
-            x1 = selected["x"]
-            x2 = selected["x"] + houses[key].width
-            y1 = selected["y"]
-            y2 = selected["y"] + houses[key].length
-            temp = {"x1":x1, "y1":y1, "x2":x2, "y2":y2}
-            coordinates_simple.append(temp)
+    # Makes the graph and changes the aesthetics if the graph.
+    graph.x_range = Range1d(160, 0)
+    graph.y_range = Range1d(180, 0)
+    # Makes a ground plan polygon.
+    graph.patch(x=[160, 160, 0, 0],
+                y=[0, 180, 180, 0],
+                color="grey")
 
-    return coordinates_simple
+    for sort in coordinates.keys():
+        colour = None
 
-def random_to_vis(coordinates):
-    """
-    Orders the coordinates of the different houses.
-    """
-
-    little, medium, large = [], [], []
-
-    for i in range(len(coordinates)):
-        coordinates_1 = coordinates[i]
-        coordinate = {"x": coordinates_1["x1"], "y": coordinates_1["y1"]}
-        if i < len(coordinates) * 0.15:
-            large.append(coordinate)
-        elif i < len(coordinates) * 0.4:
-            medium.append(coordinate)
-        else:
-            little.append(coordinate)
-
-    coordinates_ordered = {"little": little, "medium": medium, "large": large}
-
-    return coordinates_ordered
+        for house in coordinates[sort]:
+            try:
+                if sort in "little":
+                    colour = "red"
+                elif sort in "medium":
+                    colour = "yellow"
+                else:
+                    colour = "green"
+                graph.patch(x=[house["x"], house["x"], (house["x"] + houses[sort].width), (house["x"] + houses[sort].width)],
+                            y=[house["y"], (house["y"] + houses[sort].length), (house["y"] + houses[sort].length), house["y"]],
+                            color=colour, line_color="black")
+            except:
+                print("No valid coordinates")
+    export_png(graph, filename=str(file) + ".png")
 
 def hillclimber(reps, steps, randoms, score_function, houses, grid, printplot = False):
     """
@@ -89,11 +83,13 @@ def hillclimber(reps, steps, randoms, score_function, houses, grid, printplot = 
     writer = csv.writer(f)
     counters = []
     max_scores = []
-
+    file = 0
     # Changes a coordinate of one house.
     while counter < reps:
-        print(reps)
-        print(counter)
+        # if counter%50 == 0:
+        #     file += 1
+        #     graph(new_coordinates, file, houses, max_score)
+
         for select in new_coordinates.keys():
             for i in range(len(new_coordinates[select])):
                 control = True
@@ -114,7 +110,8 @@ def hillclimber(reps, steps, randoms, score_function, houses, grid, printplot = 
                         new_distance = score_function.calc_distance(key, valid_set, new_coordinates)
 
                         try:
-                            if grid.grid[coordinate["y"] - 1][coordinate["x"] - 1] in range(1, 5):
+                            if grid.grid[coordinate["y"] - 1][coordinate["x"] - 1] in range(1, 5) or \
+                            new_distance < houses[key].detachement:
                                 control = False
                         except:
                             control = False
