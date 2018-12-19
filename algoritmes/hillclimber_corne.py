@@ -1,10 +1,13 @@
 import pathlib as pathlib
 import sys
-from bokeh.plotting import show
 import random
 import copy
 import csv
 import matplotlib.pyplot as plt
+from bokeh.plotting import figure, output_file, show
+from bokeh.models import Range1d
+from bokeh.io import export_png
+
 
 # Get the path to the classes.
 path = pathlib.Path.cwd()
@@ -21,46 +24,47 @@ MEDIUM = [10, 7.5, 3]
 LARGE = [11, 10.5, 6]
 NUM_HOUSES = 20
 
-def vis_to_random(coordinates, houses):
+def calc_grid_distance(coordinate, grid):
     """
-    Gives the corners of all the coordinates of the houses.
+    Calculates the distance between the coordinate and the border of the grid
     """
+    right = coordinate["x1"]
+    left = grid.width - coordinate["x2"]
+    south = coordinate["y1"]
+    north = grid.length - coordinate["y2"]
+    return min(right, left, south, north)
 
-    coordinates_simple = []
 
-    for key in coordinates.keys():
-        for selected in coordinates[key]:
-            x1 = selected["x"]
-            x2 = selected["x"] + houses[key].width
-            y1 = selected["y"]
-            y2 = selected["y"] + houses[key].length
-            temp = {"x1":x1, "y1":y1, "x2":x2, "y2":y2}
-            coordinates_simple.append(temp)
+def graph(coordinates, file, houses, score):
+    graph = figure(title = "Amstelhaege" + str(score))
 
-    return coordinates_simple
+    # Makes the graph and changes the aesthetics if the graph.
+    graph.x_range = Range1d(160, 0)
+    graph.y_range = Range1d(180, 0)
+    # Makes a ground plan polygon.
+    graph.patch(x=[160, 160, 0, 0],
+                y=[0, 180, 180, 0],
+                color="grey")
 
-def random_to_vis(coordinates):
-    """
-    Orders the coordinates of the different houses.
-    """
+    for sort in coordinates.keys():
+        colour = None
 
-    little, medium, large = [], [], []
+        for house in coordinates[sort]:
+            try:
+                if sort in "little":
+                    colour = "red"
+                elif sort in "medium":
+                    colour = "yellow"
+                else:
+                    colour = "green"
+                graph.patch(x=[house["x"], house["x"], (house["x"] + houses[sort].width), (house["x"] + houses[sort].width)],
+                            y=[house["y"], (house["y"] + houses[sort].length), (house["y"] + houses[sort].length), house["y"]],
+                            color=colour, line_color="black")
+            except:
+                print("No valid coordinates")
+    export_png(graph, filename=str(file) + ".png")
 
-    for i in range(len(coordinates)):
-        coordinates_1 = coordinates[i]
-        coordinate = {"x": coordinates_1["x1"], "y": coordinates_1["y1"]}
-        if i < len(coordinates) * 0.15:
-            large.append(coordinate)
-        elif i < len(coordinates) * 0.4:
-            medium.append(coordinate)
-        else:
-            little.append(coordinate)
-
-    coordinates_ordered = {"little": little, "medium": medium, "large": large}
-
-    return coordinates_ordered
-
-def hillclimber(reps, steps, randoms, score_function, houses, printplot = False):
+def hillclimber(reps, steps, randoms, score_function, houses, grid, printplot = False):
     """
     Tries to calculate the best score by changing coordinates of the houses.
     """
@@ -70,8 +74,8 @@ def hillclimber(reps, steps, randoms, score_function, houses, printplot = False)
     while coordinates == 0:
         score, distances, coordinates = score_function.best_of_random(randoms)
     counter = 0
-    coordinates_simple = vis_to_random(coordinates, houses)
-    new_coordinates = copy.deepcopy(coordinates_simple)
+
+    new_coordinates = copy.deepcopy(coordinates)
     max_score, max_distances, max_coordinates = 0, 0, 0
 
     # Write to csv.
@@ -79,41 +83,63 @@ def hillclimber(reps, steps, randoms, score_function, houses, printplot = False)
     writer = csv.writer(f)
     counters = []
     max_scores = []
-
+    file = 0
     # Changes a coordinate of one house.
     while counter < reps:
-        for i in range(len(coordinates_simple)):
-            mover_x = random.randint(-steps, steps)
-            mover_y = random.randint(-steps, steps)
-            for dim in [("x1", mover_x), ("x2", mover_x), ("y1", mover_y), ("y2", mover_y)]:
-                new_coordinates[i][dim[0]] = new_coordinates[i][dim[0]] + dim[1]
-            new_distances = {}
+        # if counter%50 == 0:
+        #     file += 1
+        #     graph(new_coordinates, file, houses, max_score)
 
-            check_coordinates = random_to_vis(new_coordinates)
-            # Checks if the score of the new coordinates is higher than the last score.
-            for key in check_coordinates.keys():
-                new_distances[key] = []
-                for coordinate in check_coordinates[key]:
-                    valid_set = {"y1": coordinate["y"], "x1": coordinate["x"],
-                                 "y2": coordinate["y"] + houses[key].length, "x2": coordinate["x"]+ houses[key].width}
-                    new_distance = score_function.calc_distance(key, valid_set, check_coordinates)
-                    new_distances[key].append(new_distance)
-            new_score = score_function.calc_score(new_distances)
+        for select in new_coordinates.keys():
+            for i in range(len(new_coordinates[select])):
+                control = True
+                mover_x = random.randint(-steps, steps)
+                mover_y = random.randint(-steps, steps)
+                for dim in [("x", mover_x), ("y", mover_y)]:
+                    new_coordinates[select][i][dim[0]] = new_coordinates[select][i][dim[0]] - dim[1]
 
-            # Changes all the data to the new coordinates.
-            if new_score > max_score:
-                max_score = round(new_score)
-                max_scores.append(max_score)
-                counters.append(counter)
-                max_distances = new_distances
-                max_coordinates = new_coordinates
-                writer.writerow([counter, max_score])
+                new_distances = {}
 
-            # Changes the coordinates otherwise back.
-            else:
-                for dim in [("x1", mover_x), ("x2", mover_x), ("y1", mover_y), ("y2", mover_y)]:
-                    new_coordinates[i][dim[0]] = new_coordinates[i][dim[0]] - dim[1]
-            counter += 1
+                # Checks if the score of the new coordinates is higher than the last score.
+                for key in new_coordinates.keys():
+                    new_distances[key] = []
+                    for coordinate in new_coordinates[key]:
+                        valid_set = {"y1": coordinate["y"], "x1": coordinate["x"],
+                                     "y2": coordinate["y"] + houses[key].length, "x2": coordinate["x"]+ houses[key].width}
+
+                        new_distance = score_function.calc_distance(key, valid_set, new_coordinates)
+
+                        try:
+                            if grid.grid[coordinate["y"] - 1][coordinate["x"] - 1] in range(1, 5) or \
+                            new_distance < houses[key].detachement:
+                                control = False
+                        except:
+                            control = False
+
+                        new_distances[key].append(new_distance)
+
+
+                new_score = score_function.calc_score(new_distances)
+
+                # Changes all the data to the new coordinates.
+                if new_score > max_score and control == True:
+                    print(max_score)
+
+                    max_score = round(new_score)
+                    max_scores.append(max_score)
+                    counters.append(counter)
+                    max_distances = new_distances
+                    max_coordinates = new_coordinates
+                    writer.writerow([counter, max_score])
+
+
+                # Changes the coordinates otherwise back.
+                else:
+                    for dim in [("x", mover_x), ("y", mover_y)]:
+                        new_coordinates[select][i][dim[0]] = new_coordinates[select][i][dim[0]] + dim[1]
+                counter += 1
+
+
 
     # Shows a plot of the score against the amount of runs.
     if printplot == True:
@@ -125,7 +151,7 @@ def hillclimber(reps, steps, randoms, score_function, houses, printplot = False)
         plt.text(1, 7000000, "initial score: %i" %score)
         plt.savefig('hillclimber.png')
         plt.show()
-    print(max_coordinates)
+    print(max_score)
     intermediate  = max_score, max_distances, max_coordinates
-
-    return random_to_vis(max_coordinates)
+    print(max_coordinates)
+    return max_coordinates
