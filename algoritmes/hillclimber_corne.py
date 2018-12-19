@@ -21,16 +21,57 @@ MEDIUM = [10, 7.5, 3]
 LARGE = [11, 10.5, 6]
 NUM_HOUSES = 20
 
+def vis_to_random(coordinates, houses):
+    """
+    Gives the corners of all the coordinates of the houses.
+    """
 
-def hillclimber(reps, steps, randoms, printplot = False):
+    coordinates_simple = []
+
+    for key in coordinates.keys():
+        for selected in coordinates[key]:
+            x1 = selected["x"]
+            x2 = selected["x"] + houses[key].width
+            y1 = selected["y"]
+            y2 = selected["y"] + houses[key].length
+            temp = {"x1":x1, "y1":y1, "x2":x2, "y2":y2}
+            coordinates_simple.append(temp)
+
+    return coordinates_simple
+
+def random_to_vis(coordinates):
+    """
+    Orders the coordinates of the different houses.
+    """
+
+    little, medium, large = [], [], []
+
+    for i in range(len(coordinates)):
+        coordinates_1 = coordinates[i]
+        coordinate = {"x": coordinates_1["x1"], "y": coordinates_1["y1"]}
+        if i < len(coordinates) * 0.15:
+            large.append(coordinate)
+        elif i < len(coordinates) * 0.4:
+            medium.append(coordinate)
+        else:
+            little.append(coordinate)
+
+    coordinates_ordered = {"little": little, "medium": medium, "large": large}
+
+    return coordinates_ordered
+
+def hillclimber(reps, steps, randoms, score_function, houses, printplot = False):
     """
     Tries to calculate the best score by changing coordinates of the houses.
     """
 
     # Defines the start coordinates of the houses and other constants.
-    score, distances, coordinates = best_of_random(randoms)
+    score, distances, coordinates = score_function.best_of_random(randoms)
+    while coordinates == 0:
+        score, distances, coordinates = score_function.best_of_random(randoms)
     counter = 0
-    new_coordinates = copy.deepcopy(coordinates)
+    coordinates_simple = vis_to_random(coordinates, houses)
+    new_coordinates = copy.deepcopy(coordinates_simple)
     max_score, max_distances, max_coordinates = 0, 0, 0
 
     # Write to csv.
@@ -41,18 +82,22 @@ def hillclimber(reps, steps, randoms, printplot = False):
 
     # Changes a coordinate of one house.
     while counter < reps:
-        for i in range(len(coordinates)):
+        for i in range(len(coordinates_simple)):
             mover_x = random.randint(-steps, steps)
             mover_y = random.randint(-steps, steps)
             for dim in [("x1", mover_x), ("x2", mover_x), ("y1", mover_y), ("y2", mover_y)]:
                 new_coordinates[i][dim[0]] = new_coordinates[i][dim[0]] + dim[1]
             new_distances = []
 
+            check_coordinates = random_to_vis(new_coordinates)
             # Checks if the score of the new coordinates is higher than the last score.
-            for j in range(len(coordinates)):
-                new_distance = calc_distance(new_coordinates[j], new_coordinates, j)
-                new_distances.append(new_distance)
-            new_score = calc_score(new_distances)
+            for key in check_coordinates.keys():
+                for coordinate in check_coordinates[key]:
+                    valid_set = {"y1": coordinate["y"], "x1": coordinate["x"],
+                                 "y2": coordinate["y"] + houses[key].length, "x2": coordinate["x"]+ houses[key].width}
+                    new_distance = score_function.calc_distance(valid_set, check_coordinates)
+                    new_distances.append(new_distance)
+            new_score = score_function.calc_score(new_distances)
 
             # Changes all the data to the new coordinates.
             if new_score > max_score:
@@ -79,15 +124,7 @@ def hillclimber(reps, steps, randoms, printplot = False):
         plt.text(1, 7000000, "initial score: %i" %score)
         plt.savefig('hillclimber.png')
         plt.show()
-
+    print(max_coordinates)
     intermediate  = max_score, max_distances, max_coordinates
 
-    return random_to_vis(intermediate)
-    # return  max_score, max_distances, max_coordinates
-
-if __name__ == "__main__":
-    # a = input("How many reps would you like?")
-    # b = input("In what range can the changes be?")
-    # c = input("How many randoms to do first?")
-    # hillclimber(a, b, c)
-    hillclimber(1000, 5, 1, True)
+    return random_to_vis(# NOTE: max_coordinates)
