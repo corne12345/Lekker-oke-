@@ -180,7 +180,7 @@ class newScore(object):
         for key in distances.keys():
             house = self.houses[key]
             for distance in distances[key]:
-                score += (distance - house.detachement) * house.price_improvement + house.price
+                score += (distance - house.detachement) * house.price_improvement * house.price + house.price
 
         return score
 
@@ -204,7 +204,7 @@ class newScore(object):
             for coordinate in valid_coordinates[key]:
                 valid_set = self.calc_all_coordinates(coordinate["y"], coordinate["x"], self.houses[key])
                 dist = self.calc_distance(key, valid_set, valid_coordinates)
-)
+
                 try:
                     distances[key].append(dist)
                 except:
